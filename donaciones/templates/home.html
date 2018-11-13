@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+	<button type="button" onclick="window.location.href={% url 'auxiliar_administrativo' %}">
+		Auxiliar Administrativo
+	</button>
+	<button type="button">Auxiliar de Ropero</button>
+	<button type="button">Administrador</button>
+{% endblock %}

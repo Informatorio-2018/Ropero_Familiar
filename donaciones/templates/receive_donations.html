@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %} Recibir Donacion {% endblock %}
+
+{% block content %}
+	<form method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+	</form>
+{% endblock %}
