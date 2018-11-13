@@ -18,8 +18,9 @@ from django.urls import path
 from donaciones import views
 
 urlpatterns = [
-    path('admin/', admin.site.paths),    
-    path('registrar_familia/',views.register_family, name='register'),
-    path('home/',views.home, name='home'),
+    path('admin/', admin.site.urls),
+    path('registrar_familia/', views.register_family, name='register'),
+    path('home/', views.home, name='home'),
     path('recibir_donacion/', views.receive_donation, name='receive_donation'),
+    path('recibir_donacion/<int:id>/', views.items_donation, name='items_donation'),
 ]

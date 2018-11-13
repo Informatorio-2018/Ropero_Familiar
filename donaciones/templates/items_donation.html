@@ -3,10 +3,6 @@
 {% block title %} Recibir Donacion {% endblock %}
 
 {% block content %}
-	<form method="POST">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Continuar</button>
-	</form>
-
+	<h1>hola</h1>
+	<h3>{{donator.name}}</h3>
 {% endblock %}
