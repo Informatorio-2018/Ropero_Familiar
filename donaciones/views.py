@@ -32,5 +32,6 @@ def receive_donation(request):
 
 def items_donation(request, id):
     donator = Donation.objects.get(pk=id)
-    context = {'donator': donator}
+    types = TypesDonation.objects.all()
+    context = {'donator': donator, 'types': types}
     return render(request, 'items_donation.html', context)

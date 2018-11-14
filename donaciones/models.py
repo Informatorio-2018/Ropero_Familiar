@@ -10,6 +10,9 @@ class Donation(models.Model):
     name = models.CharField(max_length=80)
     ticket_number = models.IntegerField(null=True)
 
+    def __str__(self):
+        return self.name
+
 
 class DetailsDonation(models.Model):
     donation_type = models.CharField(max_length=30)
@@ -22,6 +25,9 @@ class TypesDonation(models.Model):
     name = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE)
     quantity_total = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
 
 
 class Neighborhood(models.Model):
