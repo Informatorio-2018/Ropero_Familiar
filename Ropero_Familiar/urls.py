@@ -18,8 +18,10 @@ from django.urls import path
 from donaciones import views
 
 urlpatterns = [
-    path('admin/', admin.site.paths),    
-    path('registrar_familia/',views.register_family, name='register'),
+    path('admin/', admin.site.urls),    
+    path('registrar_familia/',views.register_family, name='register_family'),
     path('home/',views.home, name='home'),
     path('recibir_donacion/', views.receive_donation, name='receive_donation'),
+    path('registrar_referente/<int:id>',views.register_referring, name="register_referring"),
+    path('registrar_referente_f/',views.register_referring_f, name="register_referring_f"),
 ]

@@ -18,13 +18,13 @@ class Neighborhood(models.Model):
 class Family(models.Model):
 	lastname = models.CharField(max_length=30)
 	firstname = models.CharField(max_length=30)
-	dni = models.PositiveIntegerField(validators=[MaxValueValidator(8)])
+	dni = models.PositiveIntegerField()#Limitar numeros
 	birth = models.DateField(null=True)
 	role = models.CharField(max_length=1,choices=(('r','Referente'),('f','Familiar')))
 
 class Referring(models.Model):
 	neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True)
-	phone = models.PositiveIntegerField(validators=[MaxValueValidator(15)])
+	phone = models.PositiveIntegerField()#Limitar numero de telefono
 	adress = models.CharField(max_length=80)
 	family = models.OneToOneField(Family, on_delete=models.CASCADE)
 	last_buy = models.DateTimeField(null=True)
