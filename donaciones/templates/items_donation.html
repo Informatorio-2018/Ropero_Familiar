@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Recibir Donacion {% endblock %}
+
+{% block content %}
+	<h1>hola</h1>
+	<h3>{{donator.name}}</h3>
+
+	<select>
+		<option value="">---------</option>
+		{% for type in types %}
+			<option value="{{type.pk}}">{{type.name}}</option>
+		{% endfor %}
+	</select>
+
+{% endblock %}

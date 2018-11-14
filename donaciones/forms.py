@@ -6,6 +6,7 @@ class FamilyForm_r(forms.ModelForm):
 		model = Family
 		fields = ('firstname','lastname','dni','birth')
 
+
 class FamilyForm(forms.ModelForm):
 	class Meta:
 		model = Family
@@ -14,10 +15,9 @@ class FamilyForm(forms.ModelForm):
 class DonationForm(forms.ModelForm):
     class Meta:
         model = Donation
-        fields = '__all__'
-
+        fields = ('name',)
+  
 class ReferringForm(forms.ModelForm):
 	class Meta:
 		model = Referring
 		fields = ('neighborhood','phone','adress')
-
