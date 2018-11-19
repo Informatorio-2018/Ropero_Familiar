@@ -46,15 +46,16 @@ def register_referring_f(request):
 			ref.save()
 			family = Family.objects.last()
 			return redirect('register_referring',id=family.id)
-	return render(request,'register_referring.html',{'form':form})
+	return render(request,'register_referring_f.html',{'form':form})
 
 def register_referring(request,id):
-	form = ReferringForm(request.POST or None)
-	family = Family.objects.get(pk=id)
-	if request.method == 'POST':
-		if form.is_valid():
-			fam = form.save(commit=False)
-			fam.family = family
-			form.save()
-			return redirect('home')
-	return render(request,'register_referring.html',{'form':form})
+    form = ReferringForm(request.POST or None)
+    family = Family.objects.get(pk=id)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            fam = form.save(commit=False)
+            fam.family = family
+            form.save()
+            return redirect('home')
+    return render(request,'register_referring.html',{'form':form,})
