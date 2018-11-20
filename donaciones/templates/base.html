@@ -10,9 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
 		<script type="text/javascript" src=" {% static 'js/jquery-2.1.1.min.js' %}"></script>
-	       
-        <script type="text/javascript" src=" {% static 'js/qrcode.min.js' %}"></script>
-
+	   
         <script src="{% static 'js/materialize.min.js' %}"></script>
 
 		<meta charset="UTF-8">
@@ -22,49 +20,42 @@
 </head>
 <body>
 
-		<nav class="nav-extended">
-		    <div class="nav-wrapper">
-		      <div class="brand-logo">
-		        <a href="/">
-		          Ropero Familiar
-		        </a>
-		      </div>
 
-		      <!-- inicio lista de enlaces del menú arriba derecha -->
-		      <ul id="slide-out" class="side-nav">
-		        <li>
-		          <div class="user-view">
-		            <div class="background logo-menu">
-		              <img class="responsive-img" src="{% static 'images/logo_f_conin.jpg' %}" alt="side-nav">
-		            </div>
-		            
-		          </div>
-		        </li>
 
-		        <li>
-		          <a href="#">
-		            <i class="material-icons">person_pin</i>usuario
-		          </a>
-		        </li>
+  <nav> 
 
-		        <li>
-		          <a href="/">
-		            <i class="material-icons">home</i>Inicio
-		          </a>
-		        </li>
-		        
-		        <li>
-		          <a class="waves-effect" href="#"><i class="material-icons">visibility</i>Algo</a>
-		        </li>
-     
-		      </ul>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Ropero Familiar</a>
+      <ul class="right">
+		<li>
+			<a href="#" data-target="slide-out" class="sidenav-trigger">
+	        	<i class="material-icons">menu</i>
+	 		</a>
+	 	</li>
+      </ul>
+    </div>
 
-		      <a href="#" data-activates="slide-out" class="button-collapse right show-on-large">
-		        <i class="material-icons">menu</i>
-		      </a>
-		    </div>
-		  	  
-	  	</nav>
+  	 
+
+  <ul id="slide-out" class="sidenav">
+    <li><div class="user-view">
+      <div class="background">
+        <img src="{% static 'images/logo_f_conin.jpg' %}">
+      </div>
+      <a href="#user"><img class="circle" src="{% static 'images/avatar.png' %}"></a>
+      <a href="#name"><span class="black-text name">nombre de usuario</span></a>
+      <a href="#email"><span class="black-text email">usuario@gmail.com</span></a>
+    </div></li>
+    <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
+    <li><a href="#!">Second Link</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Subheader</a></li>
+    <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
+  </ul>
+  
+ 
+  </nav>
+        
 
   
         
@@ -74,21 +65,15 @@
 	
 	{% endblock %}
     </div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>
+
     {% block extra_js %}
     {% endblock %}
-
-	<script type="text/javascript">
-	   $(".button-collapse").sideNav();
-	  $('.button-collapse').sideNav({
-	      menuWidth: 300, // Default is 300
-	      edge: 'left', // Choose the horizontal origin
-	      closeOnClick: true, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-	      draggable: true, // Choose whether you can drag to open on touch screens,
-	      onOpen: function(el) {  }, // A function to be called when sideNav is opened
-	      onClose: function(el) {  }, // A function to be called when sideNav is closed
-	    }
-	  );
-	</script>
 
 </body>
 </html>
