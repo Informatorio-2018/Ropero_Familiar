@@ -3,10 +3,39 @@
 {% block title %}Registrar Familiar{% endblock %}
 
 {%block content%}
-	<h3 class="center-align">Registro de familiar</h3>
-	<form method="POST">
-		{% csrf_token %}
-		{{form.as_p}}
-	</form>
-	<button type="submit">Guardar</button>
+	<h3 class="center-align">Registro de Familiar</h3>
+	<div class="row">
+		<form method="POST">
+			{% csrf_token %}
+			{{form.firstname.label_tag}}
+			{{form.firstname}}
+			{{form.lastname.label_tag}}
+			{{form.lastname}}
+			{{form.dni.label_tag}}
+			{{form.dni}}
+			{{form.birth.label_tag}}
+			<input type="text" class="datepicker" name='birth'>
+			<button type="submit" class="btn center-align">Guardar</button>
+		</form>
+	</div>
 {%endblock%}
+
+{% block extra_js %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+    		$('.datepicker').datepicker(
+    			{ 
+            firstDay: true, 
+            format: 'yyyy-mm-dd',
+            yearRange: 100,
+            i18n: {
+                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"]
+            }
+        });
+  		});
+	</script>	
+{% endblock %}

@@ -1,4 +1,4 @@
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 # Create your models here.
@@ -42,7 +42,7 @@ class Neighborhood(models.Model):
 class Family(models.Model):
     lastname = models.CharField(max_length=30,verbose_name='Nombre')
     firstname = models.CharField(max_length=30,verbose_name='Apellido')
-    dni = models.PositiveIntegerField(validators=[MaxValueValidator(99999999)],verbose_name='DNI')  # Limitar numeros
+    dni = models.PositiveIntegerField(validators=[MinValueValidator(1000000),MaxValueValidator(99999999)],verbose_name='DNI')  # Limitar numeros
     birth = models.DateField(null=True,verbose_name='Fecha de Nacimiento')
     role = models.CharField(max_length=1, choices=(('r', 'Referente'), ('f', 'Familiar')))
 

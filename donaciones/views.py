@@ -5,19 +5,6 @@ from .models import *
 # Create your views here.
 
 
-def register_family(request):
-    form = FamilyForm(request.POST or None)
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    return render(request, 'register_family.html', {'form': form})
-
-
-def home(request):
-    return render(request, 'home.html', {})
-
 # Cristian
 
 
@@ -96,3 +83,18 @@ def register_referring(request,id):
             return redirect('home')
     return render(request,'register_referring.html',{'form':form,
                                                      'neigh': neigh})
+
+def register_family(request):
+    form = FamilyForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            fam = form.save(commit=False)
+            fam.role = 'f'
+            fam.birth = request.POST['birth']
+            fam.save()
+            return redirect('home')
+    return render(request, 'register_family.html', {'form': form})
+
+
+def home(request):
+    return render(request, 'home.html', {})
