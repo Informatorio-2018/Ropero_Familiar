@@ -7,23 +7,23 @@
 	<form method="POST">
 		{% csrf_token %}
 		{{form.as_p}}
-		<ul class="collapsible">
-		  <li>
-		    <div class="collapsible-header">Barrios</div>
-		  </li>
-   	</ul>
-		    <select name="neigh" required id="id_neigh">
-		    	<option class="collapsible-body"><span>asd</span></option>
-		    </select>
+		<div class="input-field col s12">
+    		<select name="neigh_id">
+		      <option value="" disabled selected>Elegir Barrio</option>
+		      {% for n in neigh %}
+		      	<option value={{n.id}}>{{n.name}}</option>
+		      {% endfor %}
+    		</select>
+    		<label>Barrio</label>
+  		</div>
 		<button type="submit">Guardar</button>
 	</form>
 
 	{% block extra_js %}
 		<script type="text/javascript">
-		  document.addEventListener('DOMContentLoaded', function() {
-		    var elems = document.querySelectorAll('.collapsible');
-		    var instances = M.Collapsible.init(elems);
-		  });
+			$(document).ready(function(){
+    			$('select').formSelect();
+  			});
 		</script>
 	{% endblock %}
 {% endblock %}
