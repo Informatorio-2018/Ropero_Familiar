@@ -3,7 +3,9 @@
 {% block title %} Recibir Donacion {% endblock %}
 
 {% block content %}
-	<h3>Donacion recibida de {{donator.name}}</h3>
+	<div class="row">
+		<h4 class="center-align">Donacion recibida de {{donator.name}}</h4>
+	</div>
 		<h4 class="center-align">Elegir tipo de donación</h4>
 	  <ul class="collapsible">
     	{% for t in types %}
@@ -15,8 +17,8 @@
 	      			<div class="row">
 	      				<div class="input-field col s4 offset-s4">
 	      					{{form}}
-	      					<input id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
-	      					<input id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
+	      					<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
+	      					<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
 	      				</div>
 	      				<div class="col s4 left">
 	      					<label class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
