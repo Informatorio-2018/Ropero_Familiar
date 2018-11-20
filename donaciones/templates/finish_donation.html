@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %} Guardar Bono {% endblock %}
+
+{% block content %}
+	<h3>Donacion recibida de {{donator.name}}</h3>
+	<form method="POST">
+		{% csrf_token %}
+		<div class="input-field col s4">
+			{{form}}
+		</div>
+		<div class="center-align">
+	  	<button class="btn waves-effect waves-light" type="submit">Finalizar</button>
+	 	</div>
+	</form>
+{% endblock %}

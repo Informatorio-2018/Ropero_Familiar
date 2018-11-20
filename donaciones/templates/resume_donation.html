@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Resumen de Donaciones {% endblock %}
+
+{% block content %}
+	<h3>Donacion recibida de {{donator.name}}</h3>
+	{% for res in resumes %}
+		<div class="collection">
+	    <div class="collection-item"><span class="new badge">{{res.quantity}}       
+	    	{{ res.get_unit_measure_display }}</span>{{res.donation_type}} <a class="right" href="">edit</a> 
+	    </div>
+  	</div>
+	{% endfor %}
+	<div class="center-align">
+  	<a class="waves-effect waves-light btn center-align" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+  </div>
+{% endblock %}
