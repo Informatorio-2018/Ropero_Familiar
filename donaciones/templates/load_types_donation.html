@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}  Tipos de Articulos {% endblock %}
+
+{% block content %}
+	<form method="post">
+		{% csrf_token %}
+		<div class="input-field">
+			{{ form.as_p }}
+		</div>
+		<button type="submit">Submit</button>
+	</form>
+	<!-- {{ form }} -->
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">$(document).ready(function(){
+    $('select').formSelect();
+  });</script>
+{% endblock%}

@@ -81,9 +81,38 @@ def register_referring(request,id):
             fam.neighborhood_id = request.POST['neigh_id']
             form.save()
             return redirect('home')
+          
     return render(request,'register_referring.html',{'form':form,
                                                      'neigh': neigh})
 
+def load_types_donation(request):
+    if request.method == 'POST':
+        form = LoadTypesDonationForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    form = LoadTypesDonationForm()
+    return render(request,'load_types_donation.html',{'form':form})
+
+def load_types_products(request):
+    if request.method == 'POST':
+        form = LoadTypeProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    form = LoadTypeProductForm()
+    return render(request,'load_types_product.html',{'form':form})
+
+def sort_products(request):
+    if request.method == 'POST':
+        form = SortProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    form = SortProductForm()
+    return render(request,'sort_products.html',{'form':form})
+
+  
 def register_family(request):
     form = FamilyForm(request.POST or None)
     if request.method == 'POST':

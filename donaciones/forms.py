@@ -24,6 +24,12 @@ class ReferringForm(forms.ModelForm):
         fields = ('phone', 'adress')
 
 
+class LoadTypesDonationForm(forms.ModelForm):
+    class Meta:
+        model = TypesDonation
+        fields = ('name','unit_measure')
+
+
 class DetailsDonationForm(forms.ModelForm):
     class Meta:
         model = DetailsDonation
@@ -34,3 +40,14 @@ class TicketForm(forms.ModelForm):
     class Meta:
         model = Donation
         fields = ('ticket_number',)
+
+class LoadTypeProductForm(forms.ModelForm):
+    class Meta:
+        model = TypesProducts
+        fields = ('name','unit_measure','price')
+
+class SortProductForm(forms.ModelForm):
+    class Meta:
+        model = SortProducts
+        fields = ('types','quantity')
+        

@@ -54,3 +54,17 @@ class Referring(models.Model):
     family = models.OneToOneField(Family, on_delete=models.CASCADE)
     last_buy = models.DateTimeField(null=True)
     family_last_buy = models.CharField(max_length=65, null=True)
+
+
+class TypesProducts(models.Model):
+    name = models.CharField(max_length=30)
+    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE,verbose_name='Unidad de Medida')
+    price = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
+
+class SortProducts(models.Model):
+    types = models.ForeignKey(TypesProducts,null = True,on_delete=models.SET_NULL,verbose_name='Tipos de Producto')
+    quantity = models.IntegerField(default=0,verbose_name='Cantidad')
