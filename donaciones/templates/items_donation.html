@@ -3,14 +3,40 @@
 {% block title %} Recibir Donacion {% endblock %}
 
 {% block content %}
-	<h1>hola</h1>
-	<h3>{{donator.name}}</h3>
-
-	<select>
-		<option value="">---------</option>
-		{% for type in types %}
-			<option value="{{type.pk}}">{{type.name}}</option>
-		{% endfor %}
-	</select>
-
+	<h3>Donacion recibida de {{donator.name}}</h3>
+		<h4 class="center-align">Elegir tipo de donación</h4>
+	  <ul class="collapsible">
+    	{% for t in types %}
+				<li>
+					<div class="collapsible-header center-align">{{t.name}}</div>
+	      	<div class="collapsible-body">
+	      		<form method="POST">
+	      			{% csrf_token %}
+	      			<div class="row">
+	      				<div class="input-field col s4 offset-s4">
+	      					{{form}}
+	      					<input id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
+	      					<input id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
+	      				</div>
+	      				<div class="col s4 left">
+	      					<label class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
+	      				</div>
+	      			</div>
+	      			<div class="col s4 center-align">
+								<button class="btn waves-effect waves-light" type="submit">Agregar</button>
+	    				</div>
+	      		</form>
+	      	</div>
+				</li>
+			{% endfor %}
+  	</ul>
+  	<div class="center-align">
+  		<a class="waves-effect waves-light btn center-align" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
+  	</div>
 {% endblock %}
+
+<script type="text/javascript">
+	$(document).ready(function(){
+  	$('.collapsible').collapsible();
+	});
+</script>
