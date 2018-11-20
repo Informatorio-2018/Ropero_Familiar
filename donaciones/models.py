@@ -36,6 +36,8 @@ class TypesDonation(models.Model):
 class Neighborhood(models.Model):
     name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return "%s" % (self.name)
 
 class Family(models.Model):
     lastname = models.CharField(max_length=30)

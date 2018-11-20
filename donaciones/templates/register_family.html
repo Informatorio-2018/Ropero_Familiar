@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
+{% block title %}Registrar Familiar{% endblock %}
+
 {%block content%}
-	<h2>Hola soy el form</h2>
-		
+	<h3 class="center-align">Registro de familiar</h3>
 	<form method="POST">
 		{% csrf_token %}
 		{{form.as_p}}
 	</form>
+	<button type="submit">Guardar</button>
 {%endblock%}

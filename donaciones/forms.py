@@ -1,12 +1,10 @@
 from django import forms
-from .models import Family, Donation, Referring, DetailsDonation
-
+from .models import *
 
 class FamilyForm_r(forms.ModelForm):
     class Meta:
         model = Family
         fields = ('firstname', 'lastname', 'dni', 'birth')
-
 
 class FamilyForm(forms.ModelForm):
     class Meta:

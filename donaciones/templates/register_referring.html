@@ -3,11 +3,27 @@
 {% block title %}Registrar Referente{% endblock %}
 
 {% block content %}
-	
+	<h3 class="center-align">Registro de Referente</h3>
 	<form method="POST">
 		{% csrf_token %}
 		{{form.as_p}}
+		<ul class="collapsible">
+		  <li>
+		    <div class="collapsible-header">Barrios</div>
+		  </li>
+   	</ul>
+		    <select name="neigh" required id="id_neigh">
+		    	<option class="collapsible-body"><span>asd</span></option>
+		    </select>
 		<button type="submit">Guardar</button>
 	</form>
-	
+
+	{% block extra_js %}
+		<script type="text/javascript">
+		  document.addEventListener('DOMContentLoaded', function() {
+		    var elems = document.querySelectorAll('.collapsible');
+		    var instances = M.Collapsible.init(elems);
+		  });
+		</script>
+	{% endblock %}
 {% endblock %}
