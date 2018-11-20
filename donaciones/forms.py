@@ -21,7 +21,7 @@ class DonationForm(forms.ModelForm):
 class ReferringForm(forms.ModelForm):
     class Meta:
         model = Referring
-        fields = ('neighborhood', 'phone', 'adress')
+        fields = ('phone', 'adress')
 
 
 class LoadTypesDonationForm(forms.ModelForm):

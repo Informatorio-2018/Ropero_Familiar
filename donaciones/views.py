@@ -5,19 +5,6 @@ from .models import *
 # Create your views here.
 
 
-def register_family(request):
-    form = FamilyForm(request.POST or None)
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-    return render(request, 'register_family.html', {'form': form})
-
-
-def home(request):
-    return render(request, 'home.html', {})
-
 # Cristian
 
 
@@ -72,26 +59,31 @@ def finish_donation(request, id):
 
 
 def register_referring_f(request):
-	form = FamilyForm_r(request.POST or None)
-	if request.method == 'POST':
-		if form.is_valid():
-			ref = form.save(commit=False)
-			ref.role = 'r'
-			ref.save()
-			family = Family.objects.last()
-			return redirect('register_referring',id=family.id)
-	return render(request,'register_referring_f.html',{'form':form})
+    form = FamilyForm_r(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            ref = form.save(commit=False)
+            ref.role = 'r'
+            ref.birth = request.POST['birth']
+            ref.save()
+            family = Family.objects.last()
+            return redirect('register_referring',id=family.id)
+    return render(request,'register_referring_f.html',{'form':form})
 
 def register_referring(request,id):
     form = ReferringForm(request.POST or None)
     family = Family.objects.get(pk=id)
+    neigh = Neighborhood.objects.all()
     if request.method == 'POST':
         if form.is_valid():
             fam = form.save(commit=False)
             fam.family = family
+            fam.neighborhood_id = request.POST['neigh_id']
             form.save()
             return redirect('home')
-    return render(request,'register_referring.html',{'form':form,})
+          
+    return render(request,'register_referring.html',{'form':form,
+                                                     'neigh': neigh})
 
 def load_types_donation(request):
     if request.method == 'POST':
@@ -119,3 +111,19 @@ def sort_products(request):
 
     form = SortProductForm()
     return render(request,'sort_products.html',{'form':form})
+
+  
+def register_family(request):
+    form = FamilyForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            fam = form.save(commit=False)
+            fam.role = 'f'
+            fam.birth = request.POST['birth']
+            fam.save()
+            return redirect('home')
+    return render(request, 'register_family.html', {'form': form})
+
+
+def home(request):
+    return render(request, 'home.html', {})
