@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado de Búsqueda{% endblock %}
+
+{% block content %}
+
+	<h2>Resultados para: {{query}}</h2>
+	{% for r in ref %}
+		<p><a href="/referente/{{r.id}}/">{{r.family.lastname}}, {{r.family.firstname}}</a></p>
+	{% endfor %}
+
+{% endblock %}

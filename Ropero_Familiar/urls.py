@@ -12,6 +12,8 @@ urlpatterns = [
     path('home/',views.home, name='home'),
     path('registrar_referente_f/<int:id>',views.register_referring, name="register_referring"),
     path('registrar_referente_f/',views.register_referring_f, name="register_referring_f"),
+    path('busqueda_referente/',views.referring_search, name="referring_search"),
+    path('referente/<int:id>/',views.referring_profile),
     path('cargar_tipos_donacion/',views.load_types_donation, name="load_types_donation"),
     path('cargar_tipos_productos/',views.load_types_products, name ="load_types_products"),
     path('clasificar_productos/',views.sort_products, name ="sort_products"),
