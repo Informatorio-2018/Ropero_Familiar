@@ -51,3 +51,5 @@ class SortProductForm(forms.ModelForm):
         model = SortProducts
         fields = ('types','quantity')
         
+class SearchForm(forms.Form):
+    query = forms.CharField(label = 'Búsqueda')
