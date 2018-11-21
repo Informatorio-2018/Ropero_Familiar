@@ -3,11 +3,15 @@
 {% block title %} Resumen de Donaciones {% endblock %}
 
 {% block content %}
-	<h4>Donacion recibida de {{donator.name}}</h4>
+	<h4 class="center-align">Donación recibida de {{donator.name}}</h4>
 	{% for res in resumes %}
 		<div class="collection">
 	    <div class="collection-item"><span class="new badge">{{res.quantity}}       
-	    	{{ res.get_unit_measure_display }}</span>{{res.donation_type}} <a class="right" href="">edit</a> 
+	    	{{ res.get_unit_measure_display }}</span>{{res.donation_type}} 
+	    	<a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete
+				</i></a>
+	    	<a class="right" href="#"><i class="material-icons">edit
+				</i></a>
 	    </div>
   	</div>
 	{% endfor %}

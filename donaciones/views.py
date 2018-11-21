@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
 
@@ -30,6 +30,7 @@ def items_donation(request, id):
             detail.unit_measure = request.POST['unit_measure']
             detail.donation_id = donator.id
             detail.save()
+            return redirect('items_donation', id=id)
     else:
         form = DetailsDonationForm()
     context = {'donator': donator, 'types': types, 'form': form}
@@ -40,6 +41,13 @@ def resume_donation(request, id):
     donator = Donation.objects.get(pk=id)
     context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id)}
     return render(request, 'resume_donation.html', context)
+
+
+def delete_donation(request, id):
+    detail = get_object_or_404(DetailsDonation, pk=id)
+    id_donator = detail.donation_id
+    detail.delete()
+    return redirect('resume_donation', id=id_donator)
 
 
 def finish_donation(request, id):
@@ -67,10 +75,11 @@ def register_referring_f(request):
             ref.birth = request.POST['birth']
             ref.save()
             family = Family.objects.last()
-            return redirect('register_referring',id=family.id)
-    return render(request,'register_referring_f.html',{'form':form})
+            return redirect('register_referring', id=family.id)
+    return render(request, 'register_referring_f.html', {'form': form})
 
-def register_referring(request,id):
+
+def register_referring(request, id):
     form = ReferringForm(request.POST or None)
     family = Family.objects.get(pk=id)
     neigh = Neighborhood.objects.all()
@@ -81,9 +90,10 @@ def register_referring(request,id):
             fam.neighborhood_id = request.POST['neigh_id']
             form.save()
             return redirect('home')
-          
-    return render(request,'register_referring.html',{'form':form,
-                                                     'neigh': neigh})
+
+    return render(request, 'register_referring.html', {'form': form,
+                                                       'neigh': neigh})
+
 
 def load_types_donation(request):
     if request.method == 'POST':
@@ -92,7 +102,8 @@ def load_types_donation(request):
             form.save()
 
     form = LoadTypesDonationForm()
-    return render(request,'load_types_donation.html',{'form':form})
+    return render(request, 'load_types_donation.html', {'form': form})
+
 
 def load_types_products(request):
     if request.method == 'POST':
@@ -101,7 +112,8 @@ def load_types_products(request):
             form.save()
 
     form = LoadTypeProductForm()
-    return render(request,'load_types_product.html',{'form':form})
+    return render(request, 'load_types_product.html', {'form': form})
+
 
 def sort_products(request):
     if request.method == 'POST':
@@ -110,9 +122,9 @@ def sort_products(request):
             form.save()
 
     form = SortProductForm()
-    return render(request,'sort_products.html',{'form':form})
+    return render(request, 'sort_products.html', {'form': form})
 
-  
+
 def register_family(request):
     form = FamilyForm(request.POST or None)
     if request.method == 'POST':
