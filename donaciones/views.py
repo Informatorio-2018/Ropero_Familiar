@@ -3,12 +3,6 @@ from .forms import *
 from .models import *
 from django.db.models import Q
 
-# Create your views here.
-
-
-# Cristian
-
-
 def receive_donation(request):
     form = DonationForm(request.POST or None)
     if request.method == 'POST':
@@ -64,8 +58,6 @@ def finish_donation(request, id):
         form = TicketForm()
     context = {'donator': donator, 'form': form}
     return render(request, 'finish_donation.html', context)
-
-# Facu
 
 
 def register_referring_f(request):
@@ -127,11 +119,12 @@ def sort_products(request):
     return render(request, 'sort_products.html', {'form': form})
 
 
-def register_family(request):
+def register_family(request,id):
     form = FamilyForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             fam = form.save(commit=False)
+            fam.ref = id
             fam.role = 'f'
             fam.birth = request.POST['birth']
             fam.save()
@@ -140,24 +133,36 @@ def register_family(request):
 
 
 def referring_search(request):
+    ref = Family.objects.filter(role__exact='r')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains=query)
-            q2 = Q(family__lastname__contains=query)
-            ref = Referring.objects.filter(q1 | q2)
+            q1 = Q(firstname__contains = query)
+            q2 = Q(lastname__contains = query)
+            q3 = Q(role__exact='r')
+            ref = Family.objects.filter((q1&q3)|(q2&q3))
             return render(request, 'referring_out.html', {'ref': ref,
                                                           'query': query})
     else:
         form = SearchForm()
-    return render(request, 'referring_search.html', {'form': form})
+    return render(request, 'referring_search.html', {'form': form,
+                                                     'ref': ref})
 
+def referring_profile(request,id):
+    ref = Referring.objects.get(family_id=id)
+    return render(request, 'referring_profile.html', {'ref':ref})
 
-def referring_profile(request, id):
-    ref = Referring.objects.get(pk=id)
-    return render(request, 'referring_profile.html', {'ref': ref})
+def referring_relatives(request,id):
+    ref = Family.objects.get(pk=id)
+    fam = Family.objects.filter(ref=id)
+    return render(request, 'referring_relatives.html', {'ref': ref,
+                                                        'fam': fam})
 
+def relative_profile(request,id):
+    # import ipdb; ipdb.set_trace()
+    fam = Family.objects.get(pk=id)
+    return render(request, 'relative_profile.html', {'fam': fam})
 
 def home(request):
     return render(request, 'home.html', {})
