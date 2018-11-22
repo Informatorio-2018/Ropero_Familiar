@@ -23,6 +23,7 @@ def receive_donation(request):
 def items_donation(request, id):
     donator = Donation.objects.get(pk=id)
     types = TypesDonation.objects.all()
+    details = DetailsDonation.objects.filter(donation__pk=donator.id)
     if request.method == 'POST':
         form = DetailsDonationForm(request.POST)
         if form.is_valid():
@@ -34,7 +35,7 @@ def items_donation(request, id):
             return redirect('items_donation', id=id)
     else:
         form = DetailsDonationForm()
-    context = {'donator': donator, 'types': types, 'form': form}
+    context = {'donator': donator, 'types': types, 'form': form, 'details': details}
     return render(request, 'items_donation.html', context)
 
 
@@ -137,23 +138,25 @@ def register_family(request):
             return redirect('home')
     return render(request, 'register_family.html', {'form': form})
 
+
 def referring_search(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains = query)
-            q2 = Q(family__lastname__contains = query)
-            ref = Referring.objects.filter(q1|q2)
+            q1 = Q(family__firstname__contains=query)
+            q2 = Q(family__lastname__contains=query)
+            ref = Referring.objects.filter(q1 | q2)
             return render(request, 'referring_out.html', {'ref': ref,
                                                           'query': query})
     else:
         form = SearchForm()
     return render(request, 'referring_search.html', {'form': form})
 
-def referring_profile(request,id):
+
+def referring_profile(request, id):
     ref = Referring.objects.get(pk=id)
-    return render(request, 'referring_profile.html', {'ref':ref})
+    return render(request, 'referring_profile.html', {'ref': ref})
 
 
 def home(request):

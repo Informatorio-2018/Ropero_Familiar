@@ -3,19 +3,37 @@
 {% block title %} Resumen de Donaciones {% endblock %}
 
 {% block content %}
-	<h4 class="center-align">Donación recibida de {{donator.name}}</h4>
-	{% for res in resumes %}
-		<div class="collection">
-	    <div class="collection-item"><span class="new badge">{{res.quantity}}       
-	    	{{ res.get_unit_measure_display }}</span>{{res.donation_type}} 
-	    	<a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete
-				</i></a>
-	    	<a class="right" href="#"><i class="material-icons">edit
-				</i></a>
-	    </div>
-  	</div>
-	{% endfor %}
+	<h4 class="center-align">Resumen de Donación</h4>
+	  <ul class="collection with-header">
+      <li class="collection-header"><h4>{{ donator.name }}	<a class="waves-effect 	waves-light btn modal-trigger" href="#modal1">Edit</a></h4>
+      </li>
+			{% for res in resumes %}
+      	<li class="collection-item">{{res.donation_type}} {{res.quantity}} 
+      		{{ res.get_unit_measure_display }} <a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete</i></a>
+      	</li>
+			{% endfor %}
+    </ul>
 	<div class="center-align">
   	<a class="waves-effect waves-light btn center-align" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
   </div>
+  
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+         
+		 
+{% endblock %}
+{% block extra_js %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+  		$('.modal').modal();
+		});
+	</script>
 {% endblock %}
