@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
-from django.db.models import Q
+from django.db.models import Q,Sum
 
 def receive_donation(request):
     form = DonationForm(request.POST or None)
@@ -90,11 +90,12 @@ def register_referring(request, id):
 
 
 def load_types_donation(request):
+
     if request.method == 'POST':
         form = LoadTypesDonationForm(request.POST)
         if form.is_valid():
             form.save()
-
+    
     form = LoadTypesDonationForm()
     return render(request, 'load_types_donation.html', {'form': form})
 
@@ -110,13 +111,20 @@ def load_types_products(request):
 
 
 def sort_products(request):
+    types = TypesProducts.objects.all()
     if request.method == 'POST':
         form = SortProductForm(request.POST)
         if form.is_valid():
-            form.save()
-
-    form = SortProductForm()
-    return render(request, 'sort_products.html', {'form': form})
+            sort = form.save(commit = False)
+            
+            sort.types_id = request.POST['types_id']
+            sort.save()
+            return redirect('sort_products')
+            
+    else:
+        form = SortProductForm()
+    context = {'types':types ,'form': form}
+    return render(request, 'sort_products.html', context)
 
 
 def register_family(request,id):
