@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Pefil de {{ref.family.firstname}}{% endblock %}
+{% block title %}Pefil de {{ref.firstname}}{% endblock %}
 
 {% block content %}
-
 	<p>Nombre: {{ref.family.firstname}}</p>
 	<p>Apellido: {{ref.family.lastname}}</p>
 	<p>DNI: {{ref.family.dni}}</p>
@@ -11,5 +10,6 @@
 	<p>Dirección: {{ref.adress}}</p>
 	<p>Barrio: {{ref.neighborhood}}</p>
 	<p>Número de Teléfono: {{ref.phone}}</p>
+	<a href="/referente/{{ref.family.id}}/familiares/">Familiares</a>
 	
 {% endblock %}

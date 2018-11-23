@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %} Lista de Referentes {% endblock %}
+{% block title %} Familias {% endblock %}
 
 {% block content %}
 
-	<h2 class="center-align">Lista de Referentes</h2>
+	<h2 class="center-align">Familias</h2>
 	<form action="/busqueda_referente/" method="POST">
-		{% csrf_token %}
-		{{form}}
-		<input type="submit" value="search" class="btn">
+		<div class="row">
+			{% csrf_token %}
+			{{form}}
+			<input type="submit" value="search" class="btn">
+			{% for r in ref %}
+				<br>
+				<a href="/referente/{{r.id}}/">{{r.lastname}}, {{r.firstname}}</a>
+			{% endfor %}
+			<br>
+			<a href="/registrar_referente_f/"  class="btn">Registrar</a>
+		</div>
 	</form>
-
+ 
 {% endblock %}

@@ -3,12 +3,6 @@ from .forms import *
 from .models import *
 from django.db.models import Q,Sum
 
-# Create your views here.
-
-
-# Cristian
-
-
 def receive_donation(request):
     form = DonationForm(request.POST or None)
     if request.method == 'POST':
@@ -23,6 +17,7 @@ def receive_donation(request):
 def items_donation(request, id):
     donator = Donation.objects.get(pk=id)
     types = TypesDonation.objects.all()
+    details = DetailsDonation.objects.filter(donation__pk=donator.id)
     if request.method == 'POST':
         form = DetailsDonationForm(request.POST)
         if form.is_valid():
@@ -34,7 +29,7 @@ def items_donation(request, id):
             return redirect('items_donation', id=id)
     else:
         form = DetailsDonationForm()
-    context = {'donator': donator, 'types': types, 'form': form}
+    context = {'donator': donator, 'types': types, 'form': form, 'details': details}
     return render(request, 'items_donation.html', context)
 
 
@@ -63,8 +58,6 @@ def finish_donation(request, id):
         form = TicketForm()
     context = {'donator': donator, 'form': form}
     return render(request, 'finish_donation.html', context)
-
-# Facu
 
 
 def register_referring_f(request):
@@ -134,82 +127,50 @@ def sort_products(request):
     return render(request, 'sort_products.html', context)
 
 
-def register_family(request):
+def register_family(request,id):
     form = FamilyForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             fam = form.save(commit=False)
+            fam.ref = id
             fam.role = 'f'
             fam.birth = request.POST['birth']
             fam.save()
             return redirect('home')
     return render(request, 'register_family.html', {'form': form})
 
+
 def referring_search(request):
+    ref = Family.objects.filter(role__exact='r')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains = query)
-            q2 = Q(family__lastname__contains = query)
-            ref = Referring.objects.filter(q1|q2)
+            q1 = Q(firstname__contains = query)
+            q2 = Q(lastname__contains = query)
+            q3 = Q(role__exact='r')
+            ref = Family.objects.filter((q1&q3)|(q2&q3))
             return render(request, 'referring_out.html', {'ref': ref,
                                                           'query': query})
     else:
         form = SearchForm()
-    return render(request, 'referring_search.html', {'form': form})
+    return render(request, 'referring_search.html', {'form': form,
+                                                     'ref': ref})
 
 def referring_profile(request,id):
-    ref = Referring.objects.get(pk=id)
+    ref = Referring.objects.get(family_id=id)
     return render(request, 'referring_profile.html', {'ref':ref})
 
+def referring_relatives(request,id):
+    ref = Family.objects.get(pk=id)
+    fam = Family.objects.filter(ref=id)
+    return render(request, 'referring_relatives.html', {'ref': ref,
+                                                        'fam': fam})
+
+def relative_profile(request,id):
+    # import ipdb; ipdb.set_trace()
+    fam = Family.objects.get(pk=id)
+    return render(request, 'relative_profile.html', {'fam': fam})
 
 def home(request):
     return render(request, 'home.html', {})
-
-
-# def list_sort(request):
-#     objetos=ListSort.objects.all()
-#     diccionario={}
-#     nombres=[]
-    
-#     types = TypesDonation.objects.all().values('name')
-#     lista = list(types)
-#     for i in lista:
-#         diccionario.update(i)
-#         nombres.append(diccionario.get('name'))
-
-#     print(nombres)
-#     dica={}
-#     for x in nombres:
-#         q1=DetailsDonation.objects.filter(donation_type=x).aggregate(Sum('quantity')).get('quantity__sum', 0.00)
-#         if q1 == None:
-#             print('cero')
-#         else:
-#             dica.update({x:q1})
-    
-#     lista_nombre = ListSort.objects.values_list('name')
-#     lista_ultima =[]
-#     for y in lista_nombre:
-#         for h in y:
-#             lista_ultima.append(h)
-#             pass
-#         pass
-
-#     nom=dica.keys()
-#     num=dica.values()
-#     print(num)
-
-#     for nom,num in dica.items():
-#         if nom in lista_ultima:
-#             pass
-#             # ad=ListSort.objects.get(name=nom)
-#             # ad = ListSort(quantity_total=num)
-#             # ad.save()
-#             # print('ya esta en la lista')
-#         else:
-#             c = ListSort(name=nom,quantity_total=num)
-#             c.save()
-    
-#     context ={'objetos':objetos}
-#     return render(request,'list_sort.html',context)
