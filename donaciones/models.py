@@ -24,6 +24,11 @@ class DetailsDonation(models.Model):
         return self.donation_type
 
 
+class OtherDetail(models.Model):
+    description = models.CharField(max_length=80, verbose_name='Descripción')
+    detailsdonation = models.OneToOneField(DetailsDonation, on_delete=models.CASCADE)
+
+
 class TypesDonation(models.Model):
     name = models.CharField(max_length=30, verbose_name='Nombre')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
@@ -39,11 +44,12 @@ class Neighborhood(models.Model):
     def __str__(self):
         return "%s" % (self.name)
 
+
 class Family(models.Model):
-    lastname = models.CharField(max_length=30,verbose_name='Apellido')
-    firstname = models.CharField(max_length=30,verbose_name='Nombre')
-    dni = models.PositiveIntegerField(validators=[MinValueValidator(1000000),MaxValueValidator(99999999)],verbose_name='DNI')  # Limitar numeros
-    birth = models.DateField(null=True,verbose_name='Fecha de Nacimiento')
+    lastname = models.CharField(max_length=30, verbose_name='Apellido')
+    firstname = models.CharField(max_length=30, verbose_name='Nombre')
+    dni = models.PositiveIntegerField(validators=[MinValueValidator(1000000), MaxValueValidator(99999999)], verbose_name='DNI')  # Limitar numeros
+    birth = models.DateField(null=True, verbose_name='Fecha de Nacimiento')
     role = models.CharField(max_length=1, choices=(('r', 'Referente'), ('f', 'Familiar')))
     ref = models.IntegerField(null=True)
 
@@ -58,7 +64,7 @@ class Referring(models.Model):
 
 class TypesProducts(models.Model):
     name = models.CharField(max_length=30)
-    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE,verbose_name='Unidad de Medida')
+    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     price = models.IntegerField(default=0)
 
     def __str__(self):
