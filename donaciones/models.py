@@ -24,6 +24,11 @@ class DetailsDonation(models.Model):
         return self.donation_type
 
 
+class OtherDetail(models.Model):
+    description = models.CharField(max_length=80, verbose_name='Descripción')
+    detailsdonation = models.OneToOneField(DetailsDonation, on_delete=models.CASCADE)
+
+
 class TypesDonation(models.Model):
     name = models.CharField(max_length=30, verbose_name='Nombre')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
@@ -39,18 +44,19 @@ class Neighborhood(models.Model):
     def __str__(self):
         return "%s" % (self.name)
 
+
 class Family(models.Model):
-    lastname = models.CharField(max_length=30,verbose_name='Apellido')
-    firstname = models.CharField(max_length=30,verbose_name='Nombre')
-    dni = models.PositiveIntegerField(validators=[MinValueValidator(1000000),MaxValueValidator(99999999)],verbose_name='DNI')  # Limitar numeros
-    birth = models.DateField(null=True,verbose_name='Fecha de Nacimiento')
+    lastname = models.CharField(max_length=30, verbose_name='Apellido')
+    firstname = models.CharField(max_length=30, verbose_name='Nombre')
+    dni = models.PositiveIntegerField(validators=[MinValueValidator(1000000), MaxValueValidator(99999999)], verbose_name='DNI')  # Limitar numeros
+    birth = models.DateField(null=True, verbose_name='Fecha de Nacimiento')
     role = models.CharField(max_length=1, choices=(('r', 'Referente'), ('f', 'Familiar')))
 
 
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
     phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono
-    adress = models.CharField(max_length=80,verbose_name='Dirección')
+    adress = models.CharField(max_length=80, verbose_name='Dirección')
     family = models.OneToOneField(Family, on_delete=models.CASCADE)
     last_buy = models.DateTimeField(null=True)
     family_last_buy = models.CharField(max_length=65, null=True)
@@ -58,7 +64,7 @@ class Referring(models.Model):
 
 class TypesProducts(models.Model):
     name = models.CharField(max_length=30)
-    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE,verbose_name='Unidad de Medida')
+    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     price = models.IntegerField(default=0)
 
     def __str__(self):
@@ -66,5 +72,5 @@ class TypesProducts(models.Model):
 
 
 class SortProducts(models.Model):
-    types = models.ForeignKey(TypesProducts,null = True,on_delete=models.SET_NULL,verbose_name='Tipos de Producto')
-    quantity = models.IntegerField(default=0,verbose_name='Cantidad')
+    types = models.ForeignKey(TypesProducts, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')
+    quantity = models.IntegerField(default=0, verbose_name='Cantidad')

@@ -1,10 +1,12 @@
 from django import forms
 from .models import *
 
+
 class FamilyForm_r(forms.ModelForm):
     class Meta:
         model = Family
         fields = ('firstname', 'lastname', 'dni', 'birth')
+
 
 class FamilyForm(forms.ModelForm):
     class Meta:
@@ -27,7 +29,7 @@ class ReferringForm(forms.ModelForm):
 class LoadTypesDonationForm(forms.ModelForm):
     class Meta:
         model = TypesDonation
-        fields = ('name','unit_measure')
+        fields = ('name', 'unit_measure')
 
 
 class DetailsDonationForm(forms.ModelForm):
@@ -36,20 +38,29 @@ class DetailsDonationForm(forms.ModelForm):
         fields = ('quantity',)
 
 
+class OtherDetailForm(forms.ModelForm):
+    class Meta:
+        model = OtherDetail
+        fields = ('description',)
+
+
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Donation
         fields = ('ticket_number',)
 
+
 class LoadTypeProductForm(forms.ModelForm):
     class Meta:
         model = TypesProducts
-        fields = ('name','unit_measure','price')
+        fields = ('name', 'unit_measure', 'price')
+
 
 class SortProductForm(forms.ModelForm):
     class Meta:
         model = SortProducts
-        fields = ('types','quantity')
-        
+        fields = ('types', 'quantity')
+
+
 class SearchForm(forms.Form):
-    query = forms.CharField(label = 'Búsqueda')
+    query = forms.CharField(label='Búsqueda')

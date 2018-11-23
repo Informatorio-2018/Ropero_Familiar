@@ -25,29 +25,54 @@ def items_donation(request, id):
     types = TypesDonation.objects.all()
     details = DetailsDonation.objects.filter(donation__pk=donator.id)
     if request.method == 'POST':
-        form = DetailsDonationForm(request.POST)
-        if form.is_valid():
-            detail = form.save(commit=False)
+        form_details = DetailsDonationForm(request.POST)
+        form_others = OtherDetailForm(request.POST)
+        if form_details.is_valid():
+            detail = form_details.save(commit=False)
             detail.donation_type = request.POST['donation_type']
             detail.unit_measure = request.POST['unit_measure']
             detail.donation_id = donator.id
             detail.save()
+            if detail.donation_type == 'Otros':
+                if form_others.is_valid():
+                    other = form_others.save(commit=False)
+                    other.detailsdonation_id = detail.id
+                    other.save()
+
+            type_sum = TypesDonation.objects.get(name=detail.donation_type)
+            if detail.donation_type == type_sum.name:
+                type_sum.quantity_total += detail.quantity
+                type_sum.save()
             return redirect('items_donation', id=id)
     else:
-        form = DetailsDonationForm()
-    context = {'donator': donator, 'types': types, 'form': form, 'details': details}
+        form_details = DetailsDonationForm()
+        form_others = OtherDetailForm()
+    context = {'donator': donator, 'types': types,
+               'form_details': form_details, 'details': details, 'form_others': form_others}
     return render(request, 'items_donation.html', context)
 
 
 def resume_donation(request, id):
     donator = Donation.objects.get(pk=id)
-    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id)}
+    if request.method == "POST":
+        form = DonationForm(request.POST, instance=donator)
+        if form.is_valid():
+            form.save()
+            return redirect('resume_donation', id=donator.id)
+    else:
+        form = DonationForm(instance=donator)
+    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'form': form}
     return render(request, 'resume_donation.html', context)
 
 
 def delete_donation(request, id):
     detail = get_object_or_404(DetailsDonation, pk=id)
     id_donator = detail.donation_id
+    types = TypesDonation.objects.all()
+    type_res = TypesDonation.objects.get(name=detail.donation_type)
+    if detail.donation_type == type_res.name:
+        type_res.quantity_total -= detail.quantity
+        type_res.save()
     detail.delete()
     return redirect('resume_donation', id=id_donator)
 

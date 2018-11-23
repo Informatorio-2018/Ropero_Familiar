@@ -15,21 +15,25 @@
     </ul>
 	<div class="center-align">
   	<a class="waves-effect waves-light btn center-align" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
-  </div>
-  
-  <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Modal Header</h4>
-      <p>A bunch of text</p>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
-         
+  </div> 
 		 
+<!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <form method="POST">
+    	{% csrf_token %}
+    	<div class="modal-content">
+      <h4>Editar Razón Social o Nombre</h4>
+      {{form}}	
+    	</div>
+    	<div class="modal-footer">
+      	<button class="btn waves-effect waves-light" type="submit">Guardar</button>
+    	</div>
+    </form>
+  </div>
+
 {% endblock %}
+
+
 {% block extra_js %}
 	<script type="text/javascript">
 		$(document).ready(function(){
