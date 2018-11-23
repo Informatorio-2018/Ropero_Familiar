@@ -6,7 +6,7 @@
 
 	<h2>Resultados para: {{query}}</h2>
 	{% for r in ref %}
-		<p><a href="/referente/{{r.id}}/">{{r.family.lastname}}, {{r.family.firstname}}</a></p>
+		<p><a href="/referente/{{r.id}}/">{{r.lastname}}, {{r.firstname}}</a></p>
 	{% endfor %}
 
 {% endblock %}

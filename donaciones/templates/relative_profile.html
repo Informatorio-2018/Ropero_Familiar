@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Pefil de {{fam.firstname}}{% endblock %}
+
+{% block content %}
+	<p>Nombre: {{fam.firstname}}</p>
+	<p>Apellido: {{fam.lastname}}</p>
+	<p>DNI: {{fam.dni}}</p>
+	<p>Fecha de Nacimiento: {{fam.birth}}</p>
+	
+{% endblock %}
