@@ -67,4 +67,15 @@ class TypesProducts(models.Model):
 
 class SortProducts(models.Model):
     types = models.ForeignKey(TypesProducts,null = True,on_delete=models.SET_NULL,verbose_name='Tipos de Producto')
-    quantity = models.IntegerField(default=0,verbose_name='Cantidad')
+    quantity = models.IntegerField(verbose_name='Cantidad')
+    
+    def __str__(self):
+        return self.types.name
+
+
+# class ListSort(models.Model):
+#     name=models.CharField(max_length=30)
+#     quantity_total = models.IntegerField(default=0, verbose_name='Cantidad Total')
+    
+#     def __str__(self):
+#         return self.name

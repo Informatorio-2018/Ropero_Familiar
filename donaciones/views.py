@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
-from django.db.models import Q
+from django.db.models import Q,Sum
 
 # Create your views here.
 
@@ -97,11 +97,12 @@ def register_referring(request, id):
 
 
 def load_types_donation(request):
+
     if request.method == 'POST':
         form = LoadTypesDonationForm(request.POST)
         if form.is_valid():
             form.save()
-
+    
     form = LoadTypesDonationForm()
     return render(request, 'load_types_donation.html', {'form': form})
 
@@ -117,13 +118,20 @@ def load_types_products(request):
 
 
 def sort_products(request):
+    types = TypesProducts.objects.all()
     if request.method == 'POST':
         form = SortProductForm(request.POST)
         if form.is_valid():
-            form.save()
-
-    form = SortProductForm()
-    return render(request, 'sort_products.html', {'form': form})
+            sort = form.save(commit = False)
+            
+            sort.types_id = request.POST['types_id']
+            sort.save()
+            return redirect('sort_products')
+            
+    else:
+        form = SortProductForm()
+    context = {'types':types ,'form': form}
+    return render(request, 'sort_products.html', context)
 
 
 def register_family(request):
@@ -158,3 +166,50 @@ def referring_profile(request,id):
 
 def home(request):
     return render(request, 'home.html', {})
+
+
+# def list_sort(request):
+#     objetos=ListSort.objects.all()
+#     diccionario={}
+#     nombres=[]
+    
+#     types = TypesDonation.objects.all().values('name')
+#     lista = list(types)
+#     for i in lista:
+#         diccionario.update(i)
+#         nombres.append(diccionario.get('name'))
+
+#     print(nombres)
+#     dica={}
+#     for x in nombres:
+#         q1=DetailsDonation.objects.filter(donation_type=x).aggregate(Sum('quantity')).get('quantity__sum', 0.00)
+#         if q1 == None:
+#             print('cero')
+#         else:
+#             dica.update({x:q1})
+    
+#     lista_nombre = ListSort.objects.values_list('name')
+#     lista_ultima =[]
+#     for y in lista_nombre:
+#         for h in y:
+#             lista_ultima.append(h)
+#             pass
+#         pass
+
+#     nom=dica.keys()
+#     num=dica.values()
+#     print(num)
+
+#     for nom,num in dica.items():
+#         if nom in lista_ultima:
+#             pass
+#             # ad=ListSort.objects.get(name=nom)
+#             # ad = ListSort(quantity_total=num)
+#             # ad.save()
+#             # print('ya esta en la lista')
+#         else:
+#             c = ListSort(name=nom,quantity_total=num)
+#             c.save()
+    
+#     context ={'objetos':objetos}
+#     return render(request,'list_sort.html',context)
