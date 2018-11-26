@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
 from django.db.models import Q, Sum
+from django.contrib.auth import authenticate, login as log, logout as logout_django
+from django.contrib.auth.decorators import login_required
 
 
 def receive_donation(request):
@@ -208,9 +210,9 @@ def relative_profile(request,id):
     return render(request, 'relative_profile.html', {'fam': fam})
 
 
+@login_required
 def home(request):
     return render(request, 'home.html', {})
-
 
 def edit_referring(request,id):
     family = Family.objects.get(pk=id)
@@ -234,3 +236,30 @@ def edit_referring(request,id):
                                                  'form2':form2,
                                                  'neigh': neigh,
                                                  'ref':ref})
+
+def add_neigh(request):
+    if request.method == 'POST':
+        form = AddNeighForm(request.POST)
+        if form.is_valid():
+            form.save()
+    form = AddNeighForm()
+    return render(request, 'add_neigh.html', {'form': form})
+
+def login(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request,username=username,password=password)
+        if user is not None:
+            log(request,user)
+            return redirect('home')
+    form = LoginForm()
+    return render(request,'login.html',{'form': form})
+
+@login_required
+def logout(request):
+    logout_django(request)
+    return redirect('login')

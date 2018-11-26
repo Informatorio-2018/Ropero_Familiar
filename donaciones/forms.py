@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from django.contrib.auth.models import User
 
 
 class FamilyForm_r(forms.ModelForm):
@@ -64,3 +65,12 @@ class SortProductForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Búsqueda')
+
+class AddNeighForm(forms.ModelForm):
+    class Meta:
+        model = Neighborhood
+        fields = ('name',)
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length = 20)
+    password = forms.CharField(max_length = 20 , widget = forms.PasswordInput())

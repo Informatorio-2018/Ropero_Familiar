@@ -21,4 +21,7 @@ urlpatterns = [
     path('cargar_tipos_donacion/',views.load_types_donation, name="load_types_donation"),
     path('cargar_tipos_productos/',views.load_types_products, name ="load_types_products"),
     path('clasificar_productos/',views.sort_products, name ="sort_products"),
+    path('adm/agregar_barrio/',views.add_neigh, name="add_neigh"),
+    path('login/', views.login, name='login'),
+    path('logout/',views.logout, name = 'logout'),
 ]
