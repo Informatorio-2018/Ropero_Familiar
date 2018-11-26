@@ -53,6 +53,12 @@ class Family(models.Model):
     role = models.CharField(max_length=1, choices=(('r', 'Referente'), ('f', 'Familiar')))
     ref = models.IntegerField(null=True)
 
+    def __str__(self):
+        return "%s, %s" %(self.lastname,self.firstname)
+
+    class Meta:
+        ordering = ["lastname"]
+
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
     phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono

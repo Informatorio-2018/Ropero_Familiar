@@ -9,13 +9,13 @@
 		<div class="row">
 			{% csrf_token %}
 			{{form}}
-			<input type="submit" value="search" class="btn">
-			{% for r in ref %}
-				<br>
-				<a href="/referente/{{r.id}}/">{{r.lastname}}, {{r.firstname}}</a>
-			{% endfor %}
-			<br>
+			<input type="submit" value="Buscar" class="btn">
 			<a href="/registrar_referente_f/"  class="btn">Registrar</a>
+			{% for r in ref %}
+				<div class="row collection">	
+					<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
+				</div>
+			{% endfor %}
 		</div>
 	</form>
  

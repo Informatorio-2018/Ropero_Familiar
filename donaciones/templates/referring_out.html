@@ -4,9 +4,13 @@
 
 {% block content %}
 
-	<h2>Resultados para: {{query}}</h2>
+	<h2>Resultados para: '{{query}}'</h2>
 	{% for r in ref %}
-		<p><a href="/referente/{{r.id}}/">{{r.lastname}}, {{r.firstname}}</a></p>
+		<div class="row collection">	
+			<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
+		</div>
 	{% endfor %}
+	<a href="/busqueda_referente/" class="btn">Volver</a>
+	<a href="/registrar_referente_f/"  class="btn">Registrar</a>
 
 {% endblock %}

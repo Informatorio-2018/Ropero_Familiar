@@ -94,7 +94,7 @@ def register_referring_f(request):
             ref.birth = request.POST['birth']
             ref.save()
             family = Family.objects.last()
-            return redirect('register_referring', id=family.id)
+            return redirect('/registrar_referente_f/'+str(ref.id)+'/')
     return render(request, 'register_referring_f.html', {'form': form})
 
 
@@ -108,8 +108,7 @@ def register_referring(request, id):
             fam.family = family
             fam.neighborhood_id = request.POST['neigh_id']
             form.save()
-            return redirect('home')
-
+            return redirect('/busqueda_referente/')
     return render(request, 'register_referring.html', {'form': form,
                                                        'neigh': neigh})
 
@@ -154,6 +153,7 @@ def sort_products(request):
 
 def register_family(request,id):
     form = FamilyForm(request.POST or None)
+    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         if form.is_valid():
             fam = form.save(commit=False)
@@ -161,7 +161,7 @@ def register_family(request,id):
             fam.role = 'f'
             fam.birth = request.POST['birth']
             fam.save()
-            return redirect('home')
+            return redirect('/referente/'+str(id)+'/familiares/')
     return render(request, 'register_family.html', {'form': form})
 
 
@@ -193,7 +193,6 @@ def referring_relatives(request,id):
                                                         'fam': fam})
 
 def relative_profile(request,id):
-    # import ipdb; ipdb.set_trace()
     fam = Family.objects.get(pk=id)
     return render(request, 'relative_profile.html', {'fam': fam})
 
