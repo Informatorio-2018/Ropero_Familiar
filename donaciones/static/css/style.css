@@ -7,6 +7,10 @@
 	border: solid 1px red;
 }
 
+.disable-col{
+	pointer-events: none;
+}
+
 .borde-azul{
 	border: solid 1px blue;
 }

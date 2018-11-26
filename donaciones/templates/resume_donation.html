@@ -5,11 +5,13 @@
 {% block content %}
 	<h4 class="center-align">Resumen de Donación</h4>
 	  <ul class="collection with-header">
-      <li class="collection-header"><h4>{{ donator.name }}	<a class="waves-effect 	waves-light btn modal-trigger" href="#modal1">Edit</a></h4>
+      <li class="collection-header"><h4>{{ donator.name }}	<a class="waves-effect 	waves-light btn modal-trigger"  href="#modal1">Edit</a></h4>
       </li>
 			{% for res in resumes %}
       	<li class="collection-item">{{res.donation_type}} {{res.quantity}} 
-      		{{ res.get_unit_measure_display }} <a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete</i></a>
+      		{{ res.get_unit_measure_display }} 
+      		<a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete</i></a>
+      		<a class="waves-effect 	waves-light btn modal-trigger right"  href="#modal2" onclick="location.href='#modal2';" >Edit</a>
       	</li>
 			{% endfor %}
     </ul>
@@ -17,19 +19,33 @@
   	<a class="waves-effect waves-light btn center-align" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
   </div> 
 		 
-<!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <form method="POST">
-    	{% csrf_token %}
-    	<div class="modal-content">
-      <h4>Editar Razón Social o Nombre</h4>
-      {{form}}	
-    	</div>
-    	<div class="modal-footer">
-      	<button class="btn waves-effect waves-light" type="submit">Guardar</button>
-    	</div>
-    </form>
-  </div>
+<!-- Modal Edit Donator -->
+<div id="modal1" class="modal">
+  <form method="POST">
+  	{% csrf_token %}
+  	<div class="modal-content">
+    <h4>Editar Razón Social o Nombre</h4>
+    {{don_form}}	
+  	</div>
+  	<div class="modal-footer">
+    	<button class="btn waves-effect waves-light" name="edit_donator" type="submit">Guardar</button>
+  	</div>
+  </form>
+</div>
+
+<!-- Modal Edit Quantity -->
+<div id="modal2" class="modal">
+  <form method="POST">
+  	{% csrf_token %}
+  	<div class="modal-content">
+    <h4>Editar Cantidad</h4>
+    {{quan_form}}	
+  	</div>
+  	<div class="modal-footer">
+    	<button class="btn waves-effect waves-light" name="edit_quantity" type="submit">Guardar</button>
+  	</div>
+  </form>
+</div>
 
 {% endblock %}
 

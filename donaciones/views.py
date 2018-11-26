@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import *
 from .models import *
-from django.db.models import Q,Sum
+from django.db.models import Q, Sum
+
 
 def receive_donation(request):
     form = DonationForm(request.POST or None)
@@ -48,14 +49,22 @@ def items_donation(request, id):
 
 def resume_donation(request, id):
     donator = Donation.objects.get(pk=id)
+    detail = DetailsDonation.objects.filter(donation__pk=id)
     if request.method == "POST":
-        form = DonationForm(request.POST, instance=donator)
-        if form.is_valid():
-            form.save()
-            return redirect('resume_donation', id=donator.id)
+        if 'edit_donator' in request.POST:
+            don_form = DonationForm(request.POST, instance=donator)
+            if don_form.is_valid():
+                don_form.save()
+                return redirect('resume_donation', id=donator.id)
+        elif 'edit_quantity' in request.POST:
+            quan_form = DetailsDonationForm(request.POST)
+            if quan_form.is_valid():
+                quan_form.save()
+                return redirect('resume_donation', id=donator.id)
     else:
-        form = DonationForm(instance=donator)
-    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'form': form}
+        don_form = DonationForm(instance=donator)
+        quan_form = DetailsDonationForm()
+    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'don_form': don_form, 'quan_form': quan_form}
     return render(request, 'resume_donation.html', context)
 
 
@@ -119,7 +128,7 @@ def load_types_donation(request):
         form = LoadTypesDonationForm(request.POST)
         if form.is_valid():
             form.save()
-    
+
     form = LoadTypesDonationForm()
     return render(request, 'load_types_donation.html', {'form': form})
 
@@ -139,19 +148,19 @@ def sort_products(request):
     if request.method == 'POST':
         form = SortProductForm(request.POST)
         if form.is_valid():
-            sort = form.save(commit = False)
-            
+            sort = form.save(commit=False)
+
             sort.types_id = request.POST['types_id']
             sort.save()
             return redirect('sort_products')
-            
+
     else:
         form = SortProductForm()
-    context = {'types':types ,'form': form}
+    context = {'types': types, 'form': form}
     return render(request, 'sort_products.html', context)
 
 
-def register_family(request,id):
+def register_family(request, id):
     form = FamilyForm(request.POST or None)
     # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
@@ -171,10 +180,10 @@ def referring_search(request):
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(firstname__contains = query)
-            q2 = Q(lastname__contains = query)
+            q1 = Q(firstname__contains=query)
+            q2 = Q(lastname__contains=query)
             q3 = Q(role__exact='r')
-            ref = Family.objects.filter((q1&q3)|(q2&q3))
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
             return render(request, 'referring_out.html', {'ref': ref,
                                                           'query': query})
     else:
@@ -182,11 +191,13 @@ def referring_search(request):
     return render(request, 'referring_search.html', {'form': form,
                                                      'ref': ref})
 
-def referring_profile(request,id):
-    ref = Referring.objects.get(family_id=id)
-    return render(request, 'referring_profile.html', {'ref':ref})
 
-def referring_relatives(request,id):
+def referring_profile(request, id):
+    ref = Referring.objects.get(family_id=id)
+    return render(request, 'referring_profile.html', {'ref': ref})
+
+
+def referring_relatives(request, id):
     ref = Family.objects.get(pk=id)
     fam = Family.objects.filter(ref=id)
     return render(request, 'referring_relatives.html', {'ref': ref,
@@ -195,6 +206,7 @@ def referring_relatives(request,id):
 def relative_profile(request,id):
     fam = Family.objects.get(pk=id)
     return render(request, 'relative_profile.html', {'fam': fam})
+
 
 def home(request):
     return render(request, 'home.html', {})
