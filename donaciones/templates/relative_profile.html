@@ -3,9 +3,21 @@
 {% block title %}Pefil de {{fam.firstname}}{% endblock %}
 
 {% block content %}
-	<p>Nombre: {{fam.firstname}}</p>
-	<p>Apellido: {{fam.lastname}}</p>
-	<p>DNI: {{fam.dni}}</p>
-	<p>Fecha de Nacimiento: {{fam.birth}}</p>
-	
+	<div class="row">
+		<div class="col s6 push-s3">
+			<div class="center-align">
+				<p>Nombre: {{fam.firstname}}</p>
+				<p>Apellido: {{fam.lastname}}</p>
+				<p>DNI: {{fam.dni}}</p>
+				<p>Fecha de Nacimiento: {{fam.birth}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s6 push-s3">
+			<div class="center-align">
+				<a href="/referente/{{fam.ref}}/familiares" class="btn">Volver</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}

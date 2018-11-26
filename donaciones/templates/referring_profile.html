@@ -3,13 +3,26 @@
 {% block title %}Pefil de {{ref.firstname}}{% endblock %}
 
 {% block content %}
-	<p>Nombre: {{ref.family.firstname}}</p>
-	<p>Apellido: {{ref.family.lastname}}</p>
-	<p>DNI: {{ref.family.dni}}</p>
-	<p>Fecha de Nacimiento: {{ref.family.birth}}</p>
-	<p>Dirección: {{ref.adress}}</p>
-	<p>Barrio: {{ref.neighborhood}}</p>
-	<p>Número de Teléfono: {{ref.phone}}</p>
-	<a href="/referente/{{ref.family.id}}/familiares/">Familiares</a>
+	<div class="row">
+		<div class="col s6 push-s3">
+			<div class="center-align">
+				<p>Nombre: {{ref.family.firstname}}</p>
+				<p>Apellido: {{ref.family.lastname}}</p>
+				<p>DNI: {{ref.family.dni}}</p>
+				<p>Fecha de Nacimiento: {{ref.family.birth}}</p>
+				<p>Dirección: {{ref.adress}}</p>
+				<p>Barrio: {{ref.neighborhood}}</p>
+				<p>Número de Teléfono: {{ref.phone}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s6 push-s3">
+			<div class="center-align">
+				<a href="/busqueda_referente/" class="btn">Volver</a>
+				<a href="/referente/{{ref.family.id}}/familiares/" class="btn">Familiares</a>
+			</div>
+		</div>
+	</div>
 	
 {% endblock %}
