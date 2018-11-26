@@ -10,12 +10,41 @@
 	<ul class="collapsible popout">
     {% for t in types %}
 			<li>
+				<!--{% if details %}
+					{% for d in details %}
+						{% if t.name == d.donation_type %}
+							<div id="col_{{ t.name }}" class="collapsible-header center-align borde-rojo">
+								{{ t.name }}<span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
+							</div>
+							<script type="text/javascript">
+	 							$(function() {
+	 								if ({{d.quantity}} > 0){
+										$('#col_Ropa').addClass("borde-verde");
+	 								}
+								});
+							</script>
+						{% else %}
+							<div class="collapsible-header center-align borde-verde">
+								{{ t.name }}
+							</div>
+						{% endif %}
+					{% endfor %}
+				{% endif %}-->
+			
 				{% if details %}
-						<div class="collapsible-header center-align borde-rojo">
-							{{t.name}}  {% for d in details %}	{% if d.donation_type == t.name %} <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span> {% endif %} {% endfor %}
-						</div>
+					<div id="col_{{t.name}}" class="collapsible-header center-align">
+						{{t.name}}  {% for d in details %}	{% if d.donation_type == t.name %} <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
+						<script type="text/javascript">
+ 							$(function() {
+ 								if ({{ d.quantity }} > 0){
+									$("#col_{{t.name}}").addClass("disable-col");
+ 								}
+							});
+						</script>
+						 {% endif %} {% endfor %}
+					</div>
 				{% else %}
-					<div class="collapsible-header center-align borde-verde">
+					<div id="col_{{t.name}}" class="collapsible-header center-align ">
 						{{ t.name }}
 					</div>
 				{% endif %}
@@ -24,25 +53,22 @@
       			{% csrf_token %}
       			<div class="row">
 	      			<div class="col s4 offset-s4">
-	      				{% if form.errors %}
-	      					{{quantity}}
-	      				{% endif %}
 	     					{% if t.name == 'Otros' %}
 	     						{{form_details}}
 	     						{{form_others}}
 	     						<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
 	     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
 	     					{% else %}
-	     						{{form_details}}
+	     						{{ form_details}}
 	     						<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
 	     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
 	     					{% endif %}
 	      			</div>
 	      			<div class="col s4 left">
-	      				<label class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
+	      				<label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
 	      			</div>
 	      			<div class="col s6 center-align offset-s3">
-								<button class="btn waves-effect waves-light" type="submit">Agregar</button>
+								<button id="btn_{{t.name}}" class="btn waves-effect waves-light" type="submit">Agregar</button>
     					</div>
 	      		</div>
 	      	
@@ -52,7 +78,11 @@
 		{% endfor %}
   </ul>
   <div class="center-align">
-  	<a class="waves-effect waves-light btn center-align" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
+  	{% if details %}
+  		<a class="waves-effect waves-light btn center-align" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
+  	{% else %}
+  		<a class="waves-effect waves-light btn center-align disabled" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
+  	{% endif %}
   </div>
 {% endblock %}
 
@@ -62,4 +92,50 @@
 	    	$('.collapsible').collapsible();
 	  	});
 	</script>
-	{% endblock %}
+
+	<script>
+		$(document).ready(function(){
+			//Cambia label calzado
+			$("[id=id_quantity]:eq(1)").keyup(function(){
+				if ($(this).val() > 1) {
+        	$('#label_Calzado').text('Pares');
+    		} else {
+        	$('#label_Calzado').text('Par');
+    		}
+			});
+			//Cambia label accesorios
+			$("[id=id_quantity]:eq(2)").keyup(function(){
+				if ($(this).val() > 1) {
+        	$('#label_Accesorios').text('Unidades');
+    		} else {
+        	$('#label_Accesorios').text('Unidad');
+    		}
+			});
+			//Cambia label otros
+			$("[id=id_quantity]:eq(2),[id=id_quantity]:eq(3)").keyup(function(){
+				if ($(this).val() > 1) {
+        	$('#label_Accesorios').text('Unidades');
+    		} else {
+        	$('#label_Accesorios').text('Unidad');
+    		}
+			});
+		});
+	</script>
+
+	<!--<script type="text/javascript">
+		$(document).ready(function(){
+			$("#btn_Ropa").click(function(){
+				$("#col_Ropa").toggleClass("borde-rojo");
+			});
+			$("#btn_Calzado").click(function(){
+				$("#col_Calzado").addClass("borde-rojo");
+			});
+			$("#btn_Accesorios").click(function(){
+				$("#col_Accesorios").removeClass("borde-rojo");
+			});
+			$("#btn_Otros").click(function(){
+				$("#col_Otros").removeClass("borde-rojo");
+			});
+		});
+	</script>-->
+{% endblock %}

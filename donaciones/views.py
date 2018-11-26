@@ -49,10 +49,11 @@ def items_donation(request, id):
 def resume_donation(request, id):
     donator = Donation.objects.get(pk=id)
     if request.method == "POST":
-        form = DonationForm(request.POST, instance=donator)
-        if form.is_valid():
-            form.save()
-            return redirect('resume_donation', id=donator.id)
+        if 'edit_donator' in request.POST:
+            form = DonationForm(request.POST, instance=donator)
+            if form.is_valid():
+                form.save()
+                return redirect('resume_donation', id=donator.id)
     else:
         form = DonationForm(instance=donator)
     context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'form': form}
