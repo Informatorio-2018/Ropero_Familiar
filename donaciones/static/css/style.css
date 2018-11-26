@@ -31,8 +31,34 @@
 	border: solid 1px black;
 }
 
-
 /* -----bordes de prueba------ */
+
+.background{
+	background-image: url(../images/background.jpg);
+	background-size: cover;
+}
+.nombre-usuario{
+	text-shadow: 1px 1px 1px #000000;
+	background-color: rgba(155,46,43,.6);/*#9b2e2b;*/
+	border-radius: 3px 3px 0 0;
+}
+.nombre-usuario a span{
+	font-size: 1.3em!important;
+}
+
+.divider{
+	margin:0!important;
+}
+
+.title-menu{
+	padding-left: 5px;
+	height: 30px;
+	line-height: 2em;
+
+}
+.title-menu:first-of-type{
+	margin-top: -8px;
+}
 
 @media screen and (min-width: 993px){
 	nav a.sidenav-trigger {

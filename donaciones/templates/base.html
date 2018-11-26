@@ -38,17 +38,67 @@
   	 
 
   <ul id="slide-out" class="sidenav">
-    <li><div class="user-view">
-      <div class="background">
-        <img src="{% static 'images/logo_f_conin.jpg' %}">
-      </div>
+    <li>
+      <div class="user-view">
+      <div class="background"></div>
       <a href="#user"><img class="circle" src="{% static 'images/avatar.png' %}"></a>
-      <a href="#name"><span class="black-text name">nombre de usuario</span></a>
-      <a href="#email"><span class="black-text email">usuario@gmail.com</span></a>
-    </div></li>
-    <li><a href="{% url 'receive_donation' %}"><i class="material-icons">loyalty</i>Recibir Donación</a></li>
-    <li><div class="divider"></div></li>
-    <li><a href="#"><i class="material-icons">save_alt</i>Clasificar Articulo</a></li>
+      <div class="nombre-usuario">
+        <a href="#name"><span class="name">Nombre de Usuario</span></a>
+      </div>
+    </div>
+  </li>
+    <div class="grey darken-4 white-text title-menu">
+        DONACIONES
+    </div>
+    <li class="grey lighten-3">
+      <a href="{% url 'receive_donation' %}"><i class="material-icons">loyalty</i>Recibir Donación</a></li>
+    <li class="divider"></li>
+    <li  class="grey lighten-3">
+      <a href="#">
+        <i class="material-icons">save_alt</i>Clasificar Donaciones
+      </a>
+    </li>
+    <div class="grey darken-4 white-text title-menu">
+        ROPERO FAMILIAR
+    </div>
+    <li class="grey lighten-3">
+      <a href="{% url 'referring_search' %}"><i class="material-icons">how_to_reg</i>Ingreso al Ropero</a></li>
+    <li class="divider"></li>
+    <li class="grey lighten-3">
+      <a href="#"><i class="material-icons">monetization_on</i>Registrar Venta</a>
+    </li>
+    <div class="grey darken-4 white-text title-menu">
+        FAMILIAS
+    </div>
+    <li  class="grey lighten-3">
+      <a href="{% url 'register_referring_f' %}">
+        <i class="material-icons">supervised_user_circle</i>Registrar Familia
+      </a>
+    </li>
+
+    <div class="grey darken-4 white-text title-menu">
+        ADMINISTRAR
+    </div>
+    <li  class="grey lighten-3">
+      <a href="{% url 'load_types_donation' %}">
+        <i class="material-icons">card_giftcard</i>Tipos de Donaciones
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="grey lighten-3">
+      <a href="#"><i class="material-icons">view_quilt</i>Barrios</a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+
     <li><div class="divider"></div></li>
     <li><a class="subheader">Subheader</a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
