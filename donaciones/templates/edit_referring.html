@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Editar referente{% endblock %}
+	
+{% block content %}
+
+	<form method="POST">
+		{% csrf_token %}
+		{{form1.as_p}}
+		{{form2.as_p}}
+		<div class="input-field col s12">
+    		<select name="neigh_id">
+		      <option value="{{ref.neighborhood}}" disabled selected>{{ref.neighborhood.name}}</option>
+		      {% for n in neigh %}
+		      	<option value={{n.id}}>{{n.name}}</option>
+		      {% endfor %}
+    		</select>
+    		<label>Barrio</label>
+  		</div>
+		<button type="submit" class="btn">Guardar</button>
+	</form>
+
+	{% block extra_js %}
+		<script type="text/javascript">
+			$(document).ready(function(){
+    			$('select').formSelect();
+  			});
+		</script>
+	{% endblock %}
+
+{% endblock %}

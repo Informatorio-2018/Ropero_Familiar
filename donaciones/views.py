@@ -214,6 +214,29 @@ def relative_profile(request,id):
 def home(request):
     return render(request, 'home.html', {})
 
+def edit_referring(request,id):
+    family = Family.objects.get(pk=id)
+    neigh = Neighborhood.objects.all()
+    ref = Referring.objects.get(family_id=id)
+    if request.method == 'POST':
+        form1 = FamilyForm_r(request.POST, instance=family)
+        if form1.is_valid():
+            form1.save()
+            form2 = ReferringForm(request.POST, instance=ref)
+            if form2.is_valid():
+                fam = form2.save(commit=False)
+                fam.family = family
+                fam.neighborhood_id = request.POST['neigh_id']
+                fam.save()
+            return redirect('referring_profile', id)
+    else:
+        form1 = FamilyForm_r(instance=family)
+        form2 = ReferringForm(instance=ref)
+    return render(request,'edit_referring.html',{'form1':form1,
+                                                 'form2':form2,
+                                                 'neigh': neigh,
+                                                 'ref':ref})
+
 def add_neigh(request):
     if request.method == 'POST':
         form = AddNeighForm(request.POST)
@@ -240,7 +263,3 @@ def login(request):
 def logout(request):
     logout_django(request)
     return redirect('login')
-
-# def perfil(request):
-#     form = PerfilForm(instance=request.user)
-#     return render(request,'perfil.html',{'form': form})
