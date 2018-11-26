@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Agregar Barrio{% endblock %}
+
+{% block content %}
+	<h2 class="center-align">Agregar Barrio</h2>
+	<form action="/adm/agregar_barrio/" method="POST">
+		{% csrf_token %}
+		{{form}}
+		<input type="submit" value="Agregar" class="btn">
+	</form>
+
+{% endblock %}
