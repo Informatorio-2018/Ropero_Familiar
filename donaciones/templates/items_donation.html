@@ -10,27 +10,6 @@
 	<ul class="collapsible popout">
     {% for t in types %}
 			<li>
-				<!--{% if details %}
-					{% for d in details %}
-						{% if t.name == d.donation_type %}
-							<div id="col_{{ t.name }}" class="collapsible-header center-align borde-rojo">
-								{{ t.name }}<span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
-							</div>
-							<script type="text/javascript">
-	 							$(function() {
-	 								if ({{d.quantity}} > 0){
-										$('#col_Ropa').addClass("borde-verde");
-	 								}
-								});
-							</script>
-						{% else %}
-							<div class="collapsible-header center-align borde-verde">
-								{{ t.name }}
-							</div>
-						{% endif %}
-					{% endfor %}
-				{% endif %}-->
-			
 				{% if details %}
 					<div id="col_{{t.name}}" class="collapsible-header center-align">
 						{{t.name}}  {% for d in details %}	{% if d.donation_type == t.name %} <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
@@ -121,21 +100,4 @@
 			});
 		});
 	</script>
-
-	<!--<script type="text/javascript">
-		$(document).ready(function(){
-			$("#btn_Ropa").click(function(){
-				$("#col_Ropa").toggleClass("borde-rojo");
-			});
-			$("#btn_Calzado").click(function(){
-				$("#col_Calzado").addClass("borde-rojo");
-			});
-			$("#btn_Accesorios").click(function(){
-				$("#col_Accesorios").removeClass("borde-rojo");
-			});
-			$("#btn_Otros").click(function(){
-				$("#col_Otros").removeClass("borde-rojo");
-			});
-		});
-	</script>-->
 {% endblock %}
