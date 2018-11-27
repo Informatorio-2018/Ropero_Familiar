@@ -58,9 +58,26 @@ class LoadTypeProductForm(forms.ModelForm):
 
 
 class SortProductForm(forms.ModelForm):
+    lista=[]
+    control = TypesDonation.objects.filter(quantity_total__gte=0)
+    for i in control:
+        if i.name == 'Ropa':
+            lista.append('Ropa Verano')
+            lista.append('Ropa Invierno')
+        else:
+            lista.append(i.name)
+
+
+
+        
     class Meta:
         model = SortProducts
-        fields = ('quantity',)
+        fields = ('types','quantity',)
+
+        widgets= {
+        'types':forms.Select(choices='lista')
+        }
+
 
 
 class SearchForm(forms.Form):

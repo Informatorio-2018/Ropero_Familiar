@@ -146,19 +146,29 @@ def load_types_products(request):
 
 
 def sort_products(request):
-    types = TypesProducts.objects.all()
+    types = TypesDonation.objects.all()
     if request.method == 'POST':
         form = SortProductForm(request.POST)
         if form.is_valid():
-            sort = form.save(commit=False)
-
-            sort.types_id = request.POST['types_id']
-            sort.save()
+            form.save()
             return redirect('sort_products')
 
     else:
         form = SortProductForm()
-    context = {'types': types, 'form': form}
+
+    lista=[]
+    control = TypesDonation.objects.filter(quantity_total__gt=0)
+    for i in control:
+        if i.name == 'Ropa':
+            lista.append('Ropa Verano')
+            lista.append('Ropa Invierno')
+        else:
+            lista.append(i.name)
+
+    
+    # print(control)
+    
+    context = {'control': control, 'form': form, 'lista':lista}
     return render(request, 'sort_products.html', context)
 
 
