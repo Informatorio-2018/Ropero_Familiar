@@ -192,14 +192,15 @@ def register_family(request, id):
 
 
 def referring_search(request):
-    ref = Referring.objects.all()
+    ref = Family.objects.filter(role__exact='r')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains=query)
-            q2 = Q(family__lastname__contains=query)
-            ref = Referring.objects.filter(q1 | q2)
+            q1 = Q(firstname__contains=query)
+            q2 = Q(lastname__contains=query)
+            q3 = Q(role__exact='r')
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query})
     else:
@@ -209,7 +210,7 @@ def referring_search(request):
 
 
 def referring_profile(request, id):
-    ref = Referring.objects.get(family_id=id)
+    ref = Family.objects.get(pk=id)
     return render(request, 'referring_profile.html', {'ref': ref})
 
 
@@ -238,6 +239,7 @@ def edit_referring(request,id):
             form1.save()
             form2 = ReferringForm(request.POST, instance=ref)
             if form2.is_valid():
+                fam = form2.cleaned_data
                 fam = form2.save(commit=False)
                 fam.family = family
                 fam.neighborhood_id = request.POST['neigh_id']
@@ -298,14 +300,15 @@ def logout(request):
     return redirect('login')
 
 def closet(request):
-    ref = Referring.objects.all()
+    ref = Family.objects.filter(role__exact='r')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains=query)
-            q2 = Q(family__lastname__contains=query)
-            ref = Referring.objects.filter(q1 | q2)
+            q1 = Q(firstname__contains=query)
+            q2 = Q(lastname__contains=query)
+            q3 = Q(role__exact='r')
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
             return render(request, 'closet_search_out.html', {'ref': ref,
                                                               'query': query})
     else:
@@ -314,7 +317,7 @@ def closet(request):
                                          'ref':ref})
 
 def entry_ok(request,id):
-    ref = Referring.objects.get(pk=id)
+    ref = Family.objects.get(pk=id)
     
     return render(request,'entry_ok.html',{'ref':ref})
   
