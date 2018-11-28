@@ -8,6 +8,7 @@ urlpatterns = [
     path('recibir_donacion/<int:id>/', views.items_donation, name='items_donation'),
     path('recibir_donacion/<int:id>/resumen', views.resume_donation, name='resume_donation'),
     path('recibir_donacion/<int:id>/resumen/finalizar', views.finish_donation, name='finish_donation'),
+    path('editar_donacion/<int:id>/', views.edit_donation, name='edit_donation'),
     path('eliminar_donacion/<int:id>/', views.delete_donation, name='delete_donation'),
     path('home/',views.home, name='home'),
     path('registrar_referente_f/',views.register_referring_f, name="register_referring_f"),
@@ -22,6 +23,7 @@ urlpatterns = [
     path('cargar_tipos_productos/',views.load_types_products, name ="load_types_products"),
     path('clasificar_productos/',views.sort_products, name ="sort_products"),
     path('adm/agregar_barrio/',views.add_neigh, name="add_neigh"),
+    path('adm/registrar_usuario/',views.register_user, name="register_user"),
     path('login/', views.login, name='login'),
     path('logout/',views.logout, name = 'logout'),
 ]

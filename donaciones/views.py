@@ -51,24 +51,39 @@ def items_donation(request, id):
 
 def resume_donation(request, id):
     donator = Donation.objects.get(pk=id)
-    detail = DetailsDonation.objects.filter(donation__pk=id)
     if request.method == "POST":
-        if 'edit_donator' in request.POST:
-            don_form = DonationForm(request.POST, instance=donator)
-            if don_form.is_valid():
-                don_form.save()
-                return redirect('resume_donation', id=donator.id)
-        elif 'edit_quantity' in request.POST:
-            quan_form = DetailsDonationForm(request.POST)
-            if quan_form.is_valid():
-                quan_form.save()
-                return redirect('resume_donation', id=donator.id)
+        don_form = DonationForm(request.POST, instance=donator)
+        if don_form.is_valid():
+            don_form.save()
+            return redirect('resume_donation', id=donator.id)
     else:
         don_form = DonationForm(instance=donator)
-        quan_form = DetailsDonationForm()
-    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'don_form': don_form, 'quan_form': quan_form}
+    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'don_form': don_form}
     return render(request, 'resume_donation.html', context)
 
+def edit_donation(request, id):
+    # import ipdb; ipdb.set_trace()
+    detail = get_object_or_404(DetailsDonation, pk=id)
+    id_donator = detail.donation_id
+    types = TypesDonation.objects.all()
+    type_edit = types.get(name=detail.donation_type)
+
+    if request.method == 'POST':
+        # Resta del total la cantidad a editar
+        if detail.donation_type == type_edit.name:
+            type_edit.quantity_total -= detail.quantity
+            type_edit.save()
+        form = DetailsDonationForm(request.POST, instance=detail)
+        if form.is_valid():
+            form.save()
+            # Suma al total la cantidad editada
+            if detail.donation_type == type_edit.name:
+                type_edit.quantity_total += detail.quantity
+                type_edit.save()
+            return redirect('resume_donation', id=id_donator)
+    else:
+        form = DetailsDonationForm(instance=detail)
+    return render(request, 'edit_donation.html', {'form': form})
 
 def delete_donation(request, id):
     detail = get_object_or_404(DetailsDonation, pk=id)
@@ -263,3 +278,13 @@ def login(request):
 def logout(request):
     logout_django(request)
     return redirect('login')
+
+def register_user(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'register_user.html', {'form': form})

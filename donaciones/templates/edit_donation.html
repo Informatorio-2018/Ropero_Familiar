@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Donación{% endblock %}
+
+{% block content %}
+	<form method="POST">
+  	{% csrf_token %}
+    <h5 class="center-align">Editar Cantidad</h5>
+  	<div>
+    {{form.as_p}}	
+  	</div>
+  	<div class="modal-footer">
+    	<button class="btn waves-effect waves-light" type="submit">Guardar</button>
+  	</div>
+  </form>
+{% endblock %}
+
