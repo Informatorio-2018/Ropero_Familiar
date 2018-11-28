@@ -177,17 +177,16 @@ def register_family(request, id):
 
 
 def referring_search(request):
-    ref = Family.objects.filter(role__exact='r')
+    ref = Referring.objects.all()
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(firstname__contains=query)
-            q2 = Q(lastname__contains=query)
-            q3 = Q(role__exact='r')
-            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
-            return render(request, 'referring_out.html', {'ref': ref,
-                                                          'query': query})
+            q1 = Q(family__firstname__contains=query)
+            q2 = Q(family__lastname__contains=query)
+            ref = Referring.objects.filter(q1 | q2)
+            return render(request, 'referring_search_out.html', {'ref': ref,
+                                                                 'query': query})
     else:
         form = SearchForm()
     return render(request, 'referring_search.html', {'form': form,
@@ -237,13 +236,32 @@ def edit_referring(request,id):
                                                  'neigh': neigh,
                                                  'ref':ref})
 
-def add_neigh(request):
+def neigh(request):
+    neigh = Neighborhood.objects.all()
     if request.method == 'POST':
-        form = AddNeighForm(request.POST)
+        form = NeighForm(request.POST)
         if form.is_valid():
             form.save()
-    form = AddNeighForm()
-    return render(request, 'add_neigh.html', {'form': form})
+    form = NeighForm()
+    return render(request, 'neigh.html', {'form': form,
+                                          'neigh': neigh})
+
+def edit_neigh(request,id):
+    neigh = Neighborhood.objects.get(pk=id)
+    if request.method == 'POST':
+        form = EditNeighForm(request.POST, instance=neigh)
+        if form.is_valid():
+            form.save()
+            return redirect('neigh')
+    form = EditNeighForm(instance=neigh)
+    return render(request,'edit_neigh.html',{'form':form,
+                                             'neigh':neigh})
+
+def del_neigh(request, id):
+    neigh = get_object_or_404(Neighborhood, pk=id)
+    neigh.delete()
+    return redirect('neigh')
+
 
 def login(request):
     if request.user.is_authenticated:
@@ -263,3 +281,24 @@ def login(request):
 def logout(request):
     logout_django(request)
     return redirect('login')
+
+def closet(request):
+    ref = Referring.objects.all()
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            q1 = Q(family__firstname__contains=query)
+            q2 = Q(family__lastname__contains=query)
+            ref = Referring.objects.filter(q1 | q2)
+            return render(request, 'closet_search_out.html', {'ref': ref,
+                                                              'query': query})
+    else:
+        form = SearchForm()
+    return render(request,'closet.html',{'form':form,
+                                         'ref':ref})
+
+def entry_ok(request,id):
+    ref = Referring.objects.get(pk=id)
+    
+    return render(request,'entry_ok.html',{'ref':ref})

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado de Búsqueda{% endblock %}
+
+{% block content %}
+
+	<h2>Resultados para: '{{query}}'</h2>
+	{% for r in ref %}
+		<div class="row collection">	
+			<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.family.lastname}}, {{r.family.firstname}}</a>
+		</div>
+	{% endfor %}
+
+	{% for referente in ref %}
+		<div id="modal1{{referente.id}}" class="modal">
+			<div class="modal-content">
+			  <h4>Ingreso al Ropero</h4>
+			  <p>¿Está seguro que {{referente.family.lastname}}, {{referente.family.firstname}} ingresará al ropero?</p>
+			</div>
+			<div class="modal-footer">
+			  <a href="/ingreso_ropero/ok/{{referente.id}}/" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+			</div>
+		</div>
+	{% endfor %}
+
+	<a href="/busqueda_referente/" class="btn">Volver</a>
+	<a href="/registrar_referente_f/"  class="btn">Registrar</a>
+
+{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+	  $(document).ready(function(){
+	    $('.modal').modal();
+	  });	
+	</script>
+{% endblock %}
