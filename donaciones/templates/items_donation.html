@@ -77,9 +77,9 @@
 			//Cambia label calzado
 			$("[id=id_quantity]:eq(1)").keyup(function(){
 				if ($(this).val() > 1) {
-        	$('#label_Calzado').text('Pares');
+        	$('#label_Calzados').text('Pares');
     		} else {
-        	$('#label_Calzado').text('Par');
+        	$('#label_Calzados').text('Par');
     		}
 			});
 			//Cambia label accesorios
@@ -91,11 +91,11 @@
     		}
 			});
 			//Cambia label otros
-			$("[id=id_quantity]:eq(2),[id=id_quantity]:eq(3)").keyup(function(){
+			$("[id=id_quantity]:eq(3)").keyup(function(){
 				if ($(this).val() > 1) {
-        	$('#label_Accesorios').text('Unidades');
+        	$('#label_Otros').text('Unidades');
     		} else {
-        	$('#label_Accesorios').text('Unidad');
+        	$('#label_Otros').text('Unidad');
     		}
 			});
 		});
