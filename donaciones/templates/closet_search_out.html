@@ -7,7 +7,7 @@
 	<h2>Resultados para: '{{query}}'</h2>
 	{% for r in ref %}
 		<div class="row collection">	
-			<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.family.lastname}}, {{r.family.firstname}}</a>
+			<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}}</a>
 		</div>
 	{% endfor %}
 
@@ -15,7 +15,7 @@
 		<div id="modal1{{referente.id}}" class="modal">
 			<div class="modal-content">
 			  <h4>Ingreso al Ropero</h4>
-			  <p>¿Está seguro que {{referente.family.lastname}}, {{referente.family.firstname}} ingresará al ropero?</p>
+			  <p>¿Está seguro que {{referente.lastname}}, {{referente.firstname}} ingresará al ropero?</p>
 			</div>
 			<div class="modal-footer">
 			  <a href="/ingreso_ropero/ok/{{referente.id}}/" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
