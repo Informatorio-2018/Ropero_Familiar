@@ -10,8 +10,9 @@
 			{% for res in resumes %}
       	<li class="collection-item">{{res.donation_type}} {{res.quantity}} 
       		{{ res.get_unit_measure_display }} 
-      		<a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete</i></a>
-      		<a class="waves-effect 	waves-light btn modal-trigger right"  href="#modal2" onclick="location.href='#modal2';" >Edit</a>
+      		<a class="right" href="{% url 'delete_donation' res.id %}"><i class="material-icons">delete_forever</i></a>
+          <a href="#!" class="secondary-content"><i class="material-icons">edit</i></a>
+      		<a class="right"  href="{% url 'edit_donation' res.id %}"  >Edit</a>
       	</li>
 			{% endfor %}
     </ul>
@@ -29,20 +30,6 @@
   	</div>
   	<div class="modal-footer">
     	<button class="btn waves-effect waves-light" name="edit_donator" type="submit">Guardar</button>
-  	</div>
-  </form>
-</div>
-
-<!-- Modal Edit Quantity -->
-<div id="modal2" class="modal">
-  <form method="POST">
-  	{% csrf_token %}
-  	<div class="modal-content">
-    <h4>Editar Cantidad</h4>
-    {{quan_form}}	
-  	</div>
-  	<div class="modal-footer">
-    	<button class="btn waves-effect waves-light" name="edit_quantity" type="submit">Guardar</button>
   	</div>
   </form>
 </div>

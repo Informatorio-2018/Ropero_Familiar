@@ -1,6 +1,7 @@
 from django import forms
 from .models import *
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
 class FamilyForm_r(forms.ModelForm):
@@ -76,6 +77,15 @@ class EditNeighForm(forms.ModelForm):
         model = Neighborhood
         fields = ('name',)
 
+
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length = 20)
-    password = forms.CharField(max_length = 20 , widget = forms.PasswordInput())
+    username = forms.CharField(max_length=20)
+    password = forms.CharField(max_length=20, widget=forms.PasswordInput())
+
+
+class UserRegisterForm(UserCreationForm):
+    phone_number = forms.CharField(max_length=10)
+
+    class Meta:
+        model = User
+        fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'phone_number',)

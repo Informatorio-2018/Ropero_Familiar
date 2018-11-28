@@ -58,10 +58,11 @@ class Family(models.Model):
     ref = models.IntegerField(null=True)
 
     def __str__(self):
-        return "%s, %s" %(self.lastname,self.firstname)
+        return "%s, %s" % (self.lastname, self.firstname)
 
     class Meta:
         ordering = ["lastname"]
+
 
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
@@ -93,6 +94,19 @@ class FamilyEntry(models.Model):
     family = models.ForeignKey(Family,on_delete=models.CASCADE, related_name='ingresos_familias')
     familiar = models.CharField(max_length=65,null=True)#Preguntar a Matias
 
+
+class Sale(models.Model):
+    total = models.IntegerField()
+    entry = models.OneToOneField(FamilyEntry, on_delete=models.CASCADE)
+
+
+class SalesDetails(models.Model):
+    product_type = models.CharField(max_length=30)
+    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE)
+    quantity = models.IntegerField()
+    price = models.IntegerField()
+    total = models.IntegerField()
+    sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name='sales')
 
 # class ListSort(models.Model):
 #     name=models.CharField(max_length=30)
