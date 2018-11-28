@@ -45,6 +45,9 @@ class Neighborhood(models.Model):
     def __str__(self):
         return "%s" % (self.name)
 
+    class Meta:
+        ordering=["name"]
+
 
 class Family(models.Model):
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
@@ -66,7 +69,7 @@ class Referring(models.Model):
     phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono
     adress = models.CharField(max_length=80, verbose_name='Dirección')
     family = models.OneToOneField(Family, on_delete=models.CASCADE, null=True)
-    last_buy = models.DateTimeField(null=True)
+    last_buy = models.DateField(null=True)
     family_last_buy = models.CharField(max_length=65, null=True)
 
 
@@ -85,6 +88,11 @@ class SortProducts(models.Model):
 
     def __str__(self):
         return self.types.name
+
+class FamilyEntry(models.Model):
+    last_entry = models.DateTimeField(auto_now_add=True)
+    family = models.ForeignKey(Family,on_delete=models.CASCADE, related_name='ingresos_familias')
+    familiar = models.CharField(max_length=65,null=True)#Preguntar a Matias
 
 
 class Sale(models.Model):

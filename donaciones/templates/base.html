@@ -25,7 +25,7 @@
   <nav> 
 
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Ropero Familiar</a>
+      <a href="{% url 'home' %}" class="brand-logo">Ropero Familiar</a>
       <ul class="right">
 		<li>
 			<a href="#" data-target="slide-out" class="sidenav-trigger">
@@ -51,10 +51,10 @@
         DONACIONES
     </div>
     <li class="grey lighten-3">
-      <a href="{% url 'receive_donation' %}"><i class="material-icons">loyalty</i>Recibir Donación</a></li>
+      <a href="{% url 'receive_donation' %}"><i class="material-icons">card_giftcard</i>Recibir Donación</a></li>
     <li class="divider"></li>
     <li  class="grey lighten-3">
-      <a href="#">
+      <a href="{% url 'sort_products' %}">
         <i class="material-icons">save_alt</i>Clasificar Donaciones
       </a>
     </li>
@@ -62,17 +62,20 @@
         ROPERO FAMILIAR
     </div>
     <li class="grey lighten-3">
-      <a href="{% url 'referring_search' %}"><i class="material-icons">how_to_reg</i>Ingreso al Ropero</a></li>
-    <li class="divider"></li>
+      <a href="{% url 'closet' %}"><i class="material-icons">store</i>Ingreso al Ropero</a>
+    </li>
     <li class="grey lighten-3">
       <a href="#"><i class="material-icons">monetization_on</i>Registrar Venta</a>
     </li>
     <div class="grey darken-4 white-text title-menu">
         FAMILIAS
     </div>
+    <li class="grey lighten-3">
+      <a href="{% url 'referring_search' %}"><i class="material-icons">supervised_user_circle</i>Buscar Familia</a></li>
+    <li class="divider"></li>
     <li  class="grey lighten-3">
       <a href="{% url 'register_referring_f' %}">
-        <i class="material-icons">supervised_user_circle</i>Registrar Familia
+        <i class="material-icons">group_add</i>Registrar Familia
       </a>
     </li>
 
@@ -84,9 +87,14 @@
         <i class="material-icons">card_giftcard</i>Tipos de Donaciones
       </a>
     </li>
+    <li  class="grey lighten-3">
+      <a href="{% url 'load_types_donation' %}">
+        <i class="material-icons">loyalty</i>Tipos de Articulos
+      </a>
+    </li>
     <li class="divider"></li>
     <li class="grey lighten-3">
-      <a href="#"><i class="material-icons">view_quilt</i>Barrios</a>
+      <a href="{% url 'neigh' %}"><i class="material-icons">view_quilt</i>Barrios</a>
     </li>
 
 

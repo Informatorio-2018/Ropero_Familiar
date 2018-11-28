@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Barrios{% endblock %}
+
+{% block content %}
+	<h2 class="center-align">Barrios</h2>
+	{% for n in neigh %}
+		<div class="row collection">	
+			<a href="/adm/barrios/{{n.id}}" class="collection-item">{{n.name}}</a>		
+		</div>
+	{% endfor %}
+	<h3 class="center-align">Agregar un Barrio</h3>
+	<form action="/adm/barrios/" method="POST">
+		{% csrf_token %}
+		{{form}}
+		<input type="submit" value="Agregar" class="btn">
+	</form>
+{% endblock %}

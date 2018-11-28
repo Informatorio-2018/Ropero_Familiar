@@ -67,8 +67,12 @@ class SortProductForm(forms.ModelForm):
 class SearchForm(forms.Form):
     query = forms.CharField(label='Búsqueda')
 
+class NeighForm(forms.ModelForm):
+    class Meta:
+        model = Neighborhood
+        fields = ('name',)
 
-class AddNeighForm(forms.ModelForm):
+class EditNeighForm(forms.ModelForm):
     class Meta:
         model = Neighborhood
         fields = ('name',)
