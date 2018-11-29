@@ -83,6 +83,7 @@ class TypesProducts(models.Model):
     name = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     price = models.IntegerField(default=0)
+    quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name='Cantidad Total')
 
     def __str__(self):
         return self.name
@@ -92,8 +93,8 @@ class SortProducts(models.Model):
     types = models.ForeignKey(TypesProducts, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')
     quantity = models.IntegerField(verbose_name='Cantidad')
 
-    def __str__(self):
-        return self.types.name
+    # def __str__(self):
+    #     return self.types.name
 
 
 class Sale(models.Model):
