@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado de Búsqueda{% endblock %}
+
+{% block content %}
+	
+	<h3>{{fam.firstname}} no puede ingresar al ropero, ya ha ingresó éste mes.</h3>
+	<a href="{% url 'home' %}" class="btn">Volver al inicio</a>
+
+{% endblock %}

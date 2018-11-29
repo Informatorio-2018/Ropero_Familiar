@@ -4,6 +4,7 @@ from .models import *
 from django.db.models import Q, Sum
 from django.contrib.auth import authenticate, login as log, logout as logout_django
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
 def receive_donation(request):
@@ -300,26 +301,46 @@ def logout(request):
     return redirect('login')
 
 def closet(request):
-    ref = Family.objects.filter(role__exact='r')
+    ref = Family.objects.all()
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
-            q3 = Q(role__exact='r')
-            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
+            ref = Family.objects.filter(q1 | q2)
             return render(request, 'closet_search_out.html', {'ref': ref,
                                                               'query': query})
     else:
         form = SearchForm()
-    return render(request,'closet.html',{'form':form,
+    return render(request,'entry_closet.html',{'form':form,
                                          'ref':ref})
 
 def entry_ok(request,id):
-    ref = Family.objects.get(pk=id)
-    
-    return render(request,'entry_ok.html',{'ref':ref})
+    fam = Family.objects.get(pk=id)
+    today_month = datetime.date.today().month
+
+    if fam.role == 'r':
+        last_buy = fam.referring.last_buy
+    else:
+        ref = Referring.objects.get(family_id=fam.ref)
+        last_buy = ref.last_buy
+
+    if last_buy:
+        last_buy_date = last_buy.month
+        if (today_month)-(last_buy_date) > 0:
+            fam_e = FamilyEntry()
+            fam_e.family = fam
+            fam_e.save()
+            return render(request,'entry_ok.html',{'fam':fam})
+        else:
+            return render(request,'entry_fail.html',{'fam':fam})
+    else:
+        fam_e = FamilyEntry()
+        fam_e.family = fam
+        fam_e.save()
+        return render(request,'entry_ok.html',{'fam':fam})
+
   
 def register_user(request):
     if request.method == 'POST':
