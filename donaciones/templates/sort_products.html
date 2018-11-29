@@ -1,16 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %} Clasificar Articulos {% endblock %}
+
+{% block content %}
+
 {% for p in control %}<p>{{p.name}}: {{p.quantity_total}}{{p.unit_measure}}</p>{% endfor %}
 
-{{lista}}
-
-<form method="POST">
-	{% csrf_token %}
-	{{form}}
-	<button type="submit">Guardar</button>
-</form>
+	<form method="POST">
+		{% csrf_token %}
+		{{form}}
+		<button type="submit">Guardar</button>
+	</form>
 
 
+{% for t in ctotal %}<p>{{t.name}}: {{t.quantity_total}}</p>{% endfor %}
 
 
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript">
+	$(document).ready(function(){
+    $('select').formSelect();
+  });
+</script> 
+    {% endblock %}
 
 
 
