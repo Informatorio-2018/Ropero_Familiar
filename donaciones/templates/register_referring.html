@@ -19,11 +19,11 @@
 		<button type="submit" class="btn">Guardar</button>
 	</form>
 
-	{% block extra_js %}
-		<script type="text/javascript">
-			$(document).ready(function(){
-    			$('select').formSelect();
-  			});
-		</script>
-	{% endblock %}
+{% endblock %}
+{% block extra_js %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('select').formSelect();
+			});
+	</script>
 {% endblock %}

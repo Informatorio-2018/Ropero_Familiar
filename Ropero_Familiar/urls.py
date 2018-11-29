@@ -30,4 +30,5 @@ urlpatterns = [
     path('logout/',views.logout, name = 'logout'),
     path('ingreso_ropero/',views.closet, name='closet'),
     path('ingreso_ropero/ok/<int:id>/',views.entry_ok, name="entry_ok"),
+    path('adm/reporte_donaciones/',views.donations_report,name="donations_report"),
 ]

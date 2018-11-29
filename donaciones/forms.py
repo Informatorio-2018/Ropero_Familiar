@@ -91,3 +91,8 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'phone_number',)
+
+class DonationsReportForm(forms.Form):
+    donation = forms.CharField(label='Donaciones')
+    begin = forms.DateField(label='Desde',required=False)
+    finish = forms.DateField(label='Hasta',required=False)
