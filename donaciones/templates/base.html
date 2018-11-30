@@ -7,15 +7,16 @@
 		<link href=" {% static 'css/material-icons.css' %}" rel="stylesheet">
 
 		<link rel="stylesheet" href= " {% static 'css/materialize.min.css' %}">         
+
+    <script type="text/javascript" src=" {% static 'js/jquery-2.1.1.min.js' %}"></script>
+     
+    <script src="{% static 'js/materialize.min.js' %}"></script>
+
+    <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      
 		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
-		<script type="text/javascript" src=" {% static 'js/jquery-2.1.1.min.js' %}"></script>
-	   
-        <script src="{% static 'js/materialize.min.js' %}"></script>
-
-		<meta charset="UTF-8">
-  		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  		
 	<title>{% block title %}Base{% endblock %}</title>
 </head>
 <body>
@@ -24,7 +25,7 @@
 
   <nav> 
 
-    <div class="nav-wrapper">
+    <div class="nav-wrapper red darken-4">
       <a href="{% url 'home' %}" class="brand-logo">Ropero Familiar</a>
       <ul class="right">
 		<li>

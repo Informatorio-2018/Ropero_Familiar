@@ -60,6 +60,28 @@
 	margin-top: -8px;
 }
 
+.logos-home{
+	width: 70%;
+	display: block;
+	margin: 0 auto;
+}
+
+.separador{
+	height: 25px;
+}
+
+
+.boton-home{
+	width: 100%;
+	background-color: #b71c1c;
+}
+
+.boton-home:hover{
+	background-color: #831212;
+}
+
+
+
 @media screen and (min-width: 993px){
 	nav a.sidenav-trigger {
     	display: inline;
