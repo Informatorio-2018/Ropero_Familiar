@@ -4,6 +4,7 @@ from .models import *
 from django.db.models import Q, Sum
 from django.contrib.auth import authenticate, login as log, logout as logout_django
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import datetime
 import datetime
 
 @login_required
@@ -458,11 +459,93 @@ def entry_ok(request,id):
 @login_required
 def register_user(request):
     if request.method == 'POST':
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
+        import ipdb; ipdb.set_trace()
+        form_user = UserRegisterForm(request.POST)
+        if form_user.is_valid():
+            user = form_user.save(commit=False)
+            user.save()
+            profile = Profile()
+            profile.user_id = user.id
+            profile.phone_number = request.POST['phone_number']
+            profile.save()
             return redirect('home')
     else:
-        form = UserRegisterForm()
-    return render(request, 'register_user.html', {'form': form})
+        form_user = UserRegisterForm()
+    return render(request, 'register_user.html', {'form_user': form_user})
 
+
+def peoples_closet(request):
+    today = datetime.today()
+    peoples = FamilyEntry.objects.filter(last_entry__year=today.year, last_entry__month=today.month, last_entry__day=today.day)
+
+    context = {'peoples':peoples}
+    return render(request, 'closet.html', context)
+
+def sale(request, id):
+    #import ipdb; ipdb.set_trace()
+    try:
+        ventas = Sale.objects.get(entry_id = id)
+    except  Sale.DoesNotExist :
+        ventas = None
+
+    if ventas is None:
+        entry = FamilyEntry.objects.get(pk=id)
+        sale = Sale(total=0, entry_id=id)
+        sale.save()
+        return redirect('sale_detail', id)
+    else:
+        return redirect('sale_detail', id)
+
+    
+def sale_detail(request,id):
+    # import ipdb; ipdb.set_trace()
+    entry = FamilyEntry.objects.get(pk=id)
+    types = TypesProducts.objects.all()
+    sale = Sale.objects.get(entry_id = id)
+    sale_details = SalesDetails.objects.filter(sale_id=sale.id)
+    if request.method == 'POST':
+        form = SalesDetailsForm(request.POST)
+        if form.is_valid():
+            detail = form.save(commit=False)
+            detail.product_type = request.POST['product_type']
+            detail.unit_measure = request.POST['unit_measure']
+            detail.price = request.POST['price'] 
+            detail.total = int(detail.price) * int(detail.quantity)
+            detail.sale_id = sale.id
+            sale.total += detail.total
+            sale.save()
+            detail.save()
+            return redirect('sale_detail', id)
+    else:
+        form = SalesDetailsForm()
+    context = {'entry': entry, 'types': types, 'form': form, 
+                'sale': sale, 'sale_details': sale_details}
+    return render(request, 'sales.html', context)
+
+
+def summary_sale(request, id):
+    sale = Sale.objects.get(entry_id=id)
+    details = SalesDetails.objects.filter(sale_id=sale.id)
+    entry = FamilyEntry.objects.get(pk=id)
+    context = {'sale': sale, 'details': details, 'entry': entry}
+    return render(request, 'summary_sale.html', context)
+
+def finish_sale(request, id):
+    # import ipdb; ipdb.set_trace()
+    sale = Sale.objects.get(entry_id=id)
+    entry = FamilyEntry.objects.get(pk=id)
+    if entry.family.role == 'r':
+        ref = Referring.objects.get(family_id=entry.family_id)
+    else:
+        ref = Referring.objects.get(family_id=entry.family.ref)
+    if request.method == 'POST':
+        form = TotalForm(request.POST, instance=sale)
+        if form.is_valid():
+            form.save()
+            ref.last_buy = entry.last_entry
+            ref.save()
+            return redirect('peoples_closet')
+    else:
+        form = TotalForm(instance=sale)
+    context = {'sale': sale, 'entry': entry, 'form': form}
+    return render(request, 'finish_sale.html', context)

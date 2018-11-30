@@ -69,10 +69,12 @@ class SortProductForm(forms.ModelForm):
 class SearchForm(forms.Form):
     query = forms.CharField(label='Búsqueda')
 
+
 class NeighForm(forms.ModelForm):
     class Meta:
         model = Neighborhood
         fields = ('name',)
+
 
 class EditNeighForm(forms.ModelForm):
     class Meta:
@@ -86,7 +88,7 @@ class LoginForm(forms.Form):
 
 
 class UserRegisterForm(UserCreationForm):
-    phone_number = forms.CharField(max_length=10)
+    phone_number = forms.CharField(max_length=10, label='Número de telefono')
 
     class Meta:
         model = User
@@ -96,3 +98,13 @@ class DonationsReportForm(forms.Form):
     donation = forms.CharField(label='Donaciones')
     begin = forms.DateField(label='Desde',required=False)
     finish = forms.DateField(label='Hasta',required=False)
+
+class SalesDetailsForm(forms.ModelForm):
+    class Meta:
+        model = SalesDetails
+        fields = ('quantity',)
+
+class TotalForm(forms.ModelForm):
+    class Meta:
+        model = Sale
+        fields = ('total',)

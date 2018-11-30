@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 import decimal
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 UNITS_MEASURE = (('kg', 'Kg'), ('par', 'Par'), ('un', 'Unidad'), ('lt', 'Litro'))
@@ -46,7 +47,7 @@ class Neighborhood(models.Model):
         return "%s" % (self.name)
 
     class Meta:
-        ordering=["name"]
+        ordering = ["name"]
 
 
 class Family(models.Model):
@@ -63,9 +64,11 @@ class Family(models.Model):
     class Meta:
         ordering = ["lastname"]
 
+
 class FamilyEntry(models.Model):
-    last_entry = models.DateField(auto_now_add=True,null=True)
-    family = models.ForeignKey(Family,on_delete=models.CASCADE, related_name='ingresos_familias')
+    last_entry = models.DateField(auto_now_add=True, null=True)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name='ingresos_familias')
+
 
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
@@ -76,7 +79,7 @@ class Referring(models.Model):
     family_last_buy = models.CharField(max_length=65, null=True)
 
     def __str__(self):
-        return "{}-{}-{}".format(self.family.lastname,self.family.firstname,self.last_buy)
+        return "{}-{}-{}".format(self.family.lastname, self.family.firstname, self.last_buy)
 
 
 class TypesProducts(models.Model):
@@ -93,8 +96,14 @@ class SortProducts(models.Model):
     types = models.ForeignKey(TypesProducts, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')
     quantity = models.IntegerField(verbose_name='Cantidad')
 
-    # def __str__(self):
-    #     return self.types.name
+
+class FamilyEntry(models.Model):
+    last_entry = models.DateTimeField(auto_now_add=True)
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name='ingresos_familias')
+    familiar = models.CharField(max_length=65, null=True)  # Preguntar a Matias
+
+    def __str__(self):
+        return "{}, {}".format(self.family.lastname, self.family.firstname)
 
 
 class Sale(models.Model):
@@ -104,11 +113,16 @@ class Sale(models.Model):
 
 class SalesDetails(models.Model):
     product_type = models.CharField(max_length=30)
-    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE)
-    quantity = models.IntegerField()
+    unit_measure = models.CharField(max_length=10)
+    quantity = models.IntegerField(verbose_name='Cantidad')
     price = models.IntegerField()
     total = models.IntegerField()
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name='sales')
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.PositiveIntegerField(verbose_name='Numero de telefono')
 
 # class ListSort(models.Model):
 #     name=models.CharField(max_length=30)

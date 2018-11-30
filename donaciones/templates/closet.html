@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Ropero{% endblock %}
+
+{% block content %}
+	<h2 class="center-align">Personas en el ropero</h2>
+	<ul class="collection">
+			{% for person in peoples %}
+      	<li class="collection-item">{{person}}<a class="right" href="{% url 'sale' person.id %}"><i class="material-icons">shopping_cart</i></a></li>
+			{% endfor %}
+    </ul>
+{% endblock %}
