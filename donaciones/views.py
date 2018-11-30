@@ -5,6 +5,7 @@ from django.db.models import Q, Sum
 from django.contrib.auth import authenticate, login as log, logout as logout_django
 from django.contrib.auth.decorators import login_required
 import datetime
+from decimal import Decimal
 
 
 def receive_donation(request):
@@ -162,34 +163,90 @@ def load_types_products(request):
 
 
 def sort_products(request):
+    alert = False
     types_product=TypesProducts.objects.all()
     types = TypesDonation.objects.all()
+    cargo=0
     if request.method == 'POST':
         form = SortProductForm(request.POST)
         if form.is_valid():
-            form.save()
-            ultima_carga=SortProducts.objects.all().last()
+            sort=form.save(commit=False)
+            cantidad = request.POST['quantity']
+            tipo = request.POST['types']
+            # guardo el tipo de producto
+            x=TypesProducts.objects.get(id=tipo)
 
-            type_sum = TypesProducts.objects.get(name=ultima_carga.types)
-            type_res = TypesProducts.objects.get(name=ultima_carga.types)
+            # comparo 
 
+            if x.name == 'Ropa Verano':
+                d=TypesDonation.objects.get(name='Ropa')
+                if Decimal(cantidad) > d.quantity_total:
+                    
+                    cargo=0
+                    alert='El valor ingresado es mayor a la cantidad disponible'
+                    ctotal=TypesProducts.objects.all()
+                    control = TypesDonation.objects.filter(quantity_total__gt=0)
+                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    return render(request, 'sort_products.html', context)
+                else:
+                    cargo=1
+                    sort.save()
+            elif x.name == 'Ropa Invierno':
+                d=TypesDonation.objects.get(name='Ropa')
+                if Decimal(cantidad) > d.quantity_total:
+                    cargo=0
+                    alert='El valor ingresado es mayor a la cantidad disponible'
+                    ctotal=TypesProducts.objects.all()
+                    control = TypesDonation.objects.filter(quantity_total__gt=0)
+                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    return render(request, 'sort_products.html', context)
+                else:
+                    cargo=1
+                    sort.save()
+            elif TypesDonation.objects.filter(name=x.name).count() == 1:
+                
+                d=TypesDonation.objects.get(name=x.name)
+                if Decimal(cantidad) > d.quantity_total:
+                    
+                    cargo=0
+                    alert='El valor ingresado es mayor a la cantidad disponible'
+                    context={'alert':alert}
+                    ctotal=TypesProducts.objects.all()
+                    control = TypesDonation.objects.filter(quantity_total__gt=0)
+                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    return render(request, 'sort_products.html', context)
+                else:
+                    cargo=1
+                    sort.save()
 
-            if ultima_carga.types_id == type_sum.id:
-                type_sum.quantity_total += ultima_carga.quantity
-                type_sum.save()
+            # else:
+            #     cargo=1
+            #     sort.save()
+            
+            # agarro el ultimo agregado para sumar cantidad total 
+            if cargo == 1:
+                ultima_carga=SortProducts.objects.all().last()
+                type_sum = TypesProducts.objects.get(name=ultima_carga.types)
+                type_res = TypesProducts.objects.get(name=ultima_carga.types)
+                if ultima_carga.types_id == type_sum.id:
+                    type_sum.quantity_total += ultima_carga.quantity
+                    type_sum.save()
 
-            if type_res.name == 'Ropa Verano':
-                bus=TypesDonation.objects.get(name='Ropa')
-                bus.quantity_total= bus.quantity_total - ultima_carga.quantity
-                bus.save()
-            elif type_res.name == 'Ropa Invierno':
-                bus=TypesDonation.objects.get(name='Ropa')
-                bus.quantity_total= bus.quantity_total - ultima_carga.quantity
-                bus.save()
-            elif TypesDonation.objects.filter(name=type_res.name).count() == 1 :
-                bus=TypesDonation.objects.get(name=type_res.name)
-                bus.quantity_total= bus.quantity_total - ultima_carga.quantity
-                bus.save()
+                    if type_res.name == 'Ropa Verano':
+                        bus=TypesDonation.objects.get(name='Ropa')
+                        bus.quantity_total= bus.quantity_total - ultima_carga.quantity
+                        bus.save()
+                    elif type_res.name == 'Ropa Invierno':
+                        bus=TypesDonation.objects.get(name='Ropa')
+                        bus.quantity_total= bus.quantity_total - ultima_carga.quantity
+                        bus.save()
+                    elif TypesDonation.objects.filter(name=type_res.name).count() == 1 :
+                        bus=TypesDonation.objects.get(name=type_res.name)
+                        bus.quantity_total= bus.quantity_total - ultima_carga.quantity
+                        bus.save()
+            else:
+                pass
+
         
             return redirect('sort_products')
 
@@ -200,20 +257,20 @@ def sort_products(request):
     control = TypesDonation.objects.filter(quantity_total__gt=0)
     control2 = TypesDonation.objects.filter(quantity_total__gt=0).exclude(name='Ropa')
 
-    q1=Q(quantity_total__gt=0)
-    q2=Q(name='Ropa')
+    # q1=Q(quantity_total__gt=0)
+    # q2=Q(name='Ropa')
 
-    for i in art:
-        if TypesDonation.objects.filter(q1 & q2).count()==0:
-            if i.name=='Ropa Verano':
-                p=TypesProducts.objects.get(name=i.name)
-                p.delete()
-            elif i.name=='Ropa Invierno':
-                p=TypesProducts.objects.get(name=i.name)
-                p.delete()
-            elif TypesDonation.objects.filter(name=i.name).count()==0:
-                p=TypesProducts.objects.get(name=i.name)
-                p.delete()
+    # for i in art:
+    #     if TypesDonation.objects.filter(q1 & q2).count()==0:
+    #         if i.name=='Ropa Verano':
+    #             p=TypesProducts.objects.get(name=i.name)
+    #             p.delete()
+    #         elif i.name=='Ropa Invierno':
+    #             p=TypesProducts.objects.get(name=i.name)
+    #             p.delete()
+    #         elif TypesDonation.objects.filter(name=i.name).count()==0:
+    #             p=TypesProducts.objects.get(name=i.name)
+    #             p.delete()
 
 
     if TypesProducts.objects.count() != 0:
@@ -253,7 +310,7 @@ def sort_products(request):
 
     ctotal=TypesProducts.objects.all()
 
-    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product}
+    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
     return render(request, 'sort_products.html', context)
 
 
