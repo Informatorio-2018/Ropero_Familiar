@@ -4,7 +4,7 @@ from .models import *
 from django.db.models import Q, Sum
 from django.contrib.auth import authenticate, login as log, logout as logout_django
 from django.contrib.auth.decorators import login_required
-from django.utils.timezone import datetime
+from django.utils.timezone import datetime as datetime_django
 import datetime
 
 @login_required
@@ -475,7 +475,7 @@ def register_user(request):
 
 
 def peoples_closet(request):
-    today = datetime.today()
+    today = datetime_django.today()
     peoples = FamilyEntry.objects.filter(last_entry__year=today.year, last_entry__month=today.month, last_entry__day=today.day)
 
     context = {'peoples':peoples}
