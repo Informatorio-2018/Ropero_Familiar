@@ -1,7 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 import decimal
 from django.db import models
 from django.contrib.auth.models import User
+
 
 # Create your models here.
 UNITS_MEASURE = (('kg', 'Kg'), ('par', 'Par'), ('un', 'Unidad'), ('lt', 'Litro'))
@@ -34,7 +36,7 @@ class OtherDetail(models.Model):
 class TypesDonation(models.Model):
     name = models.CharField(max_length=30, verbose_name='Nombre')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
-    quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name='Cantidad Total')
+    quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0,validators=[MaxValueValidator(99999999), MinValueValidator(0)],verbose_name='Cantidad Total')
 
     def __str__(self):
         return self.name
@@ -86,7 +88,7 @@ class TypesProducts(models.Model):
     name = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     price = models.IntegerField(default=0)
-    quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0, verbose_name='Cantidad Total')
+    quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0,validators=[MaxValueValidator(99999999.00), MinValueValidator(0.00)],verbose_name='Cantidad Total')
 
     def __str__(self):
         return self.name
@@ -94,7 +96,7 @@ class TypesProducts(models.Model):
 
 class SortProducts(models.Model):
     types = models.ForeignKey(TypesProducts, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')
-    quantity = models.IntegerField(verbose_name='Cantidad')
+    quantity = models.DecimalField(max_digits=8, decimal_places=2, default=0,validators=[MaxValueValidator(99999999.00), MinValueValidator(0.00)],verbose_name='Cantidad')
 
 
 class FamilyEntry(models.Model):

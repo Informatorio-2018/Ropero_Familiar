@@ -2,7 +2,26 @@
 
 {% block title %} Clasificar Articulos {% endblock %}
 
+{% block alert %}
+{% if alert %}
+  <div class="row">
+    <div class="col s12 m6">
+      <div class="card blue-grey darken-1">
+        <div class="card-content white-text">
+          <span class="card-title">ATENCION</span>
+          <p>{{alert}}</p>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+ {% endif %}
+  
+{% endblock %}  
+
 {% block content %}
+
+
 
 {% for p in control %}<p>{{p.name}}: {{p.quantity_total}}{{p.unit_measure}}</p>{% endfor %}
 
