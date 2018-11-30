@@ -59,9 +59,11 @@ class LoadTypeProductForm(forms.ModelForm):
 
 
 class SortProductForm(forms.ModelForm):
+        
     class Meta:
         model = SortProducts
-        fields = ('quantity',)
+        fields = ('types','quantity',)
+
 
 
 class SearchForm(forms.Form):

@@ -13,7 +13,7 @@
 			<a href="/registrar_referente_f/"  class="btn">Registrar</a>
 			{% for r in ref %}
 				<div class="row collection">	
-					<a href="/referente/{{r.id}}/" class="collection-item">{{r.family.lastname}}, {{r.family.firstname}}</a>
+					<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
 				</div>
 			{% endfor %}
 		</div>

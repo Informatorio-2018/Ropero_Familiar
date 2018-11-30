@@ -5,6 +5,7 @@ from django.db.models import Q, Sum
 from django.contrib.auth import authenticate, login as log, logout as logout_django
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import datetime
+import datetime
 
 
 def receive_donation(request):
@@ -162,19 +163,98 @@ def load_types_products(request):
 
 
 def sort_products(request):
-    types = TypesProducts.objects.all()
+    types_product=TypesProducts.objects.all()
+    types = TypesDonation.objects.all()
     if request.method == 'POST':
         form = SortProductForm(request.POST)
         if form.is_valid():
-            sort = form.save(commit=False)
+            form.save()
+            ultima_carga=SortProducts.objects.all().last()
 
-            sort.types_id = request.POST['types_id']
-            sort.save()
+            type_sum = TypesProducts.objects.get(name=ultima_carga.types)
+            type_res = TypesProducts.objects.get(name=ultima_carga.types)
+
+
+            if ultima_carga.types_id == type_sum.id:
+                type_sum.quantity_total += ultima_carga.quantity
+                type_sum.save()
+
+            if type_res.name == 'Ropa Verano':
+                bus=TypesDonation.objects.get(name='Ropa')
+                bus.quantity_total= bus.quantity_total - ultima_carga.quantity
+                bus.save()
+            elif type_res.name == 'Ropa Invierno':
+                bus=TypesDonation.objects.get(name='Ropa')
+                bus.quantity_total= bus.quantity_total - ultima_carga.quantity
+                bus.save()
+            elif TypesDonation.objects.filter(name=type_res.name).count() == 1 :
+                bus=TypesDonation.objects.get(name=type_res.name)
+                bus.quantity_total= bus.quantity_total - ultima_carga.quantity
+                bus.save()
+        
             return redirect('sort_products')
 
     else:
         form = SortProductForm()
-    context = {'types': types, 'form': form}
+
+    art=TypesProducts.objects.all()
+    control = TypesDonation.objects.filter(quantity_total__gt=0)
+    control2 = TypesDonation.objects.filter(quantity_total__gt=0).exclude(name='Ropa')
+
+    q1=Q(quantity_total__gt=0)
+    q2=Q(name='Ropa')
+
+    for i in art:
+        if TypesDonation.objects.filter(q1 & q2).count()==0:
+            if i.name=='Ropa Verano':
+                p=TypesProducts.objects.get(name=i.name)
+                p.delete()
+            elif i.name=='Ropa Invierno':
+                p=TypesProducts.objects.get(name=i.name)
+                p.delete()
+            elif TypesDonation.objects.filter(name=i.name).count()==0:
+                p=TypesProducts.objects.get(name=i.name)
+                p.delete()
+
+
+    if TypesProducts.objects.count() != 0:
+        for i in control:
+            if i.name=='Ropa':
+                if TypesProducts.objects.filter(name='Ropa Verano').count()==0:
+                    p=TypesProducts()
+                    p.name='Ropa Verano'
+                    p.unit_measure=i.unit_measure
+                    p.save()
+                    p=TypesProducts()
+                    p.name='Ropa Invierno'
+                    p.unit_measure=i.unit_measure
+                    p.save()
+            else:
+                if(TypesProducts.objects.filter(name=i.name).count()==0):
+                    p=TypesProducts()
+                    p.name=i.name
+                    p.unit_measure=i.unit_measure
+                    p.save()
+    else:
+        for i in control:
+            if i.name == 'Ropa':
+                p=TypesProducts()
+                p.name='Ropa Verano'
+                p.unit_measure=i.unit_measure
+                p.save()
+                p=TypesProducts()
+                p.name='Ropa Invierno'
+                p.unit_measure=i.unit_measure
+                p.save()
+            else:
+                p=TypesProducts()
+                p.name=i.name
+                p.unit_measure=i.unit_measure
+                p.save()
+
+    ctotal=TypesProducts.objects.all()
+
+    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product}
     return render(request, 'sort_products.html', context)
 
 
@@ -193,14 +273,15 @@ def register_family(request, id):
 
 
 def referring_search(request):
-    ref = Referring.objects.all()
+    ref = Family.objects.filter(role__exact='r')
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains=query)
-            q2 = Q(family__lastname__contains=query)
-            ref = Referring.objects.filter(q1 | q2)
+            q1 = Q(firstname__contains=query)
+            q2 = Q(lastname__contains=query)
+            q3 = Q(role__exact='r')
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query})
     else:
@@ -210,7 +291,7 @@ def referring_search(request):
 
 
 def referring_profile(request, id):
-    ref = Referring.objects.get(family_id=id)
+    ref = Family.objects.get(pk=id)
     return render(request, 'referring_profile.html', {'ref': ref})
 
 
@@ -239,6 +320,7 @@ def edit_referring(request,id):
             form1.save()
             form2 = ReferringForm(request.POST, instance=ref)
             if form2.is_valid():
+                fam = form2.cleaned_data
                 fam = form2.save(commit=False)
                 fam.family = family
                 fam.neighborhood_id = request.POST['neigh_id']
@@ -299,14 +381,14 @@ def logout(request):
     return redirect('login')
 
 def closet(request):
-    ref = Referring.objects.all()
+    ref = Family.objects.all()
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
-            q1 = Q(family__firstname__contains=query)
-            q2 = Q(family__lastname__contains=query)
-            ref = Referring.objects.filter(q1 | q2)
+            q1 = Q(firstname__contains=query)
+            q2 = Q(lastname__contains=query)
+            ref = Family.objects.filter(q1 | q2)
             return render(request, 'closet_search_out.html', {'ref': ref,
                                                               'query': query})
     else:
@@ -315,9 +397,30 @@ def closet(request):
                                          'ref':ref})
 
 def entry_ok(request,id):
-    ref = Referring.objects.get(pk=id)
-    
-    return render(request,'entry_ok.html',{'ref':ref})
+    fam = Family.objects.get(pk=id)
+    today_month = datetime.date.today().month
+
+    if fam.role == 'r':
+        last_buy = fam.referring.last_buy
+    else:
+        ref = Referring.objects.get(family_id=fam.ref)
+        last_buy = ref.last_buy
+
+    if last_buy:
+        last_buy_date = last_buy.month
+        if (today_month)-(last_buy_date) > 0:
+            fam_e = FamilyEntry()
+            fam_e.family = fam
+            fam_e.save()
+            return render(request,'entry_ok.html',{'fam':fam})
+        else:
+            return render(request,'entry_fail.html',{'fam':fam})
+    else:
+        fam_e = FamilyEntry()
+        fam_e.family = fam
+        fam_e.save()
+        return render(request,'entry_ok.html',{'fam':fam})
+
   
 def register_user(request):
     if request.method == 'POST':
