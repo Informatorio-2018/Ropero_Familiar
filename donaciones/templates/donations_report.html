@@ -1,26 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Registrar Familiar{% endblock %}
+{% block title %}Reporte de Donaciones{% endblock %}
 
-{%block content%}
-	<h3 class="center-align">Registro de Familiar</h3>
-	<div class="row">
-		<form method="POST">
-			{% csrf_token %}
-			{{form.firstname.label_tag}}
-			{{form.firstname}}
-			{{form.lastname.label_tag}}
-			{{form.lastname}}
-			{{form.dni.label_tag}}
-			{{form.dni}}
-			{{form.birth.label_tag}}
-			<input type="text" class="datepicker" name='birth'>
-			<button type="submit" class="btn center-align">Guardar</button>
-		</form>
-	</div>
-{%endblock%}
+{% block content %}
+
+	<form action="/adm/reporte_donaciones/" method="POST">
+		<div class="input-field col s12">
+		{% csrf_token %}
+    		<select name="dona_id">
+		      <option value="" disabled selected>Articulo</option>
+		      {% for d in dona %}
+		      	<option value={{d.name}}>{{d.name}}</option>
+		      {% endfor %}
+    		</select>
+    		<label>Articulos</label>
+  		</div>
+  		{{form.begin.label_tag}}
+  		<input type="text" class="datepicker" name='begin'>
+  		{{form.finish.label_tag}}
+  		<input type="text" class="datepicker" name='finish'>
+		<input type="submit" value="Buscar" class="btn">
+	</form>	
+
+{% endblock %}
 
 {% block extra_js %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('select').formSelect();
+			});
+	</script>
+
 	<script type="text/javascript">
 		$(document).ready(function(){
     		$('.datepicker').datepicker(
@@ -37,5 +47,5 @@
             }
         });
   		});
-	</script>
+	</script>	
 {% endblock %}

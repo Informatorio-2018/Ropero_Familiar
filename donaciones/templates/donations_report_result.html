@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de Donaciones{% endblock %}
+
+{% block content %}
+	
+	<h3>Reporte de donaciones de {{begin}} hasta {{finish}}</h3>
+	<div class="row collection">	
+		<div class="collection-item">Total de {{don}} -- {{report}} {{all_r.unit_measure}}</div>
+	</div>
+
+{% endblock %}

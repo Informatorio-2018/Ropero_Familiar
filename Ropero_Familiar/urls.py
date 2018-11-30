@@ -26,6 +26,7 @@ urlpatterns = [
     path('adm/barrios/<int:id>', views.edit_neigh, name='edit_neigh'),
     path('adm/barrios/<int:id>/borrar', views.del_neigh, name='del_neigh'),
     path('adm/registrar_usuario/', views.register_user, name="register_user"),
+    path('adm/reporte_donaciones/',views.donations_report,name="donations_report"),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('ingreso_ropero/', views.closet, name='closet'),

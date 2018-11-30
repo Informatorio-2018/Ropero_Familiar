@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import datetime
 import datetime
 
-
+@login_required
 def receive_donation(request):
     form = DonationForm(request.POST or None)
     if request.method == 'POST':
@@ -18,7 +18,7 @@ def receive_donation(request):
     context = {'form': form}
     return render(request, 'receive_donations.html', context)
 
-
+@login_required
 def items_donation(request, id):
     donator = Donation.objects.get(pk=id)
     types = TypesDonation.objects.all()
@@ -50,7 +50,7 @@ def items_donation(request, id):
                'form_details': form_details, 'details': details, 'form_others': form_others}
     return render(request, 'items_donation.html', context)
 
-
+@login_required
 def resume_donation(request, id):
     donator = Donation.objects.get(pk=id)
     if request.method == "POST":
@@ -63,6 +63,7 @@ def resume_donation(request, id):
     context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'don_form': don_form}
     return render(request, 'resume_donation.html', context)
 
+@login_required
 def edit_donation(request, id):
     # import ipdb; ipdb.set_trace()
     detail = get_object_or_404(DetailsDonation, pk=id)
@@ -87,6 +88,7 @@ def edit_donation(request, id):
         form = DetailsDonationForm(instance=detail)
     return render(request, 'edit_donation.html', {'form': form})
 
+@login_required
 def delete_donation(request, id):
     detail = get_object_or_404(DetailsDonation, pk=id)
     id_donator = detail.donation_id
@@ -98,7 +100,7 @@ def delete_donation(request, id):
     detail.delete()
     return redirect('resume_donation', id=id_donator)
 
-
+@login_required
 def finish_donation(request, id):
     donator = Donation.objects.get(pk=id)
     if request.method == 'POST':
@@ -112,7 +114,7 @@ def finish_donation(request, id):
     context = {'donator': donator, 'form': form}
     return render(request, 'finish_donation.html', context)
 
-
+@login_required
 def register_referring_f(request):
     form = FamilyForm_r(request.POST or None)
     if request.method == 'POST':
@@ -125,7 +127,28 @@ def register_referring_f(request):
             return redirect('/registrar_referente_f/'+str(ref.id)+'/')
     return render(request, 'register_referring_f.html', {'form': form})
 
+@login_required
+def donations_report(request):
+    dona = TypesDonation.objects.all()
+    if request.method == 'POST':
+        begin = request.POST['begin']
+        finish = request.POST['finish']
+        donation = request.POST['dona_id']
+        q1 = Q(donation__date__gte=datetime.datetime.strptime(begin,"%Y-%m-%d").date())
+        q2 = Q(donation__date__lte=datetime.datetime.strptime(finish,"%Y-%m-%d").date())
+        q3 = Q(donation_type__exact=donation)
+        all_reports = report = DetailsDonation.objects.filter(q3 & q1 & q2)[0]
+        report = DetailsDonation.objects.filter(q3 & q1 & q2).aggregate(total=Sum('quantity'))
+        # import ipdb; ipdb.set_trace()
+        return render(request,'donations_report_result.html',{'report':report['total'],
+                                                              'don':donation,
+                                                              'all_r':all_reports, 'begin': begin, 'finish':finish})
+    else:
+        form = DonationsReportForm()
+    return render(request,'donations_report.html',{'form':form,
+                                                   'dona':dona})
 
+@login_required
 def register_referring(request, id):
     form = ReferringForm(request.POST or None)
     family = Family.objects.get(pk=id)
@@ -141,6 +164,7 @@ def register_referring(request, id):
                                                        'neigh': neigh})
 
 
+@login_required
 def load_types_donation(request):
 
     if request.method == 'POST':
@@ -152,6 +176,7 @@ def load_types_donation(request):
     return render(request, 'load_types_donation.html', {'form': form})
 
 
+@login_required
 def load_types_products(request):
     if request.method == 'POST':
         form = LoadTypeProductForm(request.POST)
@@ -162,6 +187,7 @@ def load_types_products(request):
     return render(request, 'load_types_product.html', {'form': form})
 
 
+@login_required
 def sort_products(request):
     types_product=TypesProducts.objects.all()
     types = TypesDonation.objects.all()
@@ -257,10 +283,9 @@ def sort_products(request):
     context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product}
     return render(request, 'sort_products.html', context)
 
-
+@login_required
 def register_family(request, id):
     form = FamilyForm(request.POST or None)
-    # import ipdb; ipdb.set_trace()
     if request.method == 'POST':
         if form.is_valid():
             fam = form.save(commit=False)
@@ -272,6 +297,7 @@ def register_family(request, id):
     return render(request, 'register_family.html', {'form': form})
 
 
+@login_required
 def referring_search(request):
     ref = Family.objects.filter(role__exact='r')
     if request.method == 'POST':
@@ -290,17 +316,20 @@ def referring_search(request):
                                                      'ref': ref})
 
 
+@login_required
 def referring_profile(request, id):
     ref = Family.objects.get(pk=id)
     return render(request, 'referring_profile.html', {'ref': ref})
 
 
+@login_required
 def referring_relatives(request, id):
     ref = Family.objects.get(pk=id)
     fam = Family.objects.filter(ref=id)
     return render(request, 'referring_relatives.html', {'ref': ref,
                                                         'fam': fam})
 
+@login_required
 def relative_profile(request,id):
     fam = Family.objects.get(pk=id)
     return render(request, 'relative_profile.html', {'fam': fam})
@@ -310,6 +339,7 @@ def relative_profile(request,id):
 def home(request):
     return render(request, 'home.html', {})
 
+@login_required
 def edit_referring(request,id):
     family = Family.objects.get(pk=id)
     neigh = Neighborhood.objects.all()
@@ -334,6 +364,7 @@ def edit_referring(request,id):
                                                  'neigh': neigh,
                                                  'ref':ref})
 
+@login_required
 def neigh(request):
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
@@ -344,6 +375,7 @@ def neigh(request):
     return render(request, 'neigh.html', {'form': form,
                                           'neigh': neigh})
 
+@login_required
 def edit_neigh(request,id):
     neigh = Neighborhood.objects.get(pk=id)
     if request.method == 'POST':
@@ -355,6 +387,7 @@ def edit_neigh(request,id):
     return render(request,'edit_neigh.html',{'form':form,
                                              'neigh':neigh})
 
+@login_required
 def del_neigh(request, id):
     neigh = get_object_or_404(Neighborhood, pk=id)
     neigh.delete()
@@ -380,6 +413,7 @@ def logout(request):
     logout_django(request)
     return redirect('login')
 
+@login_required
 def closet(request):
     ref = Family.objects.all()
     if request.method == 'POST':
@@ -396,6 +430,7 @@ def closet(request):
     return render(request,'entry_closet.html',{'form':form,
                                          'ref':ref})
 
+@login_required
 def entry_ok(request,id):
     fam = Family.objects.get(pk=id)
     today_month = datetime.date.today().month
@@ -421,7 +456,7 @@ def entry_ok(request,id):
         fam_e.save()
         return render(request,'entry_ok.html',{'fam':fam})
 
-  
+@login_required
 def register_user(request):
     if request.method == 'POST':
         import ipdb; ipdb.set_trace()
