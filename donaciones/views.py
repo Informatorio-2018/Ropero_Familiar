@@ -335,7 +335,7 @@ def relative_profile(request,id):
     return render(request, 'relative_profile.html', {'fam': fam})
 
 
-@login_required
+#@login_required
 def home(request):
     return render(request, 'home.html', {})
 

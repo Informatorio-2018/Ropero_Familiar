@@ -5,11 +5,35 @@
 {% block content %}
 	<br>
 	<div class="row">
-		<div class="col s6">
-			<img src="../static/images/flia_conin.jpg">		
+		<div class="col s12 m4">
+			<img class="logos-home"src="../static/images/fundecch.jpg">	
 		</div>
-		<div class="col s6">
-			<img src="../static/images/fundecch.jpg">	
+		<div class="col s12 m4">
+			<img class="logos-home"src="../static/images/flia_conin.jpg">		
+		</div>
+		<div class="col s12 m4">
+			<img class="logos-home"src="../static/images/informatorio.png">	
 		</div>
 	</div>
+	<div class="separador"></div>
+	<div class="row">
+		<div class="col s12 m2"></div>
+		<div class="col s12 m4">
+			<a href="{% url 'receive_donation' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">card_giftcard</i>Recibir Donación</a>
+		</div>
+		<div class="col s12 m4">
+			<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">save_alt</i>Clasificar Donaciones</a>
+		</div>
+		<div class="col s12 m2"></div>
+	</div>
+	<div class="row">
+		<div class="col s12 m2"></div>
+		<div class="col s12 m4">
+			<a href="{% url 'closet' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">store</i>Ingreso al Ropero</a>
+		</div>
+		<div class="col s12 m4">
+			<a class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">monetization_on</i>Registrar Venta</a>
+		</div>
+		<div class="col s12 m2"></div>
+	</div>	
 {% endblock %}
