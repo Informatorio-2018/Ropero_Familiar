@@ -6,14 +6,14 @@
 	<form method="POST">
   	{% csrf_token %}
     <h4 class="center-align">Registrar Usuarios</h4>
-    {% for field in form.visible_fields %}
+    {% for field in form_user.visible_fields %}
     	<div class="input-field">
     		{{field}}
     		{{field.label_tag}}
     		{% if field.help_text %}
     			 <span class="helper-text" data-error="wrong" data-success="right">{{ field.help_text }}</span>
         {% endif %}
-    	</div>
+      </div>
     {% endfor %}
   	<div >
     	<button class="btn waves-effect waves-light" type="submit">Registrar</button>
