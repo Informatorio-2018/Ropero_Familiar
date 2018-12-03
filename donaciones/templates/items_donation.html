@@ -13,13 +13,13 @@
 				{% if details %}
 					<div id="col_{{t.name}}" class="collapsible-header center-align">
 						{{t.name}}  {% for d in details %}	{% if d.donation_type == t.name %} <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
-						<script type="text/javascript">
- 							$(function() {
- 								if ({{ d.quantity }} > 0){
-									$("#col_{{t.name}}").addClass("disable-col");
- 								}
-							});
-						</script>
+							<script type="text/javascript">
+	 							$(function() {
+	 								if ({{ d.quantity }} > 0){
+										$("#col_{{t.name}}").addClass("disable-col");
+	 								}
+								});
+							</script>
 						 {% endif %} {% endfor %}
 					</div>
 				{% else %}
@@ -66,16 +66,83 @@
 {% endblock %}
 
 {% block extra_js %}
+	<!--Collapsible -->
 	<script type="text/javascript">
 		  $(document).ready(function(){
 	    	$('.collapsible').collapsible();
 	  	});
 	</script>
 
+	<!--Asigna id's diferentes a input's -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("[name=quantity]:eq(0)").attr('id', 'input_ropa');
+			$("[name=quantity]:eq(1)").attr('id', 'input_calzados');
+			$("[name=quantity]:eq(2)").attr('id', 'input_accesorios');
+			$("[name=quantity]:eq(3)").attr('id', 'input_otros');
+		});
+	</script>
+
+	<!--Controla que no se ingrese 0 en cantidad -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#btn_Ropa").click(function () {
+			var num = $('#input_ropa').val();
+			if (num == 0) {
+				alert("El valor ingresado deber ser mayor a 0");
+				event.preventDefault();
+			}
+			});
+
+			$("#btn_Calzados").click(function () {
+			var num = $('#input_calzados').val();
+			if (num == 0) {
+				alert("El valor ingresado deber ser mayor a 0");
+				event.preventDefault();
+			}
+			});
+
+			$("#btn_Accesorios").click(function () {
+			var num = $('#input_accesorios').val();
+			if (num == 0) {
+				alert("El valor ingresado deber ser mayor a 0");
+				event.preventDefault();
+			}
+			});
+
+			$("#btn_Otros").click(function () {
+			var num = $('#input_otros').val();
+			if (num == 0) {
+				alert("El valor ingresado deber ser mayor a 0");
+				event.preventDefault();
+			}
+			});
+
+		});
+	</script>
+
+	<!--Solo enteros -->
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#input_calzados").keyup(function () { 
+	    	this.value = (this.value + '').replace(/[^0-9]/g,'');
+			});
+
+			$("#input_accesorios").keyup(function () { 
+	    	this.value = (this.value + '').replace(/[^0-9]/g,'');
+			});
+
+			$("#input_otros").keyup(function () { 
+	    	this.value = (this.value + '').replace(/[^0-9]/g,'');
+			});
+		});
+	</script>
+
+	<!--Cambia label's segun cantidad -->
 	<script>
 		$(document).ready(function(){
 			//Cambia label calzado
-			$("[id=id_quantity]:eq(1)").keyup(function(){
+			$("#input_calzados").keyup(function(){
 				if ($(this).val() > 1) {
         	$('#label_Calzados').text('Pares');
     		} else {
@@ -83,7 +150,7 @@
     		}
 			});
 			//Cambia label accesorios
-			$("[id=id_quantity]:eq(2)").keyup(function(){
+			$("#input_accesorios").keyup(function(){
 				if ($(this).val() > 1) {
         	$('#label_Accesorios').text('Unidades');
     		} else {
@@ -91,7 +158,7 @@
     		}
 			});
 			//Cambia label otros
-			$("[id=id_quantity]:eq(3)").keyup(function(){
+			$("#input_otros").keyup(function(){
 				if ($(this).val() > 1) {
         	$('#label_Otros').text('Unidades');
     		} else {
@@ -100,4 +167,5 @@
 			});
 		});
 	</script>
+	
 {% endblock %}

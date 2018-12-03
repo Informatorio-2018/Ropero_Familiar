@@ -5,8 +5,70 @@
 {% block content %}
 	<form method="POST">
   	{% csrf_token %}
-    <h4 class="center-align">Registrar Usuarios</h4>
-    {% for field in form_user.visible_fields %}
+    <h4 class="center-align">Registrar Usuario</h4>
+    <div class="row">
+      <div class="input-field col s12">
+        <i class="material-icons prefix">perm_identity</i>
+        {{form_user.username}}
+        {{form_user.username.label_tag}}
+        {% if form_user.username.errors %}
+          <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.username.errors}}</span>
+        {% else %}
+          <span class="helper-text" data-error="wrong" data-success="right">{{form_user.username.help_text}}</span>
+        {% endif %}
+      </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">lock_open</i>
+          {{form_user.password1}}
+          {{form_user.password1.label_tag}}
+          {% if form_user.password1.errors %}
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.password1.errors}}</span>
+          {% else %}
+            <span class="helper-text" data-error="wrong" data-success="right">{{form_user.password1.help_text}}</span>
+          {% endif %}
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix"></i>
+          {{form_user.password2}}
+          {{form_user.password2.label_tag}}
+          {% if form_user.password2.errors %}
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.password2.errors}}</span>
+          {% else %}
+            <span class="helper-text" data-error="wrong" data-success="right">{{form_user.password2.help_text}}</span>
+          {% endif %}
+        </div>
+      <div class="input-field col s12">
+        <i class="material-icons prefix">face</i>
+        {{form_user.first_name}}
+        {{form_user.first_name.label_tag}}
+        {% if form_user.first_name.errors %}
+          <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.first_name.errors}}</span>
+        {% else %}
+        <span class="helper-text" data-error="wrong" data-success="right">{{form_user.first_name.help_text}}</span>
+        {% endif %}
+      </div>
+      <div class="input-field col s12">
+        <i class="material-icons prefix">face</i>
+        {{form_user.last_name}}
+        {{form_user.last_name.label_tag}}
+        {% if form_user.last_name.errors %}
+          <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.last_name.errors}}</span>
+        {% else %}
+        <span class="helper-text" data-error="wrong" data-success="right">{{form_user.last_name.help_text}}</span>
+        {% endif %}
+      </div>
+      <div class="input-field col s12">
+        <i class="material-icons prefix">phone_android</i>
+        {{form_user.phone_number}}
+        {{form_user.phone_number.label_tag}}
+        {% if form_user.phone_number.errors %}
+          <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.phone_number.errors}}</span>
+        {% else %}
+         <span class="helper-text" data-error="wrong" data-success="right">{{form_user.phone_number.help_text}}</span>
+        {% endif %}
+      </div>
+    </div>
+    <!--{% for field in form_user.visible_fields %}
     	<div class="input-field">
     		{{field}}
     		{{field.label_tag}}
@@ -14,9 +76,9 @@
     			 <span class="helper-text" data-error="wrong" data-success="right">{{ field.help_text }}</span>
         {% endif %}
       </div>
-    {% endfor %}
-  	<div >
-    	<button class="btn waves-effect waves-light" type="submit">Registrar</button>
+    {% endfor %}-->
+  	<div class="center-align">
+    	<button class="btn waves-effect waves-light " type="submit">Registrar</button>
   	</div>
   </form>
 {% endblock %}

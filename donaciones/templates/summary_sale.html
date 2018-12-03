@@ -3,7 +3,8 @@
 {% block title %}Resumen de compras{% endblock %}
 
 {% block content %}
-	<h4>Resumen de compras de: {{entry.family.firstname}}, {{entry.family.lastname}}</h4>
+	<h6>Fecha: {{entry.last_entry|date:"d/m/Y"}}</h6>
+	<h4 class="center-align">Bono Contribución Ropero Familiar</h4>
 	<table class="highlight">
     <thead>
       <tr>
@@ -15,20 +16,49 @@
 
     <tbody>
     	{% for det in details %}
-      <tr>
-        <td>{{det.product_type}}</td>
-        <td>{{det.quantity}} {{det.unit_measure}}</td>
-        <td>$ {{det.total}}</td>
-      </tr>
+	      <tr>
+	        <td>{{det.product_type}}</td>
+	        <td>{{det.quantity}} {{det.unit_measure}}</td>
+	        <td>$ {{det.total}}  <a href="#modal{{det.id}}" class="modal-trigger right"><i class="material-icons">delete</i></a></td>
+	      </tr>
+		  <!-- Modal Structure -->
+		  <div id="modal{{det.id}}" class="modal">
+		    <div class="modal-content">
+		      <h4>Eliminar Detalle de venta</h4>
+		      <h6>¿Desea eliminar del <i class="tiny material-icons">shopping_cart</i>: {{det.product_type}} - {{det.quantity}} {{det.unit_measure}}?</h6>
+		    </div>
+		    <div class="modal-footer">
+		    	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+		      <a href="{% url 'delete_sale' det.id %}" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+		    </div>
+		  </div>
     	{% endfor %}
     </tbody>
   </table>
   <div class="row"></div>
-  <div class="center-align">
-  		<a class="waves-effect waves-light btn center-align" href="{% url 'finish_sale' entry.id %}">Siguiente</a>
-  </div>
+	<form method="POST">
+	{% csrf_token %}
+		<div class="row">
+			<div class="col s8">
+				<h5>Colabora Sr./Sra: {{entry.family.firstname}}, {{entry.family.lastname}}</h5>
+			</div>
+			<div class="input-field col s4">
+				{{form}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="center-align">
+		  	<button class="btn waves-effect waves-light" type="submit">Finalizar</button>
+		 	</div>
+		</div>
+	</form>
+
 {% endblock %}
 
 {% block extra_js %}
-	
+	<script type="text/javascript">
+		$(document).ready(function(){
+		$('.modal').modal();
+		});
+	</script>
 {% endblock %}
