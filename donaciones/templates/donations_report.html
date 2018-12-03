@@ -8,7 +8,7 @@
 		<div class="input-field col s12">
 		{% csrf_token %}
     		<select name="dona_id">
-		      <option value="" disabled selected>Articulo</option>
+		      <option value="" disabled>Articulo</option>
 		      {% for d in dona %}
 		      	<option value={{d.name}}>{{d.name}}</option>
 		      {% endfor %}
@@ -16,10 +16,10 @@
     		<label>Articulos</label>
   		</div>
   		{{form.begin.label_tag}}
-  		<input type="text" class="datepicker" name='begin'>
+  		<input type="text" class="datepicker" name='begin' id='begin'>
   		{{form.finish.label_tag}}
-  		<input type="text" class="datepicker" name='finish'>
-		<input type="submit" value="Buscar" class="btn">
+  		<input type="text" class="datepicker" name='finish' id='finish'>
+		<input type="submit" value="Buscar" class="btn" id="btn_buscar">
 	</form>	
 
 {% endblock %}
@@ -43,9 +43,38 @@
                 monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
                 weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
                 weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
-                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"]
+                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
+                cancel: ['Cancelar'],
+                done: ['Aceptar'],
             }
         });
   		});
-	</script>	
+	</script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $("#btn_buscar").click(function(){
+        var str = $('#begin').val();
+        if (str == ''){
+          alert('Ingrese una fecha de inicio');
+          event.preventDefault();
+        }
+      });
+      $("#btn_buscar").click(function(){
+        var str = $('#finish').val();
+        if (str == ''){
+          alert('Ingrese una fecha final');
+          event.preventDefault();
+        }
+      });
+      $("#btn_buscar").click(function(){
+        var str1 = $('#begin').val();
+        var str2 = $('#finish').val();
+        if (str1 > str2){
+          alert('La fecha de inicio no puede ser mayor a la final');
+          event.preventDefault();
+        }
+      });
+    });
+  </script>	
 {% endblock %}

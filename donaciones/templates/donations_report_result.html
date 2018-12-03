@@ -5,8 +5,32 @@
 {% block content %}
 	
 	<h3>Reporte de donaciones de {{begin}} hasta {{finish}}</h3>
-	<div class="row collection">	
-		<div class="collection-item">Total de {{don}} -- {{report}} {{all_r.unit_measure}}</div>
+	<p>Toque para ver detalles de las donaciones</p>
+	<div class="row collection">
+		<div class="collection-item"><a href="#modal1" class="modal-trigger">Total de {{don}} -- {{report}}</div></a>
+	</div>
+	<a href="{% url 'donations_report' %}" class="btn">Volver</a>
+
+	<div id="modal1" class="modal">
+		<div class="modal-content">
+			<h4>Detalles de las donaciones:</h4>
+			<div class="row collection">
+				{% for a in all %}
+					<p class="collection-item">Donador: {{a.donation.name}} | Donó: {{a.quantity}}{{a.unit_measure}} de {{a.donation_type}} | Fecha: {{a.donation.date}}</p>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="modal-footer">
+		  <a href="#" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+		</div>
 	</div>
 
+{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+	  $(document).ready(function(){
+	    $('.modal').modal();
+	  });	
+	</script>
 {% endblock %}

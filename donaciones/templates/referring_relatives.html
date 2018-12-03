@@ -3,12 +3,13 @@
 {% block title %}Familiares de Referente{% endblock %}
 
 {% block content %}
-
-	{% for f in fam %}
-		<br>
-		<a href="/referente/familiares/perfil_familiar/{{f.id}}">{{f.lastname}}--{{f.firstname}}</a>
-		<br>
-	{% endfor %}
+	
+	<h2 class="center-align">Familiares de {{ref.lastname}}, {{ref.firstname}}</h2>
+	<div class="row collection">
+		{% for f in fam %}
+			<a href="/referente/familiares/perfil_familiar/{{f.id}}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
+		{% endfor %}
+	</div>
 	<a href="/referente/{{ref.id}}/" class="btn">Volver</a>
 
 	<a href="/referente/{{ref.id}}/familiares/registrar_familiar/" class="btn">Registrar Familiar</a>
