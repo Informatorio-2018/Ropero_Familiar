@@ -427,10 +427,6 @@ def carry_out(request,id):
             return redirect('carry_out', id=id)
     else:
         form_carry = CarryForm()
-    #     form_others = OtherDetailForm()
-    # context = {'donator': donator, 'types': types,
-    #            'form_details': form_details, 'details': details, 'form_others': form_others}
-    # return render(request, 'items_donation.html', context)
 
 
     context={'types':types,'responsable':responsable,'form_carry':form_carry}
