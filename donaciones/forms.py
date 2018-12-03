@@ -56,7 +56,7 @@ class TicketForm(forms.ModelForm):
 class LoadTypeProductForm(forms.ModelForm):
     class Meta:
         model = TypesProducts
-        fields = ('name', 'unit_measure', 'price')
+        fields = ('price',)
 
 
 class SortProductForm(forms.ModelForm):
@@ -66,6 +66,24 @@ class SortProductForm(forms.ModelForm):
         fields = ('types','quantity',)
 
 
+class FixProductForm(forms.ModelForm):
+    class Meta:
+        model= FixProducts
+        fields=('types','quantity',)
+
+        # CHOICES=TypesDonation.objects.all()
+        # model = FixProducts
+        # fields = ('name','quantity',)
+        # widgets={'name':forms.Select(choices=( (x.name, x.name) for x in CHOICES ))}
+class ResponsableForm(forms.ModelForm):
+    class Meta:
+        model = ResponsableFix
+        fields = ('name','lastname','phone','adress',)
+
+class CarryForm(forms.ModelForm):
+    class Meta:
+        model = Carry
+        fields = ('quantity',)
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Búsqueda')

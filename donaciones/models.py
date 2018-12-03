@@ -93,11 +93,37 @@ class TypesProducts(models.Model):
     def __str__(self):
         return self.name
 
+class ResponsableFix(models.Model):
+    date = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=30, verbose_name='Nombre')
+    lastname = models.CharField(max_length=30, verbose_name='Apellido')
+    phone = models.IntegerField()
+    adress = models.CharField(max_length=80, verbose_name='Dirección')
+    
+    # neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
+class Carry(models.Model):
+    types = models.CharField(max_length=30, verbose_name='Tipo de Donación')
+    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
+    quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
+    responsable = models.ForeignKey(ResponsableFix, on_delete=models.CASCADE, related_name='responsable')
+
 
 class SortProducts(models.Model):
     types = models.ForeignKey(TypesProducts, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')
     quantity = models.DecimalField(max_digits=8, decimal_places=2, default=0,validators=[MaxValueValidator(99999999.00), MinValueValidator(0.00)],verbose_name='Cantidad')
 
+class TypesFix(models.Model):
+    name = models.CharField(max_length=30, verbose_name='Nombre')
+    unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
+    quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0,validators=[MaxValueValidator(99999999), MinValueValidator(0)],verbose_name='Cantidad Total')
+
+    def __str__(self):
+        return self.name
+
+class FixProducts(models.Model):
+    types = models.ForeignKey(TypesFix, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')
+    quantity = models.DecimalField(max_digits=8, decimal_places=2, default=0,validators=[MaxValueValidator(99999999.00), MinValueValidator(0.00)],verbose_name='Cantidad')
+    responsable = models.OneToOneField(ResponsableFix,null=True,on_delete=models.CASCADE)
 
 class FamilyEntry(models.Model):
     last_entry = models.DateTimeField(auto_now_add=True)

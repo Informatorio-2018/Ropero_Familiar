@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Tipos de Articulo{% endblock %}
+
+{% block content %}
+	<form method="POST">
+  	{% csrf_token %}
+    <h5 class="center-align">Actualizar Precios</h5>
+  	<div>
+    {{form.as_p}}	
+  	</div>
+  	<div class="modal-footer">
+    	<button class="btn waves-effect waves-light" type="submit">Guardar</button>
+  	</div>
+  </form>
+{% endblock %}
