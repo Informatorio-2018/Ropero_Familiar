@@ -1,24 +1,16 @@
-
 {% extends "base.html" %}
-{% load staticfiles %}
 
-{% block title %}  Tipos de Productos {% endblock %}
+{% block title %} Tipos De Articuos {% endblock %}
 
-{% block content %} 
-	
-		<form method="post">
-			{% csrf_token %}
-			<div class="input-field">
-				{{ form.as_p }}
-			</div>
-			<button type="submit">Submit</button>
-		</form>
-	
-	<!-- {{ form }} -->
-{% endblock %}
+{% block content %}
+<h4 class="center-align">Tipos de Articulos</h4>
+	 <div class="collection">
+	 	{% for t in types %}
+        <a href="{% url 'update_price_article' t.id %}" class="collection-item">{{t.name}}</a>
+        {% endfor %}
+      </div>
+{% endblock %}	
 
 {% block extra_js %}
-<script type="text/javascript">$(document).ready(function(){
-    $('select').formSelect();
-  });</script>
-{% endblock%}
+	
+{% endblock %}
