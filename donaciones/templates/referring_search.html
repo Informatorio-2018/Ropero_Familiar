@@ -10,12 +10,9 @@
 			{% csrf_token %}
 			{{form}}
 			<input type="submit" value="Buscar" class="btn">
-			<a href="/registrar_referente_f/"  class="btn">Registrar</a>
-			{% for r in ref %}
-				<div class="row collection">	
-					<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
-				</div>
-			{% endfor %}
+			<div class="fixed-action-btn">
+				<a href="/registrar_referente_f/" class="btn-floating btn-large waves-effect waves-light right"><i class="material-icons">group_add</i></a>
+			</div>
 		</div>
 	</form>
  

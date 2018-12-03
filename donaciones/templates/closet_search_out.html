@@ -4,12 +4,17 @@
 
 {% block content %}
 
-	<h2>Resultados para: '{{query}}'</h2>
-	{% for r in ref %}
-		<div class="row collection">	
-			<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}}</a>
-		</div>
-	{% endfor %}
+	<h3>Resultados para: "{{query}}"</h3>
+	<div class="row collection">	
+		{% for r in ref %}
+			<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}} 
+			{% if r.role == 'r' %}
+				(Referente)
+			{% else %}
+				(Familiar)
+			{% endif %}</a>
+		{% endfor %}
+	</div>
 
 	{% for r in ref %}
 		<div id="modal1{{r.id}}" class="modal">
@@ -24,7 +29,7 @@
 	{% endfor %}
 
 	<a href="/busqueda_referente/" class="btn">Volver</a>
-	<a href="/registrar_referente_f/"  class="btn">Registrar</a>
+	<a href="/registrar_referente_f/" class="btn-floating btn-large waves-effect waves-light right"><i class="material-icons">group_add</i></a>
 
 {% endblock %}
 
