@@ -138,12 +138,11 @@ def donations_report(request):
         q1 = Q(donation__date__gte=datetime.datetime.strptime(begin,"%Y-%m-%d").date())
         q2 = Q(donation__date__lte=datetime.datetime.strptime(finish,"%Y-%m-%d").date())
         q3 = Q(donation_type__exact=donation)
-        all_reports = report = DetailsDonation.objects.filter(q3 & q1 & q2)[0]
         report = DetailsDonation.objects.filter(q3 & q1 & q2).aggregate(total=Sum('quantity'))
-        # import ipdb; ipdb.set_trace()
+        all_reports = DetailsDonation.objects.filter(q3 & q1 & q2)
         return render(request,'donations_report_result.html',{'report':report['total'],
-                                                              'don':donation,
-                                                              'all_r':all_reports, 'begin': begin, 'finish':finish})
+                                                              'don':donation, 'begin': begin, 'finish':finish,
+                                                              'all':all_reports})
     else:
         form = DonationsReportForm()
     return render(request,'donations_report.html',{'form':form,
@@ -365,8 +364,10 @@ def referring_search(request):
             q2 = Q(lastname__contains=query)
             q3 = Q(role__exact='r')
             ref = Family.objects.filter((q1 & q3) | (q2 & q3))
+            total = Family.objects.filter((q1 & q3) | (q2 & q3)).count()
             return render(request, 'referring_search_out.html', {'ref': ref,
-                                                                 'query': query})
+                                                                 'query': query,
+                                                                 'total': total})
     else:
         form = SearchForm()
     return render(request, 'referring_search.html', {'form': form,
@@ -420,6 +421,20 @@ def edit_referring(request,id):
                                                  'form2':form2,
                                                  'neigh': neigh,
                                                  'ref':ref})
+
+@login_required
+def edit_family(request,id):
+    family = Family.objects.get(pk=id)
+    if request.method == 'POST':
+        form = FamilyForm(request.POST, instance=family)
+        if form.is_valid():
+            fam = form.save(commit=False)
+            fam.birth = request.POST['birth']
+            fam.save()
+        return redirect('relative_profile', id)
+    else:
+        form = FamilyForm(instance=family)
+    return render(request,'edit_family.html',{'form':form})
 
 @login_required
 def neigh(request):
@@ -530,7 +545,7 @@ def register_user(request):
         form_user = UserRegisterForm()
     return render(request, 'register_user.html', {'form_user': form_user})
 
-
+@login_required
 def peoples_closet(request):
     today = datetime_django.today()
     peoples = FamilyEntry.objects.filter(last_entry__year=today.year, last_entry__month=today.month, last_entry__day=today.day)
@@ -538,6 +553,7 @@ def peoples_closet(request):
     context = {'peoples':peoples}
     return render(request, 'closet.html', context)
 
+@login_required
 def sale(request, id):
     #import ipdb; ipdb.set_trace()
     try:
@@ -553,7 +569,7 @@ def sale(request, id):
     else:
         return redirect('sale_detail', id)
 
-    
+@login_required
 def sale_detail(request,id):
     # import ipdb; ipdb.set_trace()
     entry = FamilyEntry.objects.get(pk=id)
@@ -579,7 +595,7 @@ def sale_detail(request,id):
                 'sale': sale, 'sale_details': sale_details}
     return render(request, 'sales.html', context)
 
-
+@login_required
 def summary_sale(request, id):
     sale = Sale.objects.get(entry_id=id)
     details = SalesDetails.objects.filter(sale_id=sale.id)
@@ -587,6 +603,7 @@ def summary_sale(request, id):
     context = {'sale': sale, 'details': details, 'entry': entry}
     return render(request, 'summary_sale.html', context)
 
+@login_required
 def finish_sale(request, id):
     # import ipdb; ipdb.set_trace()
     sale = Sale.objects.get(entry_id=id)

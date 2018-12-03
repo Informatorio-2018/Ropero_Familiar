@@ -4,11 +4,11 @@
 
 {% block content %}
 
-	<h2 class="center-align">Iniciar Sesión</h2>	
+	<h2 class="center-align">Iniciar Sesión</h2>
 	<form method="POST">
 		{% csrf_token %}
 		{{form.as_p}}
-		<button type="submit" class="btn">Entrar</button>
+			<button type="submit" class="btn center-align">Entrar</button>
 	</form>
 
 {% endblock %}

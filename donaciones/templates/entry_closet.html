@@ -8,34 +8,9 @@
 	<form action="/ingreso_ropero/" method="POST">
 		<div class="row">
 			{% csrf_token %}
-			<div class="col s10">{{form}}</div>
-			<div class="col s2 center-align">
-				<input type="submit" value="Buscar" class="btn">
-			</div>
+			<div class="col s12">{{form}}</div>
 		</div>
-		<div class="row">
-			<div class="col s12">
-				{% for r in ref %}
-						<div class="row collection">
-							<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}}</a>
-						</div>
-				{% endfor %}
-			</div>
-			{% for r in ref %}
-				<div id="modal1{{r.id}}" class="modal">
-					<div class="modal-content">
-					  <h4>Ingreso al Ropero</h4>
-					  <p>¿Está seguro que {{r.lastname}}, {{r.firstname}} ingresará al ropero?</p>
-					</div>
-					<div class="modal-footer">
-						<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-					 	<a href="/ingreso_ropero/ok/{{r.id}}/" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
-					</div>
-				</div>
-			{% endfor %}
-			<div class="center-align"><a href="/registrar_referente_f/"  class="btn">Registrar</a></div>
-			
-		</div>
+			<div class="center-align"><input type="submit" value="Buscar" class="btn"></div>
 	</form>
  
 {% endblock %}
