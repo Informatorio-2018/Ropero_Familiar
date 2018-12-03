@@ -53,7 +53,9 @@ def items_donation(request, id):
 
 @login_required
 def resume_donation(request, id):
+    # import ipdb; ipdb.set_trace()
     donator = Donation.objects.get(pk=id)
+    resumes = DetailsDonation.objects.filter(donation__pk=id)
     if request.method == "POST":
         don_form = DonationForm(request.POST, instance=donator)
         if don_form.is_valid():
@@ -61,7 +63,7 @@ def resume_donation(request, id):
             return redirect('resume_donation', id=donator.id)
     else:
         don_form = DonationForm(instance=donator)
-    context = {'donator': donator, 'resumes': DetailsDonation.objects.filter(donation__pk=id), 'don_form': don_form}
+    context = {'donator': donator, 'resumes': resumes, 'don_form': don_form}
     return render(request, 'resume_donation.html', context)
 
 @login_required
@@ -516,7 +518,7 @@ def entry_ok(request,id):
 @login_required
 def register_user(request):
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
         form_user = UserRegisterForm(request.POST)
         if form_user.is_valid():
             user = form_user.save(commit=False)
@@ -534,9 +536,26 @@ def register_user(request):
 def peoples_closet(request):
     today = datetime_django.today()
     peoples = FamilyEntry.objects.filter(last_entry__year=today.year, last_entry__month=today.month, last_entry__day=today.day)
+    ref = Referring.objects.all()
+    id_excludes = []
+    for p in peoples:
+        # import ipdb; ipdb.set_trace()
+        if p.family.role == 'r':
+            referente = Referring.objects.get(family_id=p.family_id)
+            if referente.last_buy != None:
+                if referente.last_buy.year==today.year and referente.last_buy.month==today.month and referente.last_buy.day==today.day:
+                    #peoples.exclude(family_id=p.family_id)
+                    id_excludes.append(p.family_id)
+        else:
+            referente = Referring.objects.get(family_id=p.family.ref)
+            if referente.last_buy != None:
+                if referente.last_buy.year==today.year and referente.last_buy.month==today.month and referente.last_buy.day==today.day:
+                    #peoples.exclude(family_id=p.family_id)
+                    id_excludes.append(p.family_id)
 
-    context = {'peoples':peoples}
-    return render(request, 'closet.html', context)
+    peoples = peoples.exclude(family_id__in=id_excludes)
+    context = {'peoples':peoples, 'ref': ref, 'today':today}
+    return render(request, 'peoples_closet.html', context)
 
 def sale(request, id):
     #import ipdb; ipdb.set_trace()
@@ -584,25 +603,29 @@ def summary_sale(request, id):
     sale = Sale.objects.get(entry_id=id)
     details = SalesDetails.objects.filter(sale_id=sale.id)
     entry = FamilyEntry.objects.get(pk=id)
-    context = {'sale': sale, 'details': details, 'entry': entry}
-    return render(request, 'summary_sale.html', context)
 
-def finish_sale(request, id):
-    # import ipdb; ipdb.set_trace()
-    sale = Sale.objects.get(entry_id=id)
-    entry = FamilyEntry.objects.get(pk=id)
     if entry.family.role == 'r':
         ref = Referring.objects.get(family_id=entry.family_id)
     else:
         ref = Referring.objects.get(family_id=entry.family.ref)
+
     if request.method == 'POST':
         form = TotalForm(request.POST, instance=sale)
         if form.is_valid():
             form.save()
             ref.last_buy = entry.last_entry
+            ref.family_last_buy = entry.family.lastname+", "+entry.family.firstname
             ref.save()
             return redirect('peoples_closet')
     else:
         form = TotalForm(instance=sale)
-    context = {'sale': sale, 'entry': entry, 'form': form}
-    return render(request, 'finish_sale.html', context)
+    context = {'sale': sale, 'details': details, 'entry': entry, 'form': form}
+    return render(request, 'summary_sale.html', context)
+
+def delete_sale(request, id):
+    detail = get_object_or_404(SalesDetails, pk=id)
+    sale = Sale.objects.get(pk=detail.sale_id)
+    sale.total -= detail.total
+    sale.save()
+    detail.delete()
+    return redirect('summary_sale', id=sale.entry_id)

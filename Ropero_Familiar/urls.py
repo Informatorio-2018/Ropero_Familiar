@@ -26,7 +26,7 @@ urlpatterns = [
     path('adm/barrios/<int:id>', views.edit_neigh, name='edit_neigh'),
     path('adm/barrios/<int:id>/borrar', views.del_neigh, name='del_neigh'),
     path('adm/registrar_usuario/', views.register_user, name="register_user"),
-    path('adm/reporte_donaciones/',views.donations_report,name="donations_report"),
+    path('adm/reporte_donaciones/', views.donations_report, name="donations_report"),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('ingreso_ropero/', views.closet, name='closet'),
@@ -36,5 +36,5 @@ urlpatterns = [
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
-    path('personas_ropero/venta/<int:id>/detalles/resumen/finalizar', views.finish_sale, name="finish_sale"),
+    path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
 ]

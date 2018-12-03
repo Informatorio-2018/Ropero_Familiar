@@ -4,22 +4,38 @@
 
 {% block content %}
 	<div class="row">
-		<h3>{{entry.family.lastname}}, {{entry.family.firstname}}</h3>
+		<h3 class="col s11">{{entry.family.lastname}}, {{entry.family.firstname}}</h3>
 		<h4 class="right-align">Subtotal: {{sale.total}}</h4>
 	</div>
 	<ul class="collapsible popout">
 		{% for type in types %}
 	    <li>
-	      <div class="collapsible-header">{{type.name}}</div>
+	    	{% if sale_details %}
+					<div id="col_{{type.id}}" class="collapsible-header center-align">
+						{{type.name}} {% for sale in sale_details %}{% if sale.product_type == type.name %} <span class="new badge" data-badge-caption="">{{ sale.quantity }} {{sale.unit_measure}} - ${{sale.total}}</span>
+							<script type="text/javascript">
+	 							$(function() {
+	 								if ({{ sale.quantity }} > 0){
+										$("#col_{{type.id}}").addClass("disable-col");
+	 								}
+								});
+							</script>
+						 {% endif %} {% endfor %}
+					</div>
+				{% else %}
+					<div id="col_{{type.name}}" class="collapsible-header center-align ">
+						{{ type.name }}
+					</div>
+				{% endif %}
 	      <div class="collapsible-body">
 	      	<form method="POST">
 	      		{% csrf_token %}
 		      	<div class="row">
 		      			<div class="col s4 offset-s4">
 		     						{{form}}
-		     						<input type="text" name="product_type" value="{{ type.name }}">
-		     						<input type="text" name="unit_measure" value="{{ type.unit_measure }}">
-		     						<input type="number" name="price" value="{{ type.price }}">
+		     						<input class="hide" type="text" name="product_type" value="{{ type.name }}">
+		     						<input class="hide" type="text" name="unit_measure" value="{{ type.unit_measure }}">
+		     						<input class="hide" type="number" name="price" value="{{ type.price }}">
 		      			</div>
 		      			<div class="col s4 left">
 		      				<label id="label_{{type.name}}" class="validate"  for="id_unit_measure">{{ type.get_unit_measure_display }}</label>
@@ -34,7 +50,11 @@
 		{% endfor %}
   </ul>
   <div class="center-align">
+  	{% if sale_details %}
   		<a class="waves-effect waves-light btn center-align" href="{% url 'summary_sale' entry.id %}">Siguiente</a>
+  	{% else %}
+  		<a class="waves-effect waves-light btn center-align disabled" href="{% url 'summary_sale' entry.id %}">Siguiente</a>
+  	{% endif %}
   </div>
 {% endblock %}
 
@@ -43,5 +63,16 @@
 		$(document).ready(function(){
     	$('.collapsible').collapsible();
   	});
+	</script>
+
+	<!--Asigna id's diferentes a input's -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("[name=quantity]:eq(0)").attr('id', 'input_ropaverano');
+			$("[name=quantity]:eq(1)").attr('id', 'input_ropainvierno');
+			$("[name=quantity]:eq(2)").attr('id', 'input_calzados');
+			$("[name=quantity]:eq(3)").attr('id', 'input_otros');
+			$("[name=quantity]:eq(4)").attr('id', 'input_accesorios');
+		});
 	</script>
 {% endblock %}
