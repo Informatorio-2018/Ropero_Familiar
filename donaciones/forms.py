@@ -102,8 +102,8 @@ class EditNeighForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=20)
-    password = forms.CharField(max_length=20, widget=forms.PasswordInput())
+    username = forms.CharField(max_length=20, label='Nombre de Usuario')
+    password = forms.CharField(max_length=20, widget=forms.PasswordInput(),label='Contraseña')
 
 
 class UserRegisterForm(UserCreationForm):

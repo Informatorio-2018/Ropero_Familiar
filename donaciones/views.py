@@ -523,14 +523,17 @@ def edit_referring(request,id):
     if request.method == 'POST':
         form1 = FamilyForm_r(request.POST, instance=family)
         if form1.is_valid():
-            form1.save()
-            form2 = ReferringForm(request.POST, instance=ref)
-            if form2.is_valid():
-                fam = form2.cleaned_data
-                fam = form2.save(commit=False)
-                fam.family = family
-                fam.neighborhood_id = request.POST['neigh_id']
-                fam.save()
+            fam1 = form1.save(commit=False)
+            fam1.birth = request.POST['birth']
+            fam1.save()
+        form2 = ReferringForm(request.POST, instance=ref)
+        if form2.is_valid():
+            fam = form2.cleaned_data
+            fam = form2.save(commit=False)
+            fam.family = family
+            fam.neighborhood_id = request.POST['neigh_id']
+            fam.save()
+        if form1.is_valid() and form2.is_valid():
             return redirect('referring_profile', id)
     else:
         form1 = FamilyForm_r(instance=family)
@@ -552,7 +555,7 @@ def edit_family(request,id):
         return redirect('relative_profile', id)
     else:
         form = FamilyForm(instance=family)
-    return render(request,'edit_family.html',{'form':form})
+    return render(request,'edit_family.html',{'form':form, 'family':family})
 
 @login_required
 def neigh(request):
@@ -594,6 +597,9 @@ def login(request):
         user = authenticate(request,username=username,password=password)
         if user is not None:
             log(request,user)
+            request.session['member_id'] = user.id
+            request.session.set_expiry(3600) #86400 = 24hs     # 3600 = 1hr
+
             return redirect('home')
     form = LoginForm()
     return render(request,'login.html',{'form': form})
