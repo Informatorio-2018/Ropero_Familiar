@@ -29,15 +29,16 @@
       <a href="{% url 'home' %}" class="brand-logo">Ropero Familiar</a>
       <ul class="right">
 		<li>
+      {% if user.is_authenticated %}
 			<a href="#" data-target="slide-out" class="sidenav-trigger">
 	        	<i class="material-icons">menu</i>
 	 		</a>
+      {% endif %}
 	 	</li>
       </ul>
     </div>
 
   	 
-
   <ul id="slide-out" class="sidenav">
     <li>
       <div class="user-view">
