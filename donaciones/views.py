@@ -695,6 +695,7 @@ def sale(request, id):
 @login_required
 def sale_detail(request,id):
     # import ipdb; ipdb.set_trace()
+    alert = False
     entry = FamilyEntry.objects.get(pk=id)
     types = TypesProducts.objects.all()
     sale = Sale.objects.get(entry_id = id)
@@ -702,20 +703,34 @@ def sale_detail(request,id):
     if request.method == 'POST':
         form = SalesDetailsForm(request.POST)
         if form.is_valid():
+            import ipdb; ipdb.set_trace()
             detail = form.save(commit=False)
             detail.product_type = request.POST['product_type']
             detail.unit_measure = request.POST['unit_measure']
             detail.price = request.POST['price'] 
             detail.total = int(detail.price) * int(detail.quantity)
             detail.sale_id = sale.id
-            sale.total += detail.total
-            sale.save()
             detail.save()
-            return redirect('sale_detail', id)
+
+            # Restar la cantidad vendida de product_types
+            type_res = TypesProducts.objects.get(name=detail.product_type)
+            if detail.product_type == type_res.name:
+                if type_res.quantity_total < detail.quantity:
+                    alert = 'La cantidad ingresada es mayor a la disponible en el ropero'
+                    detail.delete()
+                    context = {'entry': entry, 'types': types, 'form': form, 
+                                'sale': sale, 'sale_details': sale_details, 'alert': alert}
+                    return render(request, 'sales.html', context)
+                else:
+                    type_res.quantity_total -= detail.quantity
+                    type_res.save()
+                    sale.total += detail.total
+                    sale.save()
+                    return redirect('sale_detail', id)
     else:
         form = SalesDetailsForm()
     context = {'entry': entry, 'types': types, 'form': form, 
-                'sale': sale, 'sale_details': sale_details}
+                'sale': sale, 'sale_details': sale_details, 'alert': alert}
     return render(request, 'sales.html', context)
 
 @login_required
@@ -747,5 +762,10 @@ def delete_sale(request, id):
     sale = Sale.objects.get(pk=detail.sale_id)
     sale.total -= detail.total
     sale.save()
+
+    type_sum = TypesProducts.objects.get(name=detail.product_type)
+    if detail.product_type == type_sum.name:
+        type_sum.quantity_total += detail.quantity
+        type_sum.save()
     detail.delete()
     return redirect('summary_sale', id=sale.entry_id)

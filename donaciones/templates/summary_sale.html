@@ -43,7 +43,10 @@
 				<h5>Colabora Sr./Sra: {{entry.family.firstname}}, {{entry.family.lastname}}</h5>
 			</div>
 			<div class="input-field col s4">
-				{{form}}
+				<i class="material-icons prefix">monetization_on</i>
+				{{form.total}}
+				{{form.total.label_tag}}
+				<span class="helper-text" data-error="wrong" data-success="right">Confirmar o editar cantidad</span>
 			</div>
 		</div>
 		<div class="row">
