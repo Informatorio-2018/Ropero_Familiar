@@ -13,7 +13,7 @@
     <script src="{% static 'js/materialize.min.js' %}"></script>
 
     <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       
 		<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
@@ -26,7 +26,9 @@
   <nav> 
 
     <div class="nav-wrapper red darken-4">
-      <a href="{% url 'home' %}" class="brand-logo">Ropero Familiar</a>
+      <a href="{% url 'home' %}">
+        <img class="logo-topbar" src="../static/images/flia_conin.jpg">
+      </a>
       <ul class="right">
 		<li>
 			<a href="#" data-target="slide-out" class="sidenav-trigger">
