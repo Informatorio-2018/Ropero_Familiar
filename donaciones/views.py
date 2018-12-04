@@ -585,6 +585,9 @@ def login(request):
         user = authenticate(request,username=username,password=password)
         if user is not None:
             log(request,user)
+            request.session['member_id'] = user.id
+            request.session.set_expiry(3600) #86400 = 24hs     # 3600 = 1hr
+
             return redirect('home')
     form = LoginForm()
     return render(request,'login.html',{'form': form})
