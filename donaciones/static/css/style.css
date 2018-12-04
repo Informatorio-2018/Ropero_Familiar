@@ -87,3 +87,20 @@
     	display: inline;
 	}
 }
+
+.btn, .btn-floating{
+	background-color: #b71c1c!important;
+}
+
+.btn:hover, .btn-floating:hover{
+	background-color: #831212!important;
+}
+
+.boton-perfil{
+	width: 100%;
+	background-color: #b71c1c;
+}
+
+.boton-perfil:hover{
+	background-color: #831212;
+}
