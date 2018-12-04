@@ -142,7 +142,7 @@ class Sale(models.Model):
 class SalesDetails(models.Model):
     product_type = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10)
-    quantity = models.IntegerField(verbose_name='Cantidad')
+    quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
     price = models.IntegerField()
     total = models.IntegerField()
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name='sales')
