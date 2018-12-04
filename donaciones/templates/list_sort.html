@@ -1,3 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} Para Clasificar {% endblock %}
+
+{% block content %}
+
+<h3 class="center-align">Para Clasificar</h3>
+	<ul class="collection">
+	{% for t in list_donations %}
+		<li class="collection-item avatar">
+			<img src="images/yuna.jpg" alt="" class="circle">
+      		<span class="title">{{t.name}}</span>
+      		<p>{{t.quantity_total}} {{t.unit_measure}}<br>
+         		
+      		</p>
+      		<a class="secondary-content"><i class="material-icons">grade</i></a>
+    	</li> 
+	{% endfor %}
+    </ul>
+	
+        
+
+<ul class="center-align">
+	<li>
+		<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn boton-home">Ropero</a>
+	</li>
+	<div class="separador"></div>
+	<li>
+		<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn boton-home">Acondicionar</a>
+	</li>
+	<div class="separador"></div>
+	<li>
+		<a href="#" class="waves-effect waves-light btn boton-home">Basura</a>
+	</li>
+</ul>
+	
+  
+{% endblock %}
+
+{% block extra_js %}
+ 
+{% endblock %}
  
 
 
