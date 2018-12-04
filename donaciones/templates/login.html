@@ -7,8 +7,20 @@
 	<h2 class="center-align">Iniciar Sesión</h2>
 	<form method="POST">
 		{% csrf_token %}
-		{{form.as_p}}
-			<button type="submit" class="btn center-align">Entrar</button>
+		<div class="row">
+			<div class="input-field col s12">
+				<i class="material-icons prefix">perm_identity</i>
+				{{form.username}}
+				{{form.username.label_tag}}
+			</div>
+			<div class="input-field col s12">
+				<i class="material-icons prefix">lock</i>
+				{{form.password}}
+				{{form.password.label_tag}}
+			</div>
+			<div class="center-align">
+				<button type="submit" class="btn waves-effect waves-light">Entrar</button>
+			</div>
 	</form>
 
 {% endblock %}
