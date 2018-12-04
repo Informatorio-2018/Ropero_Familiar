@@ -404,12 +404,12 @@ def fix_products(request):
     context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
     return render(request, 'fix_products.html', context)
     
-    # return render(request,'fix_products.html')
 
 
 def carry_out(request,id):
+    alert = False
     responsable = ResponsableFix.objects.get(pk=id)
-    types=TypesFix.objects.all()
+    types=TypesFix.objects.filter(quantity_total__gt=0)
     carry = Carry.objects.filter(responsable__pk=responsable.id)
     if request.method == 'POST':
         form_carry = CarryForm(request.POST)
@@ -418,18 +418,26 @@ def carry_out(request,id):
             load.types = request.POST['types']
             load.unit_measure = request.POST['unit_measure']
             load.responsable_id = responsable.id
-            load.save()
+            # load.save()
 
             type_res = TypesFix.objects.get(name=load.types)
             if load.types == type_res.name:
-                type_res.quantity_total -= load.quantity
-                type_res.save()
+                if load.quantity > type_res.quantity_total:
+                    cargo=0
+                    alert='El valor ingresado es mayor a la cantidad disponible'
+                    context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert}
+                    return render(request, 'carry_out.html', context)
+                else:
+                    cargo=1
+                    load.save()
+                    type_res.quantity_total -= load.quantity
+                    type_res.save()
             return redirect('carry_out', id=id)
     else:
         form_carry = CarryForm()
 
 
-    context={'types':types,'responsable':responsable,'form_carry':form_carry}
+    context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert}
 
     return render(request,'carry_out.html',context)
 
@@ -443,7 +451,11 @@ def responsable(request):
     context = {'form': form}
     return render(request, 'responsable.html', context)
     
+def list_sort(request):
+    list_donations=TypesDonation.objects.filter(quantity_total__gt=0)
 
+    context={'list_donations':list_donations}
+    return render(request,'list_sort.html',context)
 
 @login_required
 def register_family(request, id):

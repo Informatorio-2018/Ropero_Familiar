@@ -26,6 +26,7 @@ urlpatterns = [
     path('tipos_productos/<int:id>', views.update_price_article, name="update_price_article"),
     path('clasificar_productos/', views.sort_products, name="sort_products"),
     path('clasificar_acondicionar/', views.fix_products, name="fix_products"),
+    path('lista_donaciones/', views.list_sort, name="list_sort"),
     path('responsable/', views.responsable, name="responsable"),
     path('para_acondicionar/<int:id>', views.carry_out, name="carry_out"),
     path('adm/barrios/', views.neigh, name="neigh"),
