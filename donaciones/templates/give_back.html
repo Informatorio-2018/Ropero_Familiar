@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Acondicionar {% endblock %}
+{% block title %} Devolver {% endblock %}
 {% block alert %}
 {% if alert %}
    <div class="container">
@@ -26,7 +26,7 @@
   <div class="row">
     <h4 class="center-align"> Voluntario {{responsable.name}}</h4>
   </div>
-  <h4 class="center-align">Disponible para acondicionar </h4>
+  <h4 class="center-align">Devolver </h4>
 
   <ul class="collection">
   {% for p in types %}
@@ -43,49 +43,34 @@
     
   
 
-  <ul class="collapsible popout">
-    {% for t in types %}
-      <li>
-        {% if carry %}
-          <div id="col_{{t.name}}" class="collapsible-header center-align">
-            {{t.name}}  {% for d in carry %}  {% if d.types == t.name %} 
-            <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
-            <script type="text/javascript">
-              $(function() {
-                if ({{ d.quantity }} > 0){
-                  $("#col_{{t.name}}").addClass("disable-col");
-                }
-              });
-            </script>
-             {% endif %} 
-            {% endfor %}
-          </div>
-        {% else %}
-          <div id="col_{{t.name}}" class="collapsible-header center-align ">
-            {{ t.name }}
-          </div>
-        {% endif %}
-        <div class="collapsible-body">
-          <form method="POST">
+<ul class="collapsible popout">
+    {% for c in carry %}
+    <li>
+      <div class="collapsible-header">{{c.types}}-----------{{c.quantity}}</div>
+      <div class="collapsible-body">
+        <form method="POST">
             {% csrf_token %}
             <div class="row">
               <div class="col s4 offset-s4">
                 {{ form_carry}}
-                  <input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
-                  <input class="hide" id="id_types" type="text" name="types" value="{{ t.name }}">
+                  <input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ c.unit_measure }}">
+                  <input class="hide" id="id_types" type="text" name="types" value="{{ c.types }}">
               
               </div>
               <div class="col s4 left">
-                <label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
+                <label id="label_{{c.types}}" class="validate"  for="id_unit_measure">{{ c.get_unit_measure_display }}</label>
               </div>
               <div class="col s6 center-align offset-s3">
-                <button id="btn_{{t.name}}" class="btn waves-effect waves-light" type="submit">Agregar</button>
+                <button id="btn_{{c.types}}" class="btn waves-effect waves-light" type="submit">Agregar</button>
               </div>
             </div>
           
-          </form>
-        </div>
-      </li>
+        </form>
+      </div>
+    </li>
+    
+       
+      
     {% endfor %}
   </ul>
   <div class="center-align">
