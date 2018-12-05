@@ -4,18 +4,20 @@
 
 {% block content %}
 
-		{% if total > 0 %}
-			<h3>Resultados para: "{{query}}"</h3>
-			<div class="row collection">
-				{% for r in ref %}
-					<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
-				{% endfor %}
+	{% if total > 0 %}
+		<h3>Resultados para: "{{query}}"</h3>
+		<div class="row collection">
+			{% for r in ref %}
+				<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
+			{% endfor %}
 			</div>
-		{% else %}
-			<h3>No se han encontrado resultados para: "{{query}}"</h3>
-		{% endif %}
-	<div class="center-align">	
-		<a href="/busqueda_referente/" class="btn">Volver</a>
+	{% else %}
+		<h3>No se han encontrado resultados para: "{{query}}"</h3>
+	{% endif %}
+	<div class="row">
+		<div class="col s12 m6 push-m3">	
+			<a href="/busqueda_referente/" class="btn-large boton-perfil">Volver</a>
+		</div>
 	</div>
 	<div class="fixed-action-btn">
 		<a href="/registrar_referente_f/" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>

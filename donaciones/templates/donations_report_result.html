@@ -4,20 +4,28 @@
 
 {% block content %}
 	
-	<h3>Reporte de donaciones de {{begin}} hasta {{finish}}</h3>
+	<h4 class="center-align">Reporte de donaciones de {{begin}} hasta {{finish}}</h4>
 	<p>Toque para ver detalles de las donaciones</p>
 	<div class="row collection">
-		<div class="collection-item"><a href="#modal1" class="modal-trigger">Total de {{don}} -- {{report}}</div></a>
+		<a href="#modal1" class="modal-trigger collection-item">{% if report is None %}No hubo donaciones entre estas fechas{% else %}Total de {{don}} donado: {{report}} {{don1.unit_measure}}{% endif %}</a>
 	</div>
-	<a href="{% url 'donations_report' %}" class="btn">Volver</a>
+	<div class="row">
+		<div class="col s12 m6 push-m3">
+			<a href="{% url 'donations_report' %}" class="btn-large boton-perfil">Volver</a>
+		</div>
+	</div>
 
 	<div id="modal1" class="modal">
 		<div class="modal-content">
 			<h4>Detalles de las donaciones:</h4>
 			<div class="row collection">
-				{% for a in all %}
-					<p class="collection-item">Donador: {{a.donation.name}} | Donó: {{a.quantity}}{{a.unit_measure}} de {{a.donation_type}} | Fecha: {{a.donation.date}}</p>
-				{% endfor %}
+				{% if report is None %}
+					<p>No hay detalles</p>
+				{% else %}
+					{% for a in all %}
+						<p class="collection-item">Donador: {{a.donation.name}} | Donó: {{a.quantity}}{{a.unit_measure}} de {{a.donation_type}} | Fecha: {{a.donation.date}}</p>
+					{% endfor %}
+				{% endif %}
 			</div>
 		</div>
 		<div class="modal-footer">

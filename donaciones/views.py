@@ -68,7 +68,6 @@ def resume_donation(request, id):
 
 @login_required
 def edit_donation(request, id):
-    # import ipdb; ipdb.set_trace()
     detail = get_object_or_404(DetailsDonation, pk=id)
     id_donator = detail.donation_id
     types = TypesDonation.objects.all()
@@ -133,17 +132,26 @@ def register_referring_f(request):
 @login_required
 def donations_report(request):
     dona = TypesDonation.objects.all()
+    today = datetime.date.today()
     if request.method == 'POST':
         begin = request.POST['begin']
         finish = request.POST['finish']
         donation = request.POST['dona_id']
-        q1 = Q(donation__date__gte=datetime.datetime.strptime(begin,"%Y-%m-%d").date())
-        q2 = Q(donation__date__lte=datetime.datetime.strptime(finish,"%Y-%m-%d").date())
+        if begin == '':
+            begin = today
+        else:
+            begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
+        if finish == '':
+            finish = today
+        else:
+            finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
+        q1 = Q(donation__date__year__gte=begin.year,donation__date__month__gte=begin.month,donation__date__day__gte=begin.day)
+        q2 = Q(donation__date__year__lte=finish.year,donation__date__month__lte=finish.month,donation__date__day__lte=finish.day)
         q3 = Q(donation_type__exact=donation)
         report = DetailsDonation.objects.filter(q3 & q1 & q2).aggregate(total=Sum('quantity'))
         all_reports = DetailsDonation.objects.filter(q3 & q1 & q2)
         return render(request,'donations_report_result.html',{'report':report['total'],
-                                                              'don':donation, 'begin': begin, 'finish':finish,
+                                                              'don':donation,'don1':all_reports[0], 'begin': begin, 'finish':finish,
                                                               'all':all_reports})
     else:
         form = DonationsReportForm()
@@ -596,20 +604,20 @@ def logout(request):
 
 @login_required
 def closet(request):
-    ref = Family.objects.all()
+    fam = Family.objects.all()
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
-            ref = Family.objects.filter(q1 | q2)
-            return render(request, 'closet_search_out.html', {'ref': ref,
+            fam = Family.objects.filter(q1 | q2)
+            return render(request, 'closet_search_out.html', {'fam': fam,
                                                               'query': query})
     else:
         form = SearchForm()
     return render(request,'entry_closet.html',{'form':form,
-                                         'ref':ref})
+                                         'fam':fam})
 
 @login_required
 def entry_ok(request,id):

@@ -66,7 +66,6 @@ class Family(models.Model):
     class Meta:
         ordering = ["lastname"]
 
-
 class FamilyEntry(models.Model):
     last_entry = models.DateField(auto_now_add=True, null=True)
     family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name='ingresos_familias')
