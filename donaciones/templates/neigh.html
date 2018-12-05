@@ -4,15 +4,19 @@
 
 {% block content %}
 	<h2 class="center-align">Barrios</h2>
-	{% for n in neigh %}
-		<div class="row collection">	
+	<div class="row collection">
+		{% for n in neigh %}
 			<a href="/adm/barrios/{{n.id}}" class="collection-item">{{n.name}}</a>		
-		</div>
-	{% endfor %}
+		{% endfor %}
+	</div>
 	<h3 class="center-align">Agregar un Barrio</h3>
 	<form action="/adm/barrios/" method="POST">
 		{% csrf_token %}
 		{{form}}
-		<input type="submit" value="Agregar" class="btn">
+		<div class="row">
+			<div class="col s12 m6 push-m3">	
+				<input type="submit" value="Agregar" class="btn-large boton-perfil">
+			</div>
+		</div>
 	</form>
 {% endblock %}

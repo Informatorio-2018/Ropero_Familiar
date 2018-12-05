@@ -4,32 +4,39 @@
 
 {% block content %}
 
-	<h3>Resultados para: "{{query}}"</h3>
+	<h3 class="center-align">Resultados para: "{{query}}"</h3>
 	<div class="row collection">	
-		{% for r in ref %}
-			<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}} 
-			{% if r.role == 'r' %}
-				(Referente)
-			{% else %}
-				(Familiar)
-			{% endif %}</a>
+		{% for r in fam %}
+				<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}}
+				{% if r.role == 'r' %}
+					(Referente)
+				{% else %}
+					(Familiar)
+				{% endif %}
+				<p>Fecha de ultima compra: {{r.referring.last_buy}}</p></a>
 		{% endfor %}
 	</div>
 
-	{% for r in ref %}
+	{% for r in fam %}
 		<div id="modal1{{r.id}}" class="modal">
 			<div class="modal-content">
 			  <h4>Ingreso al Ropero</h4>
 			  <p>¿Está seguro que {{r.lastname}}, {{r.firstname}} ingresará al ropero?</p>
 			</div>
 			<div class="modal-footer">
-			  <a href="/ingreso_ropero/ok/{{r.id}}/" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+				<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+			  	<a href="/ingreso_ropero/ok/{{r.id}}/" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
 			</div>
 		</div>
 	{% endfor %}
-
-	<a href="/busqueda_referente/" class="btn">Volver</a>
-	<a href="/registrar_referente_f/" class="btn-floating btn-large waves-effect waves-light right"><i class="material-icons">group_add</i></a>
+	<div class="row">
+		<div class="col s12 m6 push-m3">		
+			<a href="{% url 'closet' %}" class="btn-large boton-perfil">Volver</a>
+		</div>
+	</div>
+	<div class="fixed-action-btn">
+		<a href="/registrar_referente_f/" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
+	</div>
 
 {% endblock %}
 
