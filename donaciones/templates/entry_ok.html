@@ -4,7 +4,11 @@
 
 {% block content %}
 
-	<h3>{{fam.firstname}} ingresó al ropero</h3>
-	<a href="{% url 'home' %}" class="btn">Volver al inicio</a>
+	<h3 class="center-align">{{fam.firstname}} ingresó al ropero</h3>
+	<div class="row">
+		<div class="col s12 m6 push-m3">
+			<a href="{% url 'home' %}" class="btn-large boton-perfil">Volver al inicio</a>	
+		</div>
+	</div>
 
 {% endblock %}

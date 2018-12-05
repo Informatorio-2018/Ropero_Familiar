@@ -4,7 +4,8 @@
 
 {% block content %}
 
-	<h3 class="center-align">Resultados para: "{{query}}"</h3>
+	<h2 class="center-align">Resultados para: "{{query}}"</h2>
+	<h4>Seleccione la persona que ingresará al ropero</h4>
 	<div class="row collection">	
 		{% for r in fam %}
 				<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}}

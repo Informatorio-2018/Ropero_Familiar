@@ -115,8 +115,9 @@
 }
 
 .logo-topbar{
-	max-width: 45px!important;
-	margin: 5px 0 0 5px;
+	max-width: 64px!important;
+	margin: 0 0 0 20px;
+	border-radius: 50%;
 }
 
 .boton-rojo{

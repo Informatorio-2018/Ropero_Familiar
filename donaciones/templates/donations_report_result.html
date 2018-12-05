@@ -14,7 +14,6 @@
 			<a href="{% url 'donations_report' %}" class="btn-large boton-perfil">Volver</a>
 		</div>
 	</div>
-
 	<div id="modal1" class="modal">
 		<div class="modal-content">
 			<h4>Detalles de las donaciones:</h4>
@@ -22,10 +21,26 @@
 				{% if report is None %}
 					<p>No hay detalles</p>
 				{% else %}
-					{% for a in all %}
-						<p class="collection-item">Donador: {{a.donation.name}} | Donó: {{a.quantity}}{{a.unit_measure}} de {{a.donation_type}} | Fecha: {{a.donation.date}}</p>
-					{% endfor %}
-				{% endif %}
+			      <table>
+			        <thead>
+			          <tr>
+			              <th>Nombre o Razón Social</th>
+			              <th>Donación</th>
+			              <th>Fecha</th>
+			          </tr>
+			        </thead>
+
+			        <tbody>
+			        	{% for a in all %}	
+			        		<tr>
+			        			<td>{{a.donation.name}}</td>
+						        <td>{{a.quantity}}{{a.unit_measure}}</td>
+						        <td>{{a.donation.date}}</td>
+			        		</tr>
+			        	{% endfor %}
+			        </tbody>
+			      </table>
+			      {% endif %}	
 			</div>
 		</div>
 		<div class="modal-footer">
@@ -41,4 +56,6 @@
 	    $('.modal').modal();
 	  });	
 	</script>
+
+
 {% endblock %}

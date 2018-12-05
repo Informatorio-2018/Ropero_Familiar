@@ -134,9 +134,11 @@ def donations_report(request):
     dona = TypesDonation.objects.all()
     today = datetime.date.today()
     if request.method == 'POST':
+
         begin = request.POST['begin']
         finish = request.POST['finish']
         donation = request.POST['dona_id']
+
         if begin == '':
             begin = today
         else:
@@ -145,14 +147,20 @@ def donations_report(request):
             finish = today
         else:
             finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
-        q1 = Q(donation__date__year__gte=begin.year,donation__date__month__gte=begin.month,donation__date__day__gte=begin.day)
-        q2 = Q(donation__date__year__lte=finish.year,donation__date__month__lte=finish.month,donation__date__day__lte=finish.day)
+
+
+        q1 = Q(donation__date__gte=begin)
+        q2 = Q(donation__date__lte=finish)
         q3 = Q(donation_type__exact=donation)
         report = DetailsDonation.objects.filter(q3 & q1 & q2).aggregate(total=Sum('quantity'))
         all_reports = DetailsDonation.objects.filter(q3 & q1 & q2)
+
         return render(request,'donations_report_result.html',{'report':report['total'],
-                                                              'don':donation,'don1':all_reports[0], 'begin': begin, 'finish':finish,
+                                                              'don':donation,
+                                                              'begin': begin,
+                                                              'finish':finish,
                                                               'all':all_reports})
+
     else:
         form = DonationsReportForm()
     return render(request,'donations_report.html',{'form':form,
@@ -489,8 +497,9 @@ def referring_search(request):
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
             q3 = Q(role__exact='r')
-            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
-            total = Family.objects.filter((q1 & q3) | (q2 & q3)).count()
+            q4 = Q(dni__exact = int(query))
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3) | (q4 & q3))
+            total = Family.objects.filter((q1 & q3) | (q2 & q3) | (q4 & q3)).count()
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query,
                                                                  'total': total})
@@ -519,7 +528,7 @@ def relative_profile(request,id):
     return render(request, 'relative_profile.html', {'fam': fam})
 
 
-#@login_required
+@login_required
 def home(request):
     return render(request, 'home.html', {})
 
@@ -602,6 +611,7 @@ def login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
+        username = username.upper()
         user = authenticate(request,username=username,password=password)
         if user is not None:
             log(request,user)
@@ -667,6 +677,7 @@ def register_user(request):
         form_user = UserRegisterForm(request.POST)
         if form_user.is_valid():
             user = form_user.save(commit=False)
+            user.username = user.username.upper()
             user.save()
             profile = Profile()
             profile.user_id = user.id
