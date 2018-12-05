@@ -33,6 +33,20 @@
 
 /* -----bordes de prueba------ */
 
+
+body{
+	background-image: url(../images/backgroundapp1.gif
+);
+	background-repeat: repeat;
+	background-size: 20%;
+}
+
+.contenedor{
+	padding: 1% 3% 2% 3%;
+	margin-top: 15px;
+	border-radius: 4px;
+}
+
 .background{
 	background-image: url(../images/background.jpg);
 	background-size: cover;
@@ -64,6 +78,19 @@
 	width: 70%;
 	display: block;
 	margin: 0 auto;
+}
+.logo-info{
+	max-width: 200px;
+	display:  block;
+	margin: auto;
+}
+
+.renglon-logos{
+	padding: 30px 20px;
+}
+
+.texto-ropero{
+	padding:20px 20px 10px 10px; 
 }
 
 .separador{
@@ -115,8 +142,8 @@
 }
 
 .logo-topbar{
-	max-width: 64px!important;
-	margin: 0 0 0 20px;
+	max-width: 54px!important;
+	margin: 5px 0 0 10px;
 	border-radius: 50%;
 }
 
