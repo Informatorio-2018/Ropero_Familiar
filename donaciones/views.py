@@ -875,3 +875,9 @@ def delete_sale(request, id):
         type_sum.save()
     detail.delete()
     return redirect('summary_sale', id=sale.entry_id)
+
+
+def profile_user(request):
+    user = request.user
+
+    return render(request, 'profile_user.html', {'user': user})

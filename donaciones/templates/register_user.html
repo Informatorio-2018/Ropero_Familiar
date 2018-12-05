@@ -17,8 +17,8 @@
           <span class="helper-text" data-error="wrong" data-success="right">{{form_user.username.help_text}}</span>
         {% endif %}
       </div>
-        <div class="input-field col s6">
-          <i class="material-icons prefix">lock_open</i>
+        <div class="input-field col m6 s12">
+          <i class="material-icons prefix">lock_outline</i>
           {{form_user.password1}}
           {{form_user.password1.label_tag}}
           {% if form_user.password1.errors %}
@@ -27,8 +27,8 @@
             <span class="helper-text" data-error="wrong" data-success="right">{{form_user.password1.help_text}}</span>
           {% endif %}
         </div>
-        <div class="input-field col s6">
-          <i class="material-icons prefix"></i>
+        <div class="input-field col m6 s12">
+          <i class="material-icons prefix hide-on-med-and-up">lock_outline</i>
           {{form_user.password2}}
           {{form_user.password2.label_tag}}
           {% if form_user.password2.errors %}
@@ -68,17 +68,10 @@
         {% endif %}
       </div>
     </div>
-    <!--{% for field in form_user.visible_fields %}
-    	<div class="input-field">
-    		{{field}}
-    		{{field.label_tag}}
-    		{% if field.help_text %}
-    			 <span class="helper-text" data-error="wrong" data-success="right">{{ field.help_text }}</span>
-        {% endif %}
+    <div class="row">
+      <div class="col s12 m4 push-m4">
+        <button class="waves-effect waves-light btn-large boton-home" type="submit">Registrar</button>
       </div>
-    {% endfor %}-->
-  	<div class="center-align">
-    	<button class="btn waves-effect waves-light " type="submit">Registrar</button>
-  	</div>
+    </div>
   </form>
 {% endblock %}
