@@ -203,6 +203,7 @@ def load_types_products(request):
     
     return render(request, 'load_types_product.html',context)
 
+@login_required
 def update_price_article(request,id):
     article = TypesProducts.objects.get(pk=id)
     if request.method == "POST":
@@ -353,6 +354,7 @@ def sort_products(request):
     context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
     return render(request, 'sort_products.html', context)
 
+@login_required
 def fix_products(request):
     alert = False
     types_product=TypesFix.objects.all()
@@ -377,7 +379,7 @@ def fix_products(request):
                     ctotal=TypesFix.objects.all()
                     control = TypesDonation.objects.filter(quantity_total__gt=0)
                     context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
-                    return render(request, 'sort_products.html', context)
+                    return render(request, 'fix_products.html', context)
                 else:
                     cargo=1
                     sort.save()
@@ -421,7 +423,7 @@ def fix_products(request):
     return render(request, 'fix_products.html', context)
     
 
-
+@login_required
 def carry_out(request,id):
     alert = False
     responsable = ResponsableFix.objects.get(pk=id)
@@ -452,11 +454,11 @@ def carry_out(request,id):
     else:
         form_carry = CarryForm()
 
-
     context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert}
 
     return render(request,'carry_out.html',context)
 
+@login_required
 def responsable(request):
     form = ResponsableForm(request.POST or None)
     if request.method == 'POST':
@@ -466,12 +468,83 @@ def responsable(request):
             return redirect('carry_out',id=responsable.id)
     context = {'form': form}
     return render(request, 'responsable.html', context)
+
+def resume_fix(request, id):
+    responsable = ResponsableFix.objects.get(pk=id)
+    resumes = Carry.objects.filter(responsable__pk=id)
+    if request.method == "POST":
+        fix_form = CarryForm(request.POST, instance=responsable)
+        if fix_form.is_valid():
+            fix_form.save()
+            return redirect('resume_fix', id=responsables.id)
+    else:
+        fix_form = DonationForm(instance=responsable)
+    context = {'responsable': responsable, 'resumes': resumes, 'don_form': fix_form}
+    return render(request, 'resume_fix.html', context)
+
+def delete_fix(request, id):
+    carry = get_object_or_404(Carry, pk=id)
+    id_responsable = carry.responsable_id
+    types = TypesFix.objects.all()
+    type_res = TypesFix.objects.get(name=carry.types)
+    if carry.types == type_res.name:
+        type_res.quantity_total += carry.quantity
+        type_res.save()
+    carry.delete()
+    return redirect('resume_fix', id=id_responsable)
     
+@login_required
 def list_sort(request):
     list_donations=TypesDonation.objects.filter(quantity_total__gt=0)
 
     context={'list_donations':list_donations}
     return render(request,'list_sort.html',context)
+
+def list_fix(request):
+    resp=ResponsableFix.objects.all()
+    carry=Carry.objects.all()
+
+    context={'resp':resp,'carry':carry}
+    return render(request,'list_fix.html',context)
+
+def give_back(request,id):
+    # import ipdb; ipdb.set_trace()
+    alert = False
+    responsable = ResponsableFix.objects.get(pk=id)
+    types=TypesDonation.objects.all()
+    carry = Carry.objects.filter(responsable__pk=responsable.id)
+    if request.method == 'POST':
+        form_carry = CarryForm(request.POST)
+        if form_carry.is_valid():
+            load = form_carry.save(commit=False)
+            load.types = request.POST['types']
+            load.unit_measure = request.POST['unit_measure']
+            load.responsable_id = responsable.id
+            print(types)
+            # load.save()
+
+            type_sum = TypesDonation.objects.get(name=load.types)
+            if load.types == type_sum.name:
+                if load.quantity > type_sum.quantity_total:
+                    cargo=0
+                    alert='El valor ingresado es mayor a lo que tiene que devolver'
+                    context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert}
+                    return render(request, 'give_back.html', context)
+                else:
+                    cargo=1
+                    type_sum.quantity_total += load.quantity
+                    type_sum.save()
+                    load.quantity = 0
+                    load.save()
+            return redirect('give_back', id=id)
+    else:
+        form_carry = CarryForm()
+
+    context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert,'carry':carry}
+
+    return render(request,'give_back.html',context)
+
+
 
 @login_required
 def register_family(request, id):
@@ -497,9 +570,8 @@ def referring_search(request):
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
             q3 = Q(role__exact='r')
-            q4 = Q(dni__exact = int(query))
-            ref = Family.objects.filter((q1 & q3) | (q2 & q3) | (q4 & q3))
-            total = Family.objects.filter((q1 & q3) | (q2 & q3) | (q4 & q3)).count()
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
+            total = Family.objects.filter((q1 & q3) | (q2 & q3)).count()
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query,
                                                                  'total': total})
@@ -806,3 +878,25 @@ def delete_sale(request, id):
         type_sum.save()
     detail.delete()
     return redirect('summary_sale', id=sale.entry_id)
+
+@login_required
+def adm_home(request):
+    today = datetime.date.today()
+    donations = DetailsDonation.objects.filter(donation__date__year=today.year,donation__date__month=today.month,donation__date__day=today.day)
+    clothes = donations.filter(donation_type='Ropa').aggregate(total_c=Sum('quantity'))
+    accesories = donations.filter(donation_type='Accesorios').aggregate(total_a=Sum('quantity'))
+    shod = donations.filter(donation_type='Calzados').aggregate(total_s=Sum('quantity'))
+    others = donations.filter(donation_type='Otros').aggregate(total_o=Sum('quantity'))
+
+    return render(request,'adm_home.html',{'dona':donations,
+                                           'today':today,
+                                           'clothes':clothes['total_c'],
+                                           'accesories':accesories['total_a'],
+                                           'shod':shod['total_s'],
+                                           'others':others['total_o']})
+
+@login_required
+def profile_user(request):
+    user = request.user
+
+    return render(request, 'profile_user.html', {'user': user})

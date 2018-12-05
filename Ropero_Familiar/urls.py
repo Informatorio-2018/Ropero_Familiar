@@ -4,7 +4,7 @@ from donaciones import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.login),
+    path('', views.login),
     path('recibir_donacion/', views.receive_donation, name='receive_donation'),
     path('recibir_donacion/<int:id>/', views.items_donation, name='items_donation'),
     path('recibir_donacion/<int:id>/resumen', views.resume_donation, name='resume_donation'),
@@ -27,13 +27,18 @@ urlpatterns = [
     path('clasificar_productos/', views.sort_products, name="sort_products"),
     path('clasificar_acondicionar/', views.fix_products, name="fix_products"),
     path('lista_donaciones/', views.list_sort, name="list_sort"),
+    path('lista_acondicionar/', views.list_fix, name="list_fix"),
     path('responsable/', views.responsable, name="responsable"),
+    path('devolver/<int:id>', views.give_back, name="give_back"),
+    path('para_acondicionar/<int:id>/resumen',views.resume_fix,name="resume_fix"),
     path('para_acondicionar/<int:id>', views.carry_out, name="carry_out"),
+    path('eliminar_acondicionar/<int:id>/',views.delete_fix, name='delete_fix'),
     path('adm/barrios/', views.neigh, name="neigh"),
     path('adm/barrios/<int:id>', views.edit_neigh, name='edit_neigh'),
     path('adm/barrios/<int:id>/borrar', views.del_neigh, name='del_neigh'),
     path('adm/registrar_usuario/', views.register_user, name="register_user"),
     path('adm/reporte_donaciones/', views.donations_report, name="donations_report"),
+    path('adm/home/', views.adm_home, name="adm_home"),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('ingreso_ropero/', views.closet, name='closet'),
@@ -44,4 +49,5 @@ urlpatterns = [
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
     path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
+    path('perfil_usuario/', views.profile_user, name='profile_user'),
 ]
