@@ -6,16 +6,13 @@
 	<div class="row">
 		<h4 class="center-align">Donación recibida de {{donator.name}}</h4>
 	</div>
-	<div class="row">
-		<h5 class="col s12">Elegir tipo de donación</h5>
-	</div>
+	<h4 class="center-align">Elegir tipo de donación</h4>
 	<ul class="collapsible popout">
     {% for t in types %}
 			<li>
 				{% if details %}
 					<div id="col_{{t.name}}" class="collapsible-header center-align">
-						<h6><strong>{{t.name}}</strong></h6>  {% for d in details %}	{% if d.donation_type == t.name %}
-						<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity }} {{d.unit_measure}}</strong> </span>
+						{{t.name}}  {% for d in details %}	{% if d.donation_type == t.name %} <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
 							<script type="text/javascript">
 	 							$(function() {
 	 								if ({{ d.quantity }} > 0){
@@ -27,7 +24,7 @@
 					</div>
 				{% else %}
 					<div id="col_{{t.name}}" class="collapsible-header center-align ">
-						<h6>{{ t.name }}</h6>
+						{{ t.name }}
 					</div>
 				{% endif %}
 	     	<div class="collapsible-body">
@@ -49,8 +46,8 @@
 	      			<div class="col s4 left">
 	      				<label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
 	      			</div>
-	      			<div class="col m2 s2 center-align offset-m5">
-								<button id="btn_{{t.name}}" class="btn waves-effect waves-light boton-home" type="submit">Agregar</button>
+	      			<div class="col s6 center-align offset-s3">
+								<button id="btn_{{t.name}}" class="btn waves-effect waves-light" type="submit">Agregar</button>
     					</div>
 	      		</div>
 	      	
@@ -59,16 +56,14 @@
 			</li>
 		{% endfor %}
   </ul>
-  <div class="row">
+  <div class="center-align">
   	{% if details %}
-  		<div class="col m2 s12 offset-m5">
-  			<a class="waves-effect waves-light btn center-align boton-home" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
-  		</div>
+  		<a class="waves-effect waves-light btn center-align" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
   	{% else %}
   		<a class="waves-effect waves-light btn center-align disabled" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
   	{% endif %}
   </div>
-{% endblock %} 
+{% endblock %}
 
 {% block extra_js %}
 	<!--Collapsible -->
@@ -82,9 +77,9 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$("[name=quantity]:eq(0)").attr('id', 'input_ropa');
-			$("[name=quantity]:eq(1)").attr({id:'input_calzados', step:'1'});
-			$("[name=quantity]:eq(2)").attr({id:'input_accesorios', step:'1'});
-			$("[name=quantity]:eq(3)").attr({id:'input_otros', step:'1'});
+			$("[name=quantity]:eq(1)").attr('id', 'input_calzados');
+			$("[name=quantity]:eq(2)").attr('id', 'input_accesorios');
+			$("[name=quantity]:eq(3)").attr('id', 'input_otros');
 		});
 	</script>
 
@@ -93,7 +88,7 @@
 		$(document).ready(function(){
 			$("#btn_Ropa").click(function () {
 			var num = $('#input_ropa').val();
-			if (num <= 0) {
+			if (num == 0) {
 				alert("El valor ingresado deber ser mayor a 0");
 				event.preventDefault();
 			}
@@ -101,7 +96,7 @@
 
 			$("#btn_Calzados").click(function () {
 			var num = $('#input_calzados').val();
-			if (num <= 0) {
+			if (num == 0) {
 				alert("El valor ingresado deber ser mayor a 0");
 				event.preventDefault();
 			}
@@ -109,7 +104,7 @@
 
 			$("#btn_Accesorios").click(function () {
 			var num = $('#input_accesorios').val();
-			if (num <= 0) {
+			if (num == 0) {
 				alert("El valor ingresado deber ser mayor a 0");
 				event.preventDefault();
 			}
@@ -117,7 +112,7 @@
 
 			$("#btn_Otros").click(function () {
 			var num = $('#input_otros').val();
-			if (num <= 0) {
+			if (num == 0) {
 				alert("El valor ingresado deber ser mayor a 0");
 				event.preventDefault();
 			}
