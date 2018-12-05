@@ -35,20 +35,23 @@
     	{% endfor %}
     </tbody>
   </table>
-  <div class="row"></div>
+  <div class="separador"></div>
 	<form method="POST">
 	{% csrf_token %}
 		<div class="row">
 			<div class="col s8">
-				<h5>Colabora Sr./Sra: {{entry.family.firstname}}, {{entry.family.lastname}}</h5>
+				<h5>Colabora:<br> Sr./Sra: {{entry.family.firstname}}, {{entry.family.lastname}}</h5>
 			</div>
 			<div class="input-field col s4">
-				{{form}}
+				<i class="material-icons prefix">monetization_on</i>
+				{{form.total}}
+				{{form.total.label_tag}}
+				<span class="helper-text" data-error="wrong" data-success="right">Confirmar o editar cantidad</span>
 			</div>
 		</div>
 		<div class="row">
-			<div class="center-align">
-		  	<button class="btn waves-effect waves-light" type="submit">Finalizar</button>
+			<div class="col m4 s12 offset-m4">
+		  	<button class="waves-effect waves-light btn-large boton-home" type="submit">Finalizar</button>
 		 	</div>
 		</div>
 	</form>

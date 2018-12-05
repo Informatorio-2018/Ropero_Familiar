@@ -3,15 +3,22 @@
 {% block title %} Resumen de Donaciones {% endblock %}
 
 {% block content %}
-	<h4 class="center-align">Resumen de Donación</h4>
-	  <ul class="collection with-header">
-      <li class="collection-header"><h4>{{ donator.name }}	<a class="waves-effect 	waves-light btn modal-trigger"  href="#edit_name"><i class="material-icons">edit</i></a></h4>
+  <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">edit</i> para editar </span>
+  <h3 class="center-align">Resumen de Donación</h3>
+    <ul class="collection with-header">
+      <li class="collection-header"><h4>{{ donator.name }}  <a class=" modal-trigger"  href="#edit_name"><i class="material-icons">edit</i></a></h4>
       </li>
-			{% for res in resumes %}
-      	<li class="collection-item">{{res.donation_type}} {{res.quantity}} 
-      		{{ res.get_unit_measure_display }}
-      		<a href="#modal_delete{{res.id}}" class="modal-trigger right"><i class="material-icons">delete</i></a>
-      		<a href="{% url 'edit_donation' res.id %}" class="modal-trigger right"><i class="small material-icons">edit</i></a>
+      {% for res in resumes %}
+        <li class="collection-item row">
+          <div class="col s7">
+            {{res.donation_type}} {{res.quantity}} {{ res.get_unit_measure_display }}
+          </div>
+          <div class="col s1 right">
+            <a href="#modal_delete{{res.id}}" class="modal-trigger right"><i class="material-icons">delete</i></a>
+          </div>
+          <div class="col s1 right">
+            <a href="{% url 'edit_donation' res.id %}" class="modal-trigger right"><i class="small material-icons">edit</i></a>
+          </div>
 
           <!-- Modal Structure delete donation -->
           <div id="modal_delete{{res.id}}" class="modal">
@@ -25,11 +32,13 @@
             </div>
           </div>
 
-      	</li>
-			{% endfor %}
+        </li>
+      {% endfor %}
     </ul>
-	<div class="center-align">
-  	<a class="waves-effect waves-light btn center-align" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+  <div class="row">
+    <div class="col m4 s12 offset-m4">
+      <a class="waves-effect waves-light btn-large boton-home " href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+    </div>
   </div> 
 
 
@@ -51,19 +60,19 @@
 
 
 
-		 
+     
 <!-- Modal Edit Donator -->
 <div id="edit_name" class="modal">
   <form method="POST">
-  	{% csrf_token %}
-  	<div class="modal-content">
+    {% csrf_token %}
+    <div class="modal-content">
     <h4>Editar Razón Social o Nombre</h4>
-    {{don_form}}	
-  	</div>
-  	<div class="modal-footer">
+    {{don_form}}  
+    </div>
+    <div class="modal-footer">
       <a href="#!" class="modal-close waves-effect waves-light btn-flat">Cancelar</a>
-    	<button class="btn-flat waves-effect waves-light" name="edit_donator" type="submit">Guardar</button>
-  	</div>
+      <button class="btn-flat waves-effect waves-light" name="edit_donator" type="submit">Guardar</button>
+    </div>
   </form>
 </div>
 
@@ -71,9 +80,9 @@
 
 
 {% block extra_js %}
-	<script type="text/javascript">
-		$(document).ready(function(){
-  		$('.modal').modal();
-		});
-	</script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.modal').modal();
+    });
+  </script>
 {% endblock %}
