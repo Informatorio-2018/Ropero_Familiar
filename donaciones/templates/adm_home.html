@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Bienvenido{% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col s12 m6">
+			<div class="card">
+				<span class="card-title">Donaciones recibidas hoy</span>
+			    <table>
+			        <thead>
+			          <tr>
+			              <th>Donación</th>
+			              <th>Cantidad</th>
+			          </tr>
+			        </thead>
+
+			        <tbody>
+			        	<tr>
+			        		<td>Ropa</td>
+						    <td>{{clothes}}</td>
+			        	</tr>
+			        	<tr>
+			        		<td>Calzados</td>
+						    <td>{{shod}}</td>
+			        	</tr>
+			        	<tr>
+			        		<td>Accesorios</td>
+						    <td>{{accesories}}</td>
+			        	</tr>
+			        	<tr>
+			        		<td>Otros</td>
+						    <td>{{others}}</td>
+			        	</tr>			        				        				        	
+			        </tbody>
+			    </table>				
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
