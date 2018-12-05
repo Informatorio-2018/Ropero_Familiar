@@ -4,7 +4,7 @@ from donaciones import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.login),
+    path('', views.login),
     path('recibir_donacion/', views.receive_donation, name='receive_donation'),
     path('recibir_donacion/<int:id>/', views.items_donation, name='items_donation'),
     path('recibir_donacion/<int:id>/resumen', views.resume_donation, name='resume_donation'),
@@ -44,4 +44,5 @@ urlpatterns = [
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
     path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
+    path('perfil_usuario/', views.profile_user, name='profile_user'),
 ]
