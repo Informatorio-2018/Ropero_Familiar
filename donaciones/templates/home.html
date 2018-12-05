@@ -4,15 +4,18 @@
 
 {% block content %}
 	<br>
-	<div class="row">
-		<div class="col s12 m4">
+	<div class="row white renglon-logos">
+		<div class="col s12 m4 valign-wrapper">
 			<img class="logos-home"src="../static/images/fundecch.jpg">	
 		</div>
 		<div class="col s12 m4">
 			<img class="logos-home"src="../static/images/flia_conin.jpg">		
 		</div>
 		<div class="col s12 m4">
-			<img class="logos-home"src="../static/images/informatorio_transp.png">	
+
+			<p class="texto-ropero">
+				Ropero Familiar permite que todos los integrantes de la familia tengan abrigo y zapatos.
+			</p>
 		</div>
 	</div>
 	<div class="separador"></div>
@@ -30,6 +33,16 @@
 		</div>
 		<div class="col s12 m6">
 			<a href="{% url 'peoples_closet' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">monetization_on</i>Registrar Venta</a>
+		</div>
+	</div>	
+	<div class="separador"></div>
+	<div class="row">
+		<div class="col s12">
+			<img class="logo-info"src="../static/images/informatorio_transp.png">	
+			<p class="center">
+				HECHO CON <i class="material-icons">
+favorite</i> EN 2018
+ 			</p>	
 		</div>
 	</div>	
 {% endblock %}

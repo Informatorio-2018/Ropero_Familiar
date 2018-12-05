@@ -2,22 +2,23 @@
 
 {% block title %} Recibir Donacion {% endblock %}
 {% block content %}
-	<h4 class="center-align">Recibir Donación</h4>
-	<form method="POST">
-		{% csrf_token %}
-		<div class="row">
-			<div class="input-field col s12">
-				{{ form.name }}
-				{{ form.name.label_tag }}
-				<span class="helper-text" data-error="wrong" data-success="right">Ingrese el nombre o razón social del donador</span>
-	    </div>
-	    <div class="col s12 m4 push-m2">
-				<a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home" >Volver</a>
-	    </div>
-	    <div class="col s12 m4 push-m2">
-				<button class="waves-effect waves-light btn-large boton-home" type="submit">Siguiente</button>
-	    </div>
-		</div>
-	</form>
-
+	<div class="contenedor z-depth-3 white">
+		<h4 class="center-align">Recibir Donación</h4>
+		<form method="POST">
+			{% csrf_token %}
+			<div class="row">
+				<div class="input-field col s12">
+					{{ form.name }}
+					{{ form.name.label_tag }}
+					<span class="helper-text" data-error="wrong" data-success="right">Ingrese el nombre o razón social del donador</span>
+		    </div>
+        <div class="col s12 m4 push-m2">
+          <a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home" >Volver</a>
+        </div>
+        <div class="col s12 m4 push-m2">
+          <button class="waves-effect waves-light btn-large boton-home" type="submit">Siguiente</button>
+        </div>
+			</div>
+		</form>
+	</div>	
 {% endblock %}
