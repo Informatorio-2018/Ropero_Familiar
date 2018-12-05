@@ -203,6 +203,7 @@ def load_types_products(request):
     
     return render(request, 'load_types_product.html',context)
 
+@login_required
 def update_price_article(request,id):
     article = TypesProducts.objects.get(pk=id)
     if request.method == "POST":
@@ -353,6 +354,7 @@ def sort_products(request):
     context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
     return render(request, 'sort_products.html', context)
 
+@login_required
 def fix_products(request):
     alert = False
     types_product=TypesFix.objects.all()
@@ -421,7 +423,7 @@ def fix_products(request):
     return render(request, 'fix_products.html', context)
     
 
-
+@login_required
 def carry_out(request,id):
     alert = False
     responsable = ResponsableFix.objects.get(pk=id)
@@ -457,6 +459,7 @@ def carry_out(request,id):
 
     return render(request,'carry_out.html',context)
 
+@login_required
 def responsable(request):
     form = ResponsableForm(request.POST or None)
     if request.method == 'POST':
@@ -467,6 +470,7 @@ def responsable(request):
     context = {'form': form}
     return render(request, 'responsable.html', context)
     
+@login_required
 def list_sort(request):
     list_donations=TypesDonation.objects.filter(quantity_total__gt=0)
 
@@ -497,9 +501,8 @@ def referring_search(request):
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
             q3 = Q(role__exact='r')
-            q4 = Q(dni__exact = int(query))
-            ref = Family.objects.filter((q1 & q3) | (q2 & q3) | (q4 & q3))
-            total = Family.objects.filter((q1 & q3) | (q2 & q3) | (q4 & q3)).count()
+            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
+            total = Family.objects.filter((q1 & q3) | (q2 & q3)).count()
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query,
                                                                  'total': total})
@@ -806,3 +809,19 @@ def delete_sale(request, id):
         type_sum.save()
     detail.delete()
     return redirect('summary_sale', id=sale.entry_id)
+
+@login_required
+def adm_home(request):
+    today = datetime.date.today()
+    donations = DetailsDonation.objects.filter(donation__date__year=today.year,donation__date__month=today.month,donation__date__day=today.day)
+    clothes = donations.filter(donation_type='Ropa').aggregate(total_c=Sum('quantity'))
+    accesories = donations.filter(donation_type='Accesorios').aggregate(total_a=Sum('quantity'))
+    shod = donations.filter(donation_type='Calzados').aggregate(total_s=Sum('quantity'))
+    others = donations.filter(donation_type='Otros').aggregate(total_o=Sum('quantity'))
+
+    return render(request,'adm_home.html',{'dona':donations,
+                                           'today':today,
+                                           'clothes':clothes['total_c'],
+                                           'accesories':accesories['total_a'],
+                                           'shod':shod['total_s'],
+                                           'others':others['total_o']})
