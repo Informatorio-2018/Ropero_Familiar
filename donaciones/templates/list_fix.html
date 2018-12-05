@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %} Para Acondicionar {% endblock %}
+
+
+{% block content %}
+	<h1>Voluntarios</h1>
+ <ul class="collapsible">
+
+ 	{% for r in resp %}
+    	<li>
+      		<div class="collapsible-header">{{r.id}}{{r.name}}:  {{r.date}} 
+      			<a href="{% url 'give_back' r.id %}" class="modal-trigger right">Devolver</a>
+      		</div>
+      		{% for c in carry %}
+      			{% if r.id == c.responsable_id %}
+      				<div class="collapsible-body"><span>{{c.types}}:{{c.quantity}}{{c.unit_measure}}</span>
+      				</div>
+      			{% endif %}	
+      		{% endfor %}
+    	</li>
+	{% endfor %}
+</ul>
+
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
+    <i class="large material-icons">add</i>
+  </a>
+</div>
+  
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+	  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>
+<script type="text/javascript">
+	  $(document).ready(function(){
+    $('.fixed-action-btn').floatingActionButton();
+  });
+</script>
+ 
+{% endblock %}
+ 

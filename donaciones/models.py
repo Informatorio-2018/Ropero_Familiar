@@ -98,6 +98,9 @@ class ResponsableFix(models.Model):
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
     phone = models.IntegerField()
     adress = models.CharField(max_length=80, verbose_name='Dirección')
+
+    def __str__(self):
+        return self.name
     
     # neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
 class Carry(models.Model):
@@ -105,7 +108,9 @@ class Carry(models.Model):
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
     responsable = models.ForeignKey(ResponsableFix, on_delete=models.CASCADE, related_name='responsable')
-
+    
+    def __str__(self):
+        return self.responsable.name
 
 class SortProducts(models.Model):
     types = models.ForeignKey(TypesProducts, null=True, on_delete=models.SET_NULL, verbose_name='Tipos de Producto')

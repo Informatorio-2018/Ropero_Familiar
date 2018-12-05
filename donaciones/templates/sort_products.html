@@ -5,13 +5,14 @@
  
 {% block alert %}
 {% if alert %}
+
         <div class="container">
           <div class="row center-align" id="alert_box">
             <div class="col s12 ">
               <div class="card #e53935 red darken-1">
-                <div class="col s1 push-s11">
-                  <i id="alert_close" class="material-icons rigth white-text" aria-hidden="true">close</i>
-                </div>
+                  <div class="col s2 push-s10">
+                    <i id="alert_close" class="material-icons  white-text" aria-hidden="true">close</i>
+                  </div>
                 <div class="card-content white-text">
                   <span class="card-title"><h5>Atencion</h5></span>
                   <p>{{alert}}</p>
@@ -36,7 +37,7 @@
           <p>{{p.quantity_total}} {{p.unit_measure}}<br>
             
           </p>
-          <a class="secondary-content"><i class="material-icons">grade</i></a>
+          <a class="secondary-content"><i class="material-icons">fiber_manual_record</i></a>
       </li> 
   {% endfor %}
     </ul>
@@ -48,6 +49,12 @@
 		{{form}}
 		<button type="submit" data-target="modal1" class="btn modal-trigger">Guardar</button>
 	</form>
+  <ul class="center-align">
+    <div class="separador"></div>
+    <li>
+      <a href="{% url 'list_sort' %}" class="waves-effect waves-light btn">Volver</a>
+    </li>
+  </ul>
 
 
 {% for t in ctotal %}<p>{{t.name}}: {{t.quantity_total}}</p>{% endfor %}
