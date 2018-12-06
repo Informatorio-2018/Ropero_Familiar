@@ -76,7 +76,7 @@ class Referring(models.Model):
     phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono
     adress = models.CharField(max_length=80, verbose_name='Dirección')
     family = models.OneToOneField(Family, on_delete=models.CASCADE, null=True)
-    last_buy = models.DateTimeField(null=True)
+    last_buy = models.DateField(null=True)
     family_last_buy = models.CharField(max_length=65, null=True)
 
     def __str__(self):
