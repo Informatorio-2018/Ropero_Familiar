@@ -4,7 +4,7 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
-		<h4 class="center-align">Reporte de donaciones de {{begin}} hasta {{finish}}</h4>
+		<h4 class="center-align">Reporte de donaciones desde {{begin}} hasta {{finish}}</h4>
 		<p>Toque para ver detalles de las donaciones</p>
 		<div class="row collection">
 			<a href="#modal1" class="modal-trigger collection-item">{% if report is None %}No hubo donaciones entre estas fechas{% else %}Total de {{don}} donado: {{report}} {{don1.unit_measure}}{% endif %}</a>

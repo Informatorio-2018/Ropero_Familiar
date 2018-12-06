@@ -584,8 +584,9 @@ def register_referring(request):
             ref.family = fam
             ref.neighborhood_id = request.POST['neigh_id']
             ref.save()
+            ref_id = fam.id
 
-            return redirect('/busqueda_referente/')
+            return redirect('/referente/'+str(ref_id)+'/')
 
 
     form = {'form_refering':form_refering,'form_family':form_family,'neigh':neigh}
@@ -604,7 +605,8 @@ def register_family(request, id):
             fam.role = 'f'
             fam.birth = request.POST['birth']
             fam.save()
-            return redirect('/referente/'+str(id)+'/familiares/')
+            fam_id=fam.id
+            return redirect('/referente/familiares/perfil_familiar/'+str(fam_id)+'/')
     return render(request, 'register_family.html', {'form': form})
 
 
@@ -930,6 +932,7 @@ def delete_sale(request, id):
 @login_required
 def adm_home(request):
     today = datetime.date.today()
+    # Donaciones realizadas hoy
     donations = DetailsDonation.objects.filter(donation__date__year=today.year,donation__date__month=today.month,donation__date__day=today.day)
     clothes = donations.filter(donation_type='Ropa').aggregate(total_c=Sum('quantity'))
     accesories = donations.filter(donation_type='Accesorios').aggregate(total_a=Sum('quantity'))
@@ -944,15 +947,30 @@ def adm_home(request):
             desc_others.append(all_others[a].otherdetail.description)
             cant_others.append(all_others[a].quantity)
             my_list = zip(desc_others,cant_others)
-            a+=1 
+            a+=1
 
-    return render(request,'adm_home.html',{'dona':donations,
+    # Ventas realizadas hoy
+    sold = SalesDetails.objects.filter(sale__entry__last_entry__year=today.year,sale__entry__last_entry__month=today.month,sale__entry__last_entry__day=today.day)
+    clothes_rv = sold.filter(product_type='Ropa Verano').aggregate(total_rv=Sum('quantity'))
+    clothes_ri = sold.filter(product_type='Ropa Invierno').aggregate(total_ri=Sum('quantity'))
+    acc_sold = sold.filter(product_type='Accesorios').aggregate(total_as=Sum('quantity'))
+    shod_sold = sold.filter(product_type='Calzado').aggregate(total_ss=Sum('quantity'))
+    all_others_sold = sold.filter(product_type='Otros').aggregate(total_os=Sum('quantity'))
+
+    return render(request,'adm_home.html',{# Donaciones
+                                           'dona':donations,
                                            'today':today,
                                            'clothes':clothes['total_c'],
                                            'accesories':accesories['total_a'],
                                            'shod':shod['total_s'],
                                            'others':others['total_o'],
-                                           'my_list':my_list})
+                                           'my_list':my_list,
+                                           # Ventas
+                                           'clothes_rv':clothes_rv['total_rv'],
+                                           'clothes_ri':clothes_ri['total_ri'],
+                                           'acc_sold':acc_sold['total_as'],
+                                           'shod_sold':shod_sold['total_ss'],
+                                           'others_sold':all_others_sold['total_os'],})
 
 @login_required
 def profile_user(request):
