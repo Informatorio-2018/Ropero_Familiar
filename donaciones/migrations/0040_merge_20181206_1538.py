@@ -6,8 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('donaciones', '0038_merge_20181206_0009'),
         ('donaciones', '0039_responsablefix_state'),
+        ('donaciones', '0038_merge_20181206_0009'),
     ]
 
     operations = [

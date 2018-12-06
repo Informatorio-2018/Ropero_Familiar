@@ -162,6 +162,42 @@
 					<div class="card-action right-align">
 						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO ARTÍCULO"><i class="material-icons">library_add</i></a>
 					</div>
+					<table class="centered">
+						<thead>
+							<tr>
+								<th>Producto</th>
+				            	<th>Cantidad</th>
+				            	<th>Precio</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Ropa Verano</td>
+								<td>{% if clothes_rv is not None %}{{clothes_rv}}{% else %}No hubo{% endif %}</td>
+								<td>{% if clothes_rvp is not None %}{{clothes_rvp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Ropa Invierno</td>
+								<td>{% if clothes_ri is not None %}{{clothes_ri}}{% else %}No hubo{% endif %}</td>
+								<td>{% if clothes_rip is not None %}{{clothes_rip}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Calzado</td>
+								<td>{% if acc_sold is not None %}{{acc_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if acc_soldp is not None %}{{acc_soldp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Accesorios</td>
+								<td>{% if shod_sold is not None %}{{shod_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if shod_soldp is not None %}{{shod_soldp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Otros</td>
+								<td>{% if others_sold is not None %}{{others_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if others_soldp is not None %}{{others_soldp}}${% else %}0${% endif %}</td>
+							</tr>							
+						</tbody>
+					</table>
 				</div>
 			</div>
 
