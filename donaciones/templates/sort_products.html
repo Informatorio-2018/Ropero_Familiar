@@ -48,12 +48,13 @@
 	<form method="POST">
 		{% csrf_token %}
 		{{form}}
-		<button type="submit" data-target="modal1" class="btn modal-trigger">Guardar</button>
+
+		<button type="submit" class="btn modal-trigger btn-large">Guardar</button>
 	</form>
   <ul class="center-align">
     <div class="separador"></div>
     <li>
-      <a href="{% url 'list_sort' %}" class="waves-effect waves-light btn">Volver</a>
+      <a href="{% url 'list_sort' %}" class="waves-effect btn-large waves-light btn">Volver</a>
     </li>
   </ul>
 
