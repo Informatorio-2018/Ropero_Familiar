@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Créditos{% endblock %}
+
+{% block content %}
+
+<div class="contenedor z-depth-3 white">
+		       <div class="col s12 separador"></div>
+<div class="row">
+    <h4 class=" titulos center-align"><strong>Full Stack Developers</strong></h4>    
+</div>
+
+<div class="row">
+    
+    <div class="row center-align">
+        <div class="col s12 l4">
+            <div class="image-container">
+            <img class="circle" src=" {% static 'images\facu.jpg' %}">
+            <h5>Facundo Costa</h5>
+            </div>
+        </div>    
+        <div class="col s12 l4">
+            <div class="image-container">
+                <img class="circle" src="{% static 'images\cristian.jpg' %}">
+                <h5>Cristian Jovanovich</h5>
+            </div>  
+        </div> 
+
+        <div class="col s12 l4">
+          <div class="image-container">
+          <img class="circle" src="{% static 'images\joe.png' %}">
+          <h5>Joel Maglioni</h5>
+          </div>
+        </div>       
+	</div>
+
+<div class="col s12 separador"></div>
+<div class="col s12 separador hide-on-med-and-up"></div>
+
+
+<div class="row">
+    <h4 class="titulos center-align"><strong>Frontend Developers</strong></h4>
+</div>
+
+<div class="row center-align">
+    <div class="col l2"></div>
+        <div class="col s12 l4">
+            <div class="image-container">
+            <img class="circle" src="{% static 'images\maira.jpeg' %}">
+            <h5>Maira Medina</h5>
+            </div>
+        </div>    
+        <div class="col s12 l4">
+            <div class="image-container">
+                <img class="circle" src="{% static 'images\sabrina.jpg' %}">
+                <h5>Sabrina Aquino</h5>
+            </div>  
+        </div> 
+    <div class="col l2"></div>       
+</div>
+
+<div class="row center-align">
+    <h4 class="titulos"><strong>Team Leaders</strong></h4>
+</div>
+<div class="row center-align">
+
+	<div class="col l2"></div>
+    <div class="col s12 l4">
+        <div class="image-container">
+            <img class="circle" src="{% static 'images\matiasnormal.jpg' %}">
+            <h5>Matias Mancuello</h5>
+        </div>
+    </div>
+    <div class="col s12 l4">
+        <div class="image-container">
+            <img class="circle" src="{% static 'images\simon.jpg' %}">
+            <h5>Simón Ibalo</h5>
+        </div>  
+    </div>
+
+</div> 
+<div class="row">
+        <h4 class="titulos center-align"><strong>Collaborators</strong></h4>
+</div>    
+<div class="row center-align">
+
+            <div class="col s12 l3">
+                <div class="image-container">
+                <img class="circle" src="{% static 'images\Brahim.jpg' %}">
+                </div>
+                <h5>Facundo Toledo</h5>
+            </div>    
+            <div class="col s12 l3">
+              <div class="image-container">
+              <img class="circle" src="{% static 'images\agustin.jpg' %}">
+              <h5>Agustín Harasiwka</h5>
+              </div>
+          </div>
+          <div class="col s12 l3">
+              <div class="image-container">
+              <img class="circle" src="{% static 'images\alexis.jpg' %}">
+              <h5>Alexis Peloso</h5>
+              </div>
+          </div>
+           <div class="col s12 l3">
+              <div class="image-container">
+              <img class="circle" src="{% static 'images\alexis.jpg' %}">
+              <h5>Eduardo Ferreyra</h5>
+              </div>
+          </div>    
+         
+        
+</div>
+</div>
+</div>
+
+{% endblock %}

@@ -1013,3 +1013,7 @@ def profile_user(request):
     user = request.user
 
     return render(request, 'profile_user.html', {'user': user})
+
+@login_required
+def credits(request):
+    return render(request,'credits.html',{})
