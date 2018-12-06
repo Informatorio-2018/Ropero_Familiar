@@ -97,6 +97,7 @@ class ResponsableFix(models.Model):
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
     phone = models.IntegerField()
     adress = models.CharField(max_length=80, verbose_name='Dirección')
+    state=models.BooleanField(null=True)
 
     def __str__(self):
         return self.name

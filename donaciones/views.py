@@ -474,48 +474,65 @@ def list_sort(request):
 
 def list_fix(request):
     resp=ResponsableFix.objects.all()
-    carry=Carry.objects.all()
+    carry=Carry.objects.filter(quantity__gt=0)
 
     context={'resp':resp,'carry':carry}
     return render(request,'list_fix.html',context)
 
 def give_back(request,id):
-    # import ipdb; ipdb.set_trace()
-    alert = False
-    responsable = ResponsableFix.objects.get(pk=id)
-    types=TypesDonation.objects.all()
-    carry = Carry.objects.filter(responsable__pk=responsable.id)
-    if request.method == 'POST':
-        form_carry = CarryForm(request.POST)
-        if form_carry.is_valid():
-            load = form_carry.save(commit=False)
-            load.types = request.POST['types']
-            load.unit_measure = request.POST['unit_measure']
-            load.responsable_id = responsable.id
-            print(types)
-            # load.save()
+    carry = get_object_or_404(Carry, pk=id)
+    
+    id_resp = carry.responsable_id
+    responsable=ResponsableFix.objects.get(id=id_resp)
+    types = TypesDonation.objects.all()
+    # others = Carry.objects.filter(responsable=id_resp)
+    q1=Q(responsable=id_resp)
+    q2=Q(quantity__gt=0)
+    print('es :',Carry.objects.filter(q1 & q2).count())
+    # cont=others.objects.filter(quantity__gt=0).count()
 
-            type_sum = TypesDonation.objects.get(name=load.types)
-            if load.types == type_sum.name:
-                if load.quantity > type_sum.quantity_total:
-                    cargo=0
-                    alert='El valor ingresado es mayor a lo que tiene que devolver'
-                    context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert}
-                    return render(request, 'give_back.html', context)
-                else:
-                    cargo=1
-                    type_sum.quantity_total += load.quantity
-                    type_sum.save()
-                    load.quantity = 0
-                    load.save()
-            return redirect('give_back', id=id)
-    else:
-        form_carry = CarryForm()
+    type_edit = types.get(name=carry.types)
+    if carry.types == type_edit.name:
+        type_edit.quantity_total += carry.quantity
+        type_edit.save()
+        carry.quantity=0
+        carry.save()
+    # if Carry.objects.filter(q1 & q2).count() > 0:
+    #     print('entra')
+    #     responsable.state == True
+    #     responsable.save()
+    # else:
+    #     print('entra')
+    #     responsable.state == False
+    #     responsable.save()
 
-    context={'types':types,'responsable':responsable,'form_carry':form_carry,'alert':alert,'carry':carry}
 
-    return render(request,'give_back.html',context)
+        # carry.delete()
+    return redirect('list_fix')
 
+    # if request.method == 'POST':
+        # if detail.donation_type == type_edit.name:
+        #     type_edit.quantity_total -= detail.quantity
+        #     type_edit.save()
+        # form = CarryForm(request.POST, instance=carry)
+        # if form.is_valid():
+        #     form.save()
+            # Suma al total la cantidad editada
+            # if detail.donation_type == type_edit.name:
+            #     type_edit.quantity_total += detail.quantity
+            #     type_edit.save()
+            # return redirect('give_back', id=id_donator)
+    # else:
+    #     form = DetailsDonationForm(instance=detail)
+    
+    # return render(request,'give_back.html')
+
+def agregate_responsable(request):
+    resp=ResponsableFix.objects.all()
+    carry=Carry.objects.filter(quantity__gt=0)
+
+    context={'resp':resp}
+    return render(request,'agregate_responsable.html',context)
 
 
 

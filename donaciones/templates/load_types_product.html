@@ -3,12 +3,14 @@
 {% block title %} Tipos De Articuos {% endblock %}
 
 {% block content %}
+<div class="contenedor z-depth-3 white">
 <h4 class="center-align">Tipos de Articulos</h4>
 	 <div class="collection">
 	 	{% for t in types %}
         <a href="{% url 'update_price_article' t.id %}" class="collection-item">{{t.name}}</a>
         {% endfor %}
       </div>
+ </div>
 {% endblock %}	
 
 {% block extra_js %}

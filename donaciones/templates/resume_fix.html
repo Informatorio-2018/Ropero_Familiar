@@ -3,9 +3,10 @@
 {% block title %} Resumen de Acondicionar {% endblock %}
 
 {% block content %}
+<div class="contenedor z-depth-3 white">
 	<h4 class="center-align">Responsable Acondicionar</h4>
 	  <ul class="collection with-header">
-      <li class="collection-header"><h4>{{ responsable.name }}
+      <li class="collection-header"><h4>{{ responsable.name }}</h4>
       </li>
 			{% for res in resumes %}
       	<li class="collection-item">{{res.types}} {{res.quantity}} 
@@ -32,8 +33,7 @@
   </div> 
 
 
-
-
+</div>
 
 		 
 <!-- Modal Edit Donator -->

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %} Para Acondicionar {% endblock %}
+
+
+{% block content %}
+<div class="contenedor z-depth-3 white">
+	<h1>Voluntarios</h1>
+ <ul class="collapsible">
+ 	{% for r in resp %}
+ 		<li>
+      <div class="collapsible-header">
+        <span>{{r.name}}</span>
+        <a href="{% url 'carry_out' r.id %}" class="modal-trigger right"><i class="material-icons">send</i></a> 
+      		</div>
+    	</li>
+	{% endfor %}
+</ul>
+
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
+    <i class="large material-icons">add</i>
+  </a>
+</div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+	  $(document).ready(function(){
+    $('.collapsible').collapsible();
+  });
+</script>
+<script type="text/javascript">
+	  $(document).ready(function(){
+    $('.fixed-action-btn').floatingActionButton();
+  });
+</script>
+
+{% endblock %}
