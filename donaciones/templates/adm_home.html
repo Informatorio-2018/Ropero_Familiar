@@ -5,11 +5,16 @@
 {% block content %}
 	<div class="contenedor z-depth-3 white">
 		<div class="row">
+			<h5><span><i class="material-icons">date_range</i></span>
+			Resumen del día</h5>
+		</div>
+		<div class="row">
 			<div class="col s12 m6">
-				<div class="card">
-					<div class="center-align">	
-						<span class="card-title">Donaciones recibidas hoy</span>
+				<div class="card z-depth-4">
+					<div class="center-align black white-text">	
+						<span class="card-title"><span><i class="material-icons">card_giftcard</i></span>Donaciones recibidas hoy</span>
 					</div>
+					<div class="grey lighten-2">
 				    <table class="centered ">
 				        <thead>
 				          <tr>
@@ -41,14 +46,121 @@
 							    <td><a href="#modal" class="modal-trigger">Detalles</a></td>
 				        	</tr>			        				        				        	
 				        </tbody>
-				    </table>				
+				    </table>		
+				  </div>		
 				</div>
 			</div>
 
 			<div class="col s12 m6">
-				<div class="card">
-					<div class="center-align">					
-						<span class="card-title">Ventas realizadas hoy</span>
+				<div class="card z-depth-3">
+					<div class="center-align  black white-text">	
+						<span class="card-title"><span><i class="material-icons">monetization_on</i></span>Ventas realizadas hoy</span>
+					</div>
+					<div class="grey lighten-2">
+
+						<table class="centered">
+							<thead>
+								<tr>
+									<th>Producto</th>
+					            	<th>Cantidad</th>
+					            	<th>Precio</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Ropa Verano</td>
+									<td>{{clothes_rv}}</td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<h5><span><i class="material-icons">tune
+</i></span>Ajustes</h5>
+		</div>
+
+		<div class="row">
+			<div class="col s12 m4">
+				<div class="card z-depth-3">
+					<div class="center-align  black white-text">	
+						<span class="card-title">
+							<span>
+								<i class="material-icons">recent_actors</i></span>Usuarios</span>
+					</div>
+
+					<div class="grey lighten-2">
+
+						<ul class="collection with-header">
+			        <li class="collection-item">
+			        	<div>
+			        		Nombre
+			        		<span class="secondary-content">
+			        			02-02-2018
+			        		</span>
+			        	</div>
+			        </li>
+			        <li class="divisor"></li>
+			        <li class="collection-item">
+			        	<div>
+			        		Nombre
+			        		<span class="secondary-content">
+			        			02-02-2018
+			        		</span>
+			        	</div>
+			        </li>
+			        
+			      </ul>
+
+			    </div>
+			    <div class="divisor"></div>
+					<div class="card-action right-align">
+						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO USUARIO"><i class="material-icons">person_add</i></a>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col s12 m4">
+				<div class="card z-depth-3">
+					<div class="center-align  black white-text">	
+						<span class="card-title">
+							<span>
+								<i class="material-icons">layers</i></span>Artículos</span>
+					</div>
+
+					<div class="grey lighten-2">
+
+						<ul class="collection with-header">
+			        <li class="collection-item">
+			        	<div>
+			        		Nombre
+			        		<span class="secondary-content">
+			        			$40
+			        		</span>
+			        	</div>
+			        </li>
+			        <li class="divisor"></li>
+			        <li class="collection-item">
+			        	<div>
+			        		Nombre
+			        		<span class="secondary-content">
+			        			$28
+			        		</span>
+			        	</div>
+			        </li>
+			        
+			      </ul>
+
+			    </div>
+			    <div class="divisor"></div>
+					<div class="card-action right-align">
+						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO ARTÍCULO"><i class="material-icons">library_add</i></a>
 					</div>
 					<table class="centered">
 						<thead>
@@ -61,14 +173,81 @@
 						<tbody>
 							<tr>
 								<td>Ropa Verano</td>
-								<td>{{clothes_rv}}</td>
-								<td></td>
+								<td>{% if clothes_rv is not None %}{{clothes_rv}}{% else %}No hubo{% endif %}</td>
+								<td>{% if clothes_rvp is not None %}{{clothes_rvp}}${% else %}0${% endif %}</td>
 							</tr>
+							<tr>
+								<td>Ropa Invierno</td>
+								<td>{% if clothes_ri is not None %}{{clothes_ri}}{% else %}No hubo{% endif %}</td>
+								<td>{% if clothes_rip is not None %}{{clothes_rip}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Calzado</td>
+								<td>{% if acc_sold is not None %}{{acc_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if acc_soldp is not None %}{{acc_soldp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Accesorios</td>
+								<td>{% if shod_sold is not None %}{{shod_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if shod_soldp is not None %}{{shod_soldp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Otros</td>
+								<td>{% if others_sold is not None %}{{others_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if others_soldp is not None %}{{others_soldp}}${% else %}0${% endif %}</td>
+							</tr>							
 						</tbody>
 					</table>
 				</div>
 			</div>
+
+
+
+			<div class="col s12 m4">
+				<div class="card z-depth-3">
+					<div class="center-align  black white-text">	
+						<span class="card-title">
+							<span>
+								<i class="material-icons">card_giftcard</i></span>Donaciones</span>
+					</div>
+
+					<div class="grey lighten-2">
+
+						<ul class="collection with-header">
+			        <li class="collection-item">
+			        	<div>
+			        		Ropa
+			        		<span class="secondary-content">
+			        			Kg
+			        		</span>
+			        	</div>
+			        </li>
+			        <li class="divisor"></li>
+			        <li class="collection-item">
+			        	<div>
+			        		Calzado
+			        		<span class="secondary-content">
+			        			Pares
+			        		</span>
+			        	</div>
+			        </li>
+			        
+			      </ul>
+
+			    </div>
+			    <div class="divisor"></div>
+					<div class="card-action right-align">
+						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO TIPO DE DONACIÓN"><i class="material-icons">add</i></a>
+					</div>
+				</div>
+			</div>
+
+
+
 		</div>
+		
+
+
 
 
 		<div id="modal" class="modal">
@@ -107,5 +286,11 @@
 	  $(document).ready(function(){
 	    $('.modal').modal();
 	  });	
+	</script>
+
+	<script type="text/javascript">
+	  $(document).ready(function(){
+	    $('.tooltipped').tooltip();
+	  });
 	</script>
 {% endblock %}

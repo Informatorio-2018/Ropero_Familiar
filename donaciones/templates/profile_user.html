@@ -1,35 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Pefil de {{user.first_name}}{% endblock %}
+{% block title %}Pefil de {{user.username|lower}}{% endblock %}
 
 {% block content %}
-	<div class="row">
-		<div class="col s12 m8 push-m2">
-			<div class="card">				
-				<div class="card-content">
-					{% if user.first_name %}
-						<p>Nombre: {{user.first_name}}</p>
-						<br>
-					{% else %}
-						<p>Nombre: [Editar para agregar]</p>
-						<br>
-					{% endif %}
-					<p>Apellido: {{user.last_name}}</p>
-					<br>
-					<p>Nombre de usuario: {{user.username}}</p>
-					<br>
-					<p>Número de Teléfono: {{user.profile.phone_number}}</p>
+	<div class="contenedor z-depth-3 white">
+		<div class="row">
+			<div class="col s12 m10 push-m1">
+				<div class="">
+		      <ul class="collection with-header">
+		        <li class="collection-header"><h4 class="center-align">Perfil de usuario</h4></li>
+		        <li class="collection-item">
+		        	{% if user.first_name %}
+								<p><strong>Nombre: </strong>{{user.first_name}}</p>
+							{% else %}
+								<p><strong>Nombre: </strong><em>[Editar para agregar]</em></p>
+							{% endif %}
+		        </li>
+		        <li class="collection-item">
+		        	{% if user.last_name %}
+								<p><strong>Apellido: </strong>{{user.last_name}}</p>
+							{% else %}
+								<p><strong>Apellido: </strong><em>[Editar para agregar]</em></p>
+							{% endif %}
+		        </li>
+		        <li class="collection-item">
+		        	{% if user.profile.phone_number %}
+								<p><strong>Número de telefono: </strong>{{user.profile.phone_number}}</p>
+							{% else %}
+								<p><strong>Número de telefono: </strong><em>[Editar para agregar]</em></p>
+							{% endif %}
+		        </li>
+		      </ul>
 				</div>
+			</div>
+			<div class="col s10 push-s1"><a href="{% url 'change_password' user.id %}">Cambiar contraseña</a></div>
+				
+		</div>
+		<div class="row">
+			<div class="col s12 m4 push-m1">
+				<a href="{% url 'home' %}" class="btn-large boton-perfil">Volver</a>
+			</div>
+			<div class="col s12 m4 push-m3">
+				<a href="{% url 'profile_user_edit' user.id %}" class="btn-large boton-perfil">Editar</a>
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col s12 m2"></div>
-		<div class="col s12 m4">
-			<a href="{% url 'home' %}" class="btn-large boton-perfil">Volver</a>
-		</div>
-		<div class="col s12 m4">
-			<a href="#" class="btn-large boton-perfil">Editar</a>
-		</div>
-	</div>	
 {% endblock %}

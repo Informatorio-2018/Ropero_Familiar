@@ -41,6 +41,10 @@ body{
 	background-size: 20%;
 }
 
+.divisor{
+	border-bottom: 1px solid lightgrey;
+}
+
 .contenedor{
 	padding: 1% 3% 2% 3%;
 	margin-top: 15px;
