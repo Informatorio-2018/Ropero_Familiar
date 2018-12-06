@@ -5,13 +5,17 @@
 {% block title %}  Tipos de Articulos {% endblock %}
 
 {% block content %}
+<div class="contenedor z-depth-3 white">
 	<form method="post">
 		{% csrf_token %}
 		<div class="input-field">
 			{{ form.as_p }}
 		</div>
-		<button type="submit">Submit</button>
+		<div class="center-align">
+			<button class="btn waves-effect waves-light" type="submit">Guardar</button>
+		</div>
 	</form>
+</div>
 	<!-- {{ form }} -->
 {% endblock %}
 

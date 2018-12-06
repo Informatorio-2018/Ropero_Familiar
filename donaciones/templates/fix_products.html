@@ -25,6 +25,7 @@
 
 
 {% block content %}
+<div class="contenedor z-depth-3 white">
 <h3 class="center-align">Para Acondicionar</h3>
 
 <ul class="collection">
@@ -57,9 +58,8 @@
   </ul>
 
 
-{% for t in ctotal %}<p>{{t.name}}: {{t.quantity_total}}</p>{% endfor %}
 
-
+</div>
 {% endblock %}
 {% block extra_js %}
 <script type="text/javascript">

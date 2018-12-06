@@ -28,6 +28,7 @@ urlpatterns = [
     path('clasificar_acondicionar/', views.fix_products, name="fix_products"),
     path('lista_donaciones/', views.list_sort, name="list_sort"),
     path('lista_acondicionar/', views.list_fix, name="list_fix"),
+    path('lista_responsable/', views.agregate_responsable, name="agregate_responsable"),
     path('responsable/', views.responsable, name="responsable"),
     path('devolver/<int:id>', views.give_back, name="give_back"),
     path('para_acondicionar/<int:id>/resumen',views.resume_fix,name="resume_fix"),

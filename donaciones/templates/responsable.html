@@ -2,6 +2,7 @@
 
 {% block title %} Voluntario {% endblock %}
 {% block content %}
+<div class="contenedor z-depth-3 white">
 	<h4 class="center-align">Responsable</h4>
 	<form method="POST">
 		{% csrf_token %}
@@ -14,5 +15,5 @@
 			<button class="btn waves-effect waves-light" type="submit">Siguiente</button>
     </div>
 	</form>
-
+</div>
 {% endblock %}
