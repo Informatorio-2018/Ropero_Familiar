@@ -57,7 +57,6 @@
 						<span class="card-title"><span><i class="material-icons">monetization_on</i></span>Ventas realizadas hoy</span>
 					</div>
 					<div class="grey lighten-2">
-
 						<table class="centered">
 							<thead>
 								<tr>
@@ -69,12 +68,31 @@
 							<tbody>
 								<tr>
 									<td>Ropa Verano</td>
-									<td>{{clothes_rv}}</td>
-									<td></td>
+									<td>{% if clothes_rv is not None %}{{clothes_rv}}{% else %}No hubo{% endif %}</td>
+									<td>{% if clothes_rvp is not None %}${{clothes_rvp}}{% else %}$0{% endif %}</td>
 								</tr>
+								<tr>
+									<td>Ropa Invierno</td>
+									<td>{% if clothes_ri is not None %}{{clothes_ri}}{% else %}No hubo{% endif %}</td>
+									<td>{% if clothes_rip is not None %}${{clothes_rip}}{% else %}$0{% endif %}</td>
+								</tr>
+								<tr>
+									<td>Calzado</td>
+									<td>{% if acc_sold is not None %}{{acc_sold}}{% else %}No hubo{% endif %}</td>
+									<td>{% if acc_soldp is not None %}${{acc_soldp}}{% else %}$0{% endif %}</td>
+								</tr>
+								<tr>
+									<td>Accesorios</td>
+									<td>{% if shod_sold is not None %}{{shod_sold}}{% else %}No hubo{% endif %}</td>
+									<td>{% if shod_soldp is not None %}${{shod_soldp}}{% else %}$0{% endif %}</td>
+								</tr>
+								<tr>
+									<td>Otros</td>
+									<td>{% if others_sold is not None %}{{others_sold}}{% else %}No hubo{% endif %}</td>
+									<td>{% if others_soldp is not None %}${{others_soldp}}{% else %}$0{% endif %}</td>
+								</tr>							
 							</tbody>
 						</table>
-
 					</div>
 				</div>
 			</div>
@@ -96,31 +114,26 @@
 
 					<div class="grey lighten-2">
 
-						<ul class="collection with-header">
-			        <li class="collection-item">
-			        	<div>
-			        		Nombre
-			        		<span class="secondary-content">
-			        			02-02-2018
-			        		</span>
-			        	</div>
-			        </li>
-			        <li class="divisor"></li>
-			        <li class="collection-item">
-			        	<div>
-			        		Nombre
-			        		<span class="secondary-content">
-			        			02-02-2018
-			        		</span>
-			        	</div>
-			        </li>
-			        
-			      </ul>
-
+					<ul class="collection with-header">
+					{% for u in users %}
+				        <li class="collection-item">
+				        	<div>
+				        		{{u.first_name}}
+				        		<span class="secondary-content">
+				        			{% if u.last_login is not Null %}
+				        				{{u.last_login|date:"d/m/Y"}}
+				        			{% else %}
+				        				No entró
+				        			{% endif %}
+				        		</span>
+				        	</div>
+				        </li>
+			        {% endfor %}
+			      	</ul>
 			    </div>
 			    <div class="divisor"></div>
 					<div class="card-action right-align">
-						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO USUARIO"><i class="material-icons">person_add</i></a>
+						<a href="{% url 'register_user' %}" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO USUARIO"><i class="material-icons">person_add</i></a>
 					</div>
 				</div>
 			</div>
@@ -136,68 +149,26 @@
 
 					<div class="grey lighten-2">
 
-						<ul class="collection with-header">
-			        <li class="collection-item">
-			        	<div>
-			        		Nombre
-			        		<span class="secondary-content">
-			        			$40
-			        		</span>
-			        	</div>
-			        </li>
-			        <li class="divisor"></li>
-			        <li class="collection-item">
-			        	<div>
-			        		Nombre
-			        		<span class="secondary-content">
-			        			$28
-			        		</span>
-			        	</div>
-			        </li>
+					<ul class="collection with-header">
+					{% for a in arts %}
+				        <li class="collection-item">
+				        	<div>
+				        		{{a.name}}
+				        		<span class="secondary-content">
+				        			${{a.price}}
+				        		</span>
+				        	</div>
+				        </li>
+			        {% endfor %}
 			        
 			      </ul>
 
 			    </div>
 			    <div class="divisor"></div>
 					<div class="card-action right-align">
-						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO ARTÍCULO"><i class="material-icons">library_add</i></a>
+						<a href="/tipos_productos/" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="MODIFICAR PRECIOS"><i class="material-icons">monetization_on</i></a>
 					</div>
-					<table class="centered">
-						<thead>
-							<tr>
-								<th>Producto</th>
-				            	<th>Cantidad</th>
-				            	<th>Precio</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>Ropa Verano</td>
-								<td>{% if clothes_rv is not None %}{{clothes_rv}}{% else %}No hubo{% endif %}</td>
-								<td>{% if clothes_rvp is not None %}{{clothes_rvp}}${% else %}0${% endif %}</td>
-							</tr>
-							<tr>
-								<td>Ropa Invierno</td>
-								<td>{% if clothes_ri is not None %}{{clothes_ri}}{% else %}No hubo{% endif %}</td>
-								<td>{% if clothes_rip is not None %}{{clothes_rip}}${% else %}0${% endif %}</td>
-							</tr>
-							<tr>
-								<td>Calzado</td>
-								<td>{% if acc_sold is not None %}{{acc_sold}}{% else %}No hubo{% endif %}</td>
-								<td>{% if acc_soldp is not None %}{{acc_soldp}}${% else %}0${% endif %}</td>
-							</tr>
-							<tr>
-								<td>Accesorios</td>
-								<td>{% if shod_sold is not None %}{{shod_sold}}{% else %}No hubo{% endif %}</td>
-								<td>{% if shod_soldp is not None %}{{shod_soldp}}${% else %}0${% endif %}</td>
-							</tr>
-							<tr>
-								<td>Otros</td>
-								<td>{% if others_sold is not None %}{{others_sold}}{% else %}No hubo{% endif %}</td>
-								<td>{% if others_soldp is not None %}{{others_soldp}}${% else %}0${% endif %}</td>
-							</tr>							
-						</tbody>
-					</table>
+					
 				</div>
 			</div>
 
@@ -213,31 +184,23 @@
 
 					<div class="grey lighten-2">
 
-						<ul class="collection with-header">
-			        <li class="collection-item">
-			        	<div>
-			        		Ropa
-			        		<span class="secondary-content">
-			        			Kg
-			        		</span>
-			        	</div>
-			        </li>
-			        <li class="divisor"></li>
-			        <li class="collection-item">
-			        	<div>
-			        		Calzado
-			        		<span class="secondary-content">
-			        			Pares
-			        		</span>
-			        	</div>
-			        </li>
-			        
+					<ul class="collection with-header">
+					{% for d in donations %}
+				        <li class="collection-item">
+				        	<div>
+				        		{{d.donation_type}}
+				        		<span class="secondary-content">
+				        			{{d.quantity}}{{d.unit_measure}}
+				        		</span>
+				        	</div>
+				        </li>
+			        {% endfor %}  
 			      </ul>
 
 			    </div>
 			    <div class="divisor"></div>
 					<div class="card-action right-align">
-						<a class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO TIPO DE DONACIÓN"><i class="material-icons">add</i></a>
+						<a href="/cargar_tipos_donacion/" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO TIPO DE DONACIÓN"><i class="material-icons">add</i></a>
 					</div>
 				</div>
 			</div>

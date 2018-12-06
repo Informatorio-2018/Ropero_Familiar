@@ -874,7 +874,6 @@ def sale_detail(request,id):
     if request.method == 'POST':
         form = SalesDetailsForm(request.POST)
         if form.is_valid():
-            # import ipdb; ipdb.set_trace()
             detail = form.save(commit=False)
             detail.product_type = request.POST['product_type']
             detail.unit_measure = request.POST['unit_measure']
@@ -977,6 +976,13 @@ def adm_home(request):
     shod_soldp = sold.filter(product_type='Calzado').aggregate(total_ssp=Sum('price'))
     all_others_soldp = sold.filter(product_type='Otros').aggregate(total_osp=Sum('price'))
 
+    users = User.objects.filter(is_superuser=0)
+
+    arts = TypesProducts.objects.all()
+
+    adonations = DetailsDonation.objects.all()
+
+    # import ipdb; ipdb.set_trace()
     return render(request,'adm_home.html',{# Donaciones
                                            'dona':donations,
                                            'today':today,
@@ -996,7 +1002,11 @@ def adm_home(request):
                                            'clothes_rip':clothes_rip['total_rip'],
                                            'acc_soldp':acc_soldp['total_asp'],
                                            'shod_soldp':shod_soldp['total_ssp'],
-                                           'others_soldp':all_others_soldp['total_osp'],})
+                                           'others_soldp':all_others_soldp['total_osp'],
+
+                                           'users':users,
+                                           'arts':arts,
+                                           'donations':adonations})
 
 @login_required
 def profile_user(request):
