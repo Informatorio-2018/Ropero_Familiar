@@ -552,9 +552,9 @@ def register_referring(request):
     form_refering = ReferringForm(request.POST or None)
     form_family = FamilyForm_r(request.POST or None)
 
-    # import ipdb; ipdb.set_trace()
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
         if form_refering.is_valid() and form_family.is_valid() :
             # import ipdb; ipdb.set_trace()
             fam = form_family.save(commit=False)
@@ -564,7 +564,7 @@ def register_referring(request):
             family = Family.objects.last()
 
             ref = form_refering.save(commit=False)
-            ref.family = family
+            ref.family = fam
             ref.neighborhood_id = request.POST['neigh_id']
             ref.save()
 

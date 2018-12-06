@@ -47,7 +47,6 @@ urlpatterns = [
     path('personas_ropero/', views.peoples_closet, name="peoples_closet"),
     path('personas_ropero/venta/<int:id>/', views.sale, name="sale"),
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
-    path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
     path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
     path('perfil_usuario/', views.profile_user, name='profile_user'),

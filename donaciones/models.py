@@ -70,7 +70,6 @@ class FamilyEntry(models.Model):
     last_entry = models.DateField(auto_now_add=True, null=True)
     family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name='ingresos_familias')
 
-
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
     phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono
