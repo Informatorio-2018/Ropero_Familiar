@@ -3,23 +3,23 @@
 {% block title %} Ingreso al ropero {% endblock %}
 
 {% block content %}
-
-	<h2 class="center-align">Ingreso al ropero</h2>
-	<form action="/ingreso_ropero/" method="POST">
-		<div class="row">
-			<div class="input-field">
-				{% csrf_token %}
-				<div class="col s12 m8 push-m2">
-					{{form}}
-					<span class="helper-text" data-error="wrong" data-success="right">Ingrese nombre o apellido de la persona que ingresará al ropero</span>
+	<div class="contenedor z-depth-3 white">
+		<h2 class="center-align">Ingreso al ropero</h2>
+		<form action="/ingreso_ropero/" method="POST">
+			<div class="row">
+				<div class="input-field">
+					{% csrf_token %}
+					<div class="col s12 m8 push-m2">
+						{{form}}
+						<span class="helper-text" data-error="wrong" data-success="right">Ingrese nombre o apellido de la persona que ingresará al ropero</span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col s12 m6 push-m3"><input type="submit" value="Buscar" class="btn-large boton-perfil"></div>
-		</div>
-	</form>
- 
+			<div class="row">
+				<div class="col s12 m6 push-m3"><input type="submit" value="Buscar" class="btn-large boton-perfil"></div>
+			</div>
+		</form>
+	</div>
 {% endblock %}
 
 {% block extra_js %}

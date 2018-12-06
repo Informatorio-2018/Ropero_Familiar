@@ -3,34 +3,36 @@
 {% block title %}Pefil de {{ref.firstname}}{% endblock %}
 
 {% block content %}
-	<div class="row">
-		<div class="col s12 m6 push-m3">
-			<div class="card">				
-				<div class="card-content">
-					<span class="card-title">Perfil de Referente</span><br>
-					<p>Nombre: {{ref.firstname}}</p><br>
-					<p>Apellido: {{ref.lastname}}</p><br>
-					<p>DNI: {{ref.dni}}</p><br>
-					<p>Fecha de Nacimiento: {{ref.birth}}</p><br>
-					<p>Dirección: {{ref.referring.adress}}</p><br>
-					<p>Barrio: {{ref.referring.neighborhood}}</p><br>
-					<p>Número de Teléfono: {{ref.referring.phone}}</p>
+	<div class="contenedor z-depth-3 white">
+		<div class="row">
+			<div class="col s12 m6 push-m3">
+				<div class="card">				
+					<div class="card-content">
+						<span class="card-title">Perfil de Referente</span><br>
+						<p>Nombre: {{ref.firstname}}</p><br>
+						<p>Apellido: {{ref.lastname}}</p><br>
+						<p>DNI: {{ref.dni}}</p><br>
+						<p>Fecha de Nacimiento: {{ref.birth}}</p><br>
+						<p>Dirección: {{ref.referring.adress}}</p><br>
+						<p>Barrio: {{ref.referring.neighborhood}}</p><br>
+						<p>Número de Teléfono: {{ref.referring.phone}}</p>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="row">
+		<div class="row">
 
-		<div class="col s12 m4 push-m2">
-			<a href="/referente/{{ref.id}}/familiares/" class="btn-large boton-perfil">Familiares</a>
-		</div>
-		<div class="col s12 m4 push-m2">
-			<a href="/referente/{{ref.id}}/editar" class="btn-large boton-perfil">Editar</a>
-		</div>
-	</div>	
-	<div class="row">
-		<div class="col s12 m4 push-m4">
-			<a href="/busqueda_referente/" class="btn-large boton-perfil">Volver</a>
+			<div class="col s12 m4 push-m2">
+				<a href="/referente/{{ref.id}}/familiares/" class="btn-large boton-perfil">Familiares</a>
+			</div>
+			<div class="col s12 m4 push-m2">
+				<a href="/referente/{{ref.id}}/editar" class="btn-large boton-perfil">Editar</a>
+			</div>
+		</div>	
+		<div class="row">
+			<div class="col s12 m4 push-m4">
+				<a href="/busqueda_referente/" class="btn-large boton-perfil">Volver</a>
+			</div>
 		</div>
 	</div>
 	

@@ -3,11 +3,18 @@
 {% block title %}Editar Barrio{% endblock %}
 
 {% block content %}
-
-	<form method="POST">
-		{% csrf_token %}
-		{{form}}
-		<input type="submit" value="Guardar" class="btn">
-		<a href="/adm/barrios/{{neigh.id}}/borrar" class="btn">Eliminar</a>
-	</form>
+	<div class="contenedor z-depth-3 white">
+		<form method="POST">
+			{% csrf_token %}
+			{{form}}
+		<div class="row">
+			<div class="col s12 m4 push-m2">
+				<input type="submit" value="Guardar" class="btn-large boton-perfil">
+			</div>
+			<div class="col s12 m4 push-m2">
+				<a href="/adm/barrios/{{neigh.id}}/borrar" class="btn-large boton-perfil">Eliminar</a>
+			</div>
+		</div>
+		</form>
+	</div>
 {% endblock %}

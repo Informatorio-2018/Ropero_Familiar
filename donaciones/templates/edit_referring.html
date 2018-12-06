@@ -3,38 +3,40 @@
 {% block title %}Editar referente{% endblock %}
 	
 {% block content %}
-	<h2 class="center-align">Editar Perfil de Referente</h2>
-	<div class="row">
-		<form method="POST">
-			<div class="col s12 m8 push-m2">
-				{% csrf_token %}
-				{{form1.firstname.label_tag}}
-				{{form1.firstname}}
-				{{form1.lastname.label_tag}}
-				{{form1.lastname}}
-				{{form1.dni.label_tag}}
-				{{form1.dni}}
-				{{form1.birth.label_tag}}
-				<input type="text" class="datepicker" name='birth'>
-				{{form2.as_p}}
-				<div class="input-field col s12">
-		    		<select name="neigh_id">
-				      <option value="{{ref.neighborhood}}" disabled>{{ref.neighborhood.name}}</option>
-				      {% for n in neigh %}
-				      	<option value={{n.id}}>{{n.name}}</option>
-				      {% endfor %}
-		    		</select>
-		    		<label>Barrio</label>
-		  		</div>
-			</div>
+	<div class="contenedor z-depth-3 white">
+		<h2 class="center-align">Editar Perfil de Referente</h2>
+		<div class="row">
+			<form method="POST">
+				<div class="col s12 m8 push-m2">
+					{% csrf_token %}
+					{{form1.firstname.label_tag}}
+					{{form1.firstname}}
+					{{form1.lastname.label_tag}}
+					{{form1.lastname}}
+					{{form1.dni.label_tag}}
+					{{form1.dni}}
+					{{form1.birth.label_tag}}
+					<input type="text" class="datepicker" name='birth'>
+					{{form2.as_p}}
+					<div class="input-field col s12">
+			    		<select name="neigh_id">
+					      <option value="{{ref.neighborhood}}" disabled>{{ref.neighborhood.name}}</option>
+					      {% for n in neigh %}
+					      	<option value={{n.id}}>{{n.name}}</option>
+					      {% endfor %}
+			    		</select>
+			    		<label>Barrio</label>
+			  		</div>
+				</div>
+				<div class="col s12 m6 push-m3">	
+					<button type="submit" class="btn-large boton-perfil">Guardar</button>
+				</div>
+			</form>
+		</div>
+		<div class="row">
 			<div class="col s12 m6 push-m3">	
-				<button type="submit" class="btn-large boton-perfil">Guardar</button>
+				<a href="/referente/{{ref.id}}/" class="btn-large boton-perfil">Volver</a>
 			</div>
-		</form>
-	</div>
-	<div class="row">
-		<div class="col s12 m6 push-m3">	
-			<a href="/referente/{{ref.id}}/" class="btn-large boton-perfil">Volver</a>
 		</div>
 	</div>
 

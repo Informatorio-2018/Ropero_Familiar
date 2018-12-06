@@ -3,32 +3,34 @@
 {% block title %}Registrar Referente{% endblock %}
 
 {%block content%}
-	<h3 class="center-align">Registro de Referente</h3>
-	<form method="POST">
-		<div class="row">
-			<div class="col s12 m8 push-m2">
-				{% csrf_token %}
-				{{form.firstname.label_tag}}
-				{{form.firstname}}
-				{{form.lastname.label_tag}}
-				{{form.lastname}}
-				{{form.dni.label_tag}}
-				{{form.dni}}
-				{{form.birth.label_tag}}
-				<input type="text" class="datepicker" name='birth'>
+	<div class="contenedor z-depth-3 white">
+		<h3 class="center-align">Registro de Referente</h3>
+		<form method="POST">
+			<div class="row">
+				<div class="col s12 m8 push-m2">
+					{% csrf_token %}
+					{{form.firstname.label_tag}}
+					{{form.firstname}}
+					{{form.lastname.label_tag}}
+					{{form.lastname}}
+					{{form.dni.label_tag}}
+					{{form.dni}}
+					{{form.birth.label_tag}}
+					<input type="text" class="datepicker" name='birth'>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col s12 m6 push-m3">
-				<button type="submit" class="btn-large boton-perfil">Guardar</button>
+			<div class="row">
+				<div class="col s12 m6 push-m3">
+					<button type="submit" class="btn-large boton-perfil">Guardar</button>
+				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col s12 m6 push-m3">
-				<a href="/busqueda_referente/" class="btn-large boton-perfil">Volver</a>
+			<div class="row">
+				<div class="col s12 m6 push-m3">
+					<a href="/busqueda_referente/" class="btn-large boton-perfil">Volver</a>
+				</div>
 			</div>
-		</div>
-	</form>
+		</form>
+	</div>
 
 {%endblock%}
 

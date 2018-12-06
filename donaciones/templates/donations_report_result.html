@@ -3,48 +3,49 @@
 {% block title %}Reporte de Donaciones{% endblock %}
 
 {% block content %}
-	
-	<h4 class="center-align">Reporte de donaciones de {{begin}} hasta {{finish}}</h4>
-	<p>Toque para ver detalles de las donaciones</p>
-	<div class="row collection">
-		<a href="#modal1" class="modal-trigger collection-item">{% if report is None %}No hubo donaciones entre estas fechas{% else %}Total de {{don}} donado: {{report}} {{don1.unit_measure}}{% endif %}</a>
-	</div>
-	<div class="row">
-		<div class="col s12 m6 push-m3">
-			<a href="{% url 'donations_report' %}" class="btn-large boton-perfil">Volver</a>
+	<div class="contenedor z-depth-3 white">
+		<h4 class="center-align">Reporte de donaciones de {{begin}} hasta {{finish}}</h4>
+		<p>Toque para ver detalles de las donaciones</p>
+		<div class="row collection">
+			<a href="#modal1" class="modal-trigger collection-item">{% if report is None %}No hubo donaciones entre estas fechas{% else %}Total de {{don}} donado: {{report}} {{don1.unit_measure}}{% endif %}</a>
 		</div>
-	</div>
-	<div id="modal1" class="modal">
-		<div class="modal-content">
-			<h4>Detalles de las donaciones:</h4>
-			<div class="row collection">
-				{% if report is None %}
-					<p>No hay detalles</p>
-				{% else %}
-			      <table>
-			        <thead>
-			          <tr>
-			              <th>Nombre o Razón Social</th>
-			              <th>Donación</th>
-			              <th>Fecha</th>
-			          </tr>
-			        </thead>
-
-			        <tbody>
-			        	{% for a in all %}	
-			        		<tr>
-			        			<td>{{a.donation.name}}</td>
-						        <td>{{a.quantity}}{{a.unit_measure}}</td>
-						        <td>{{a.donation.date}}</td>
-			        		</tr>
-			        	{% endfor %}
-			        </tbody>
-			      </table>
-			      {% endif %}	
+		<div class="row">
+			<div class="col s12 m6 push-m3">
+				<a href="{% url 'donations_report' %}" class="btn-large boton-perfil">Volver</a>
 			</div>
 		</div>
-		<div class="modal-footer">
-		  <a href="#" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<h4>Detalles de las donaciones:</h4>
+				<div class="row collection">
+					{% if report is None %}
+						<p>No hay detalles</p>
+					{% else %}
+				      <table>
+				        <thead>
+				          <tr>
+				              <th>Nombre o Razón Social</th>
+				              <th>Donación</th>
+				              <th>Fecha</th>
+				          </tr>
+				        </thead>
+
+				        <tbody>
+				        	{% for a in all %}	
+				        		<tr>
+				        			<td>{{a.donation.name}}</td>
+							        <td>{{a.quantity}}{{a.unit_measure}}</td>
+							        <td>{{a.donation.date}}</td>
+				        		</tr>
+				        	{% endfor %}
+				        </tbody>
+				      </table>
+				      {% endif %}	
+				</div>
+			</div>
+			<div class="modal-footer">
+			  <a href="#" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+			</div>
 		</div>
 	</div>
 
