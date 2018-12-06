@@ -32,9 +32,9 @@ urlpatterns = [
     path('lista_responsable/', views.agregate_responsable, name="agregate_responsable"),
     path('responsable/', views.responsable, name="responsable"),
     path('devolver/<int:id>', views.give_back, name="give_back"),
-    path('para_acondicionar/<int:id>/resumen',views.resume_fix,name="resume_fix"),
+    path('para_acondicionar/<int:id>/resumen', views.resume_fix, name="resume_fix"),
     path('para_acondicionar/<int:id>', views.carry_out, name="carry_out"),
-    path('eliminar_acondicionar/<int:id>/',views.delete_fix, name='delete_fix'),
+    path('eliminar_acondicionar/<int:id>/', views.delete_fix, name='delete_fix'),
     path('adm/barrios/', views.neigh, name="neigh"),
     path('adm/barrios/<int:id>', views.edit_neigh, name='edit_neigh'),
     path('adm/barrios/<int:id>/borrar', views.del_neigh, name='del_neigh'),
@@ -52,4 +52,6 @@ urlpatterns = [
     path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
     path('perfil_usuario/', views.profile_user, name='profile_user'),
     path('creditos/',views.credits),
+    path('perfil_usuario/<int:id>/editar', views.profile_user_edit, name='profile_user_edit'),
+    path('usuario/<int:id>/cambiar_pass', views.change_password, name='change_password'),
 ]

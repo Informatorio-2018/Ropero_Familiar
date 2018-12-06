@@ -5,11 +5,11 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-	<h1>En Refaccion</h1>
+	<h1>Acondicionando</h1>
  <ul class="collapsible">
 
  	{% for r in resp %}
- 		{% if r.state == true %}
+ 		{% if r.state == 0 %}
  		<li>
       		<div class="collapsible-header">{{r.id}}{{r.name}}:  {{r.date}}
       			
@@ -26,9 +26,9 @@
  		{% endif %}
 	{% endfor %}
 </ul>
-<ul>
+<ul class="center-align">
 	<li>
-		<a href="{% url 'agregate_responsable' %}" class="waves-effect waves-light btn">Nueva Refaccion</a>
+		<a href="{% url 'agregate_responsable' %}" class="waves-effect waves-light btn ">Nueva Refaccion</a>
 	</li>
 </ul>
   
