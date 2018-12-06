@@ -916,15 +916,26 @@ def adm_home(request):
     donations = DetailsDonation.objects.filter(donation__date__year=today.year,donation__date__month=today.month,donation__date__day=today.day)
     clothes = donations.filter(donation_type='Ropa').aggregate(total_c=Sum('quantity'))
     accesories = donations.filter(donation_type='Accesorios').aggregate(total_a=Sum('quantity'))
-    shod = donations.filter(donation_type='Calzados').aggregate(total_s=Sum('quantity'))
-    others = donations.filter(donation_type='Otros').aggregate(total_o=Sum('quantity'))
+    shod = donations.filter(donation_type='Calzado').aggregate(total_s=Sum('quantity'))
+    all_others = donations.filter(donation_type='Otros')
+    others = all_others.aggregate(total_o=Sum('quantity'))
+    desc_others = []
+    cant_others = []
+    a=0
+    if  all_others.count() > 0:
+        for i in all_others:
+            desc_others.append(all_others[a].otherdetail.description)
+            cant_others.append(all_others[a].quantity)
+            my_list = zip(desc_others,cant_others)
+            a+=1 
 
     return render(request,'adm_home.html',{'dona':donations,
                                            'today':today,
                                            'clothes':clothes['total_c'],
                                            'accesories':accesories['total_a'],
                                            'shod':shod['total_s'],
-                                           'others':others['total_o']})
+                                           'others':others['total_o'],
+                                           'my_list':my_list})
 
 @login_required
 def profile_user(request):

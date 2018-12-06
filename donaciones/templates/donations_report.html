@@ -3,40 +3,42 @@
 {% block title %}Reporte de Donaciones{% endblock %}
 
 {% block content %}
-  <h2 class="center-align">Reporte de Donaciones</h2>
+  <div class="contenedor z-depth-3 white">
+    <h2 class="center-align">Reporte de Donaciones</h2>
 
-      <form action="/adm/reporte_donaciones/" method="POST">
-
-        <div class="input-field">
-          {% csrf_token %}
-            <select name="dona_id">
-              <option value="" disabled>Articulo</option>
-              {% for d in dona %}
-                <option value={{d.name}}>{{d.name}}</option>
-              {% endfor %}
-            </select>
-            <span class="helper-text" data-error="wrong" data-success="right">Seleccione el tipo de articulo del que desea un reporte</span>
-          </div>
+        <form action="/adm/reporte_donaciones/" method="POST">
 
           <div class="input-field">
-            <input type="text" class="datepicker" name='begin' id='begin'>
-            {{form.begin.label_tag}}
-            <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
-          </div>
-
-          <div class="input-field"> 
-            <input type="text" class="datepicker" name='finish' id='finish'>
-            {{form.finish.label_tag}}
-            <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de fin del reporte</span>
-          </div>
-
-          <div class="row">
-            <div class="col s12 m6 push-m3">
-              <input type="submit" value="Buscar" class="btn-large boton-perfil" id="btn_buscar">
+            {% csrf_token %}
+              <select name="dona_id">
+                <option value="" disabled>Articulo</option>
+                {% for d in dona %}
+                  <option value={{d.name}}>{{d.name}}</option>
+                {% endfor %}
+              </select>
+              <span class="helper-text" data-error="wrong" data-success="right">Seleccione el tipo de articulo del que desea un reporte</span>
             </div>
-          </div>
 
-      </form>
+            <div class="input-field">
+              <input type="text" class="datepicker" name='begin' id='begin'>
+              {{form.begin.label_tag}}
+              <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
+            </div>
+
+            <div class="input-field"> 
+              <input type="text" class="datepicker" name='finish' id='finish'>
+              {{form.finish.label_tag}}
+              <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de fin del reporte</span>
+            </div>
+
+            <div class="row">
+              <div class="col s12 m6 push-m3">
+                <input type="submit" value="Buscar" class="btn-large boton-perfil" id="btn_buscar">
+              </div>
+            </div>
+
+        </form>
+  </div>
 
 {% endblock %}
 

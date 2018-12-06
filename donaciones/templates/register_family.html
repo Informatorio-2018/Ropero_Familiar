@@ -3,20 +3,22 @@
 {% block title %}Registrar Familiar{% endblock %}
 
 {%block content%}
-	<h3 class="center-align">Registro de Familiar</h3>
-	<div class="row">
-		<form method="POST">
-			{% csrf_token %}
-			{{form.firstname.label_tag}}
-			{{form.firstname}}
-			{{form.lastname.label_tag}}
-			{{form.lastname}}
-			{{form.dni.label_tag}}
-			{{form.dni}}
-			{{form.birth.label_tag}}
-			<input type="text" class="datepicker" name='birth'>
-			<button type="submit" class="btn center-align">Guardar</button>
-		</form>
+	<div class="contenedor z-depth-3 white">
+		<h3 class="center-align">Registro de Familiar</h3>
+		<div class="row">
+			<form method="POST">
+				{% csrf_token %}
+				{{form.firstname.label_tag}}
+				{{form.firstname}}
+				{{form.lastname.label_tag}}
+				{{form.lastname}}
+				{{form.dni.label_tag}}
+				{{form.dni}}
+				{{form.birth.label_tag}}
+				<input type="text" class="datepicker" name='birth'>
+				<button type="submit" class="btn center-align">Guardar</button>
+			</form>
+		</div>
 	</div>
 {%endblock%}
 

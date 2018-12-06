@@ -3,7 +3,8 @@
 {% block title %}Registrar Referente{% endblock %}
 
 {% block content %}
-	<h3 class="center-align">Registro de Referente</h3>
+<div class="contenedor z-depth-3 white">
+  <h3 class="center-align">Registro de Referente</h3>
 	<form method="POST">
 		{% csrf_token %}
 
@@ -26,8 +27,8 @@
     		<label>Barrio</label>
   		</div>  		
 		<button type="submit" class="btn">Guardar</button>
-	</form>
-
+  </form>
+</div>
 {% endblock %}
 {% block extra_js %}
 

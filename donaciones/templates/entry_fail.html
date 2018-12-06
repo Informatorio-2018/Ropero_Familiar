@@ -3,11 +3,12 @@
 {% block title %}Resultado de Búsqueda{% endblock %}
 
 {% block content %}
-	
-	<h3 class="center-align">{{fam.firstname}} no puede ingresar al ropero, ya ha ingresó éste mes.</h3>
-	<div class="row">
-		<div class="col s12 m6 push-m3">
-			<a href="{% url 'home' %}" class="btn-large boton-perfil">Volver al inicio</a>	
+	<div class="contenedor z-depth-3 white">
+		<h3 class="center-align">{{fam.firstname}} no puede ingresar al ropero, ya ha ingresó éste mes.</h3>
+		<div class="row">
+			<div class="col s12 m6 push-m3">
+				<a href="{% url 'home' %}" class="btn-large boton-perfil">Volver al inicio</a>	
+			</div>
 		</div>
 	</div>
 {% endblock %}
