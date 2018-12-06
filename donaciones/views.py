@@ -445,7 +445,9 @@ def responsable(request):
 
 def resume_fix(request, id):
     responsable = ResponsableFix.objects.get(pk=id)
-    resumes = Carry.objects.filter(responsable__pk=id)
+    q1=Q(responsable__pk=id)
+    q2=Q(quantity__gt=0)
+    resumes = Carry.objects.filter(q1&q2)
     if request.method == "POST":
         fix_form = CarryForm(request.POST, instance=responsable)
         if fix_form.is_valid():
