@@ -1,15 +1,15 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
 	<br>
 	<div class="row white renglon-logos">
 		<div class="col s12 m4 valign-wrapper">
-			<img class="logos-home"src="../static/images/fundecch.jpg">	
+			<img class="logos-home"src="{% static 'images/fundecch.jpg' %}">	
 		</div>
 		<div class="col s12 m4">
-			<img class="logos-home"src="../static/images/flia_conin.jpg">		
+			<img class="logos-home"src="{% static 'images/flia_conin.jpg' %}">		
 		</div>
 		<div class="col s12 m4">
 
