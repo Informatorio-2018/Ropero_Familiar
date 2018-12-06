@@ -116,18 +116,6 @@ def finish_donation(request, id):
     context = {'donator': donator, 'form': form}
     return render(request, 'finish_donation.html', context)
 
-@login_required
-def register_referring_f(request):
-    form = FamilyForm_r(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            ref = form.save(commit=False)
-            ref.role = 'r'
-            ref.birth = request.POST['birth']
-            ref.save()
-            family = Family.objects.last()
-            return redirect('/registrar_referente_f/'+str(ref.id)+'/')
-    return render(request, 'register_referring_f.html', {'form': form})
 
 @login_required
 def donations_report(request):
@@ -165,22 +153,6 @@ def donations_report(request):
         form = DonationsReportForm()
     return render(request,'donations_report.html',{'form':form,
                                                    'dona':dona})
-
-@login_required
-def register_referring(request, id):
-    form = ReferringForm(request.POST or None)
-    family = Family.objects.get(pk=id)
-    neigh = Neighborhood.objects.all()
-    if request.method == 'POST':
-        if form.is_valid():
-            fam = form.save(commit=False)
-            fam.family = family
-            fam.neighborhood_id = request.POST['neigh_id']
-            form.save()
-            return redirect('/busqueda_referente/')
-    return render(request, 'register_referring.html', {'form': form,
-                                                       'neigh': neigh})
-
 
 @login_required
 def load_types_donation(request):
@@ -544,6 +516,65 @@ def give_back(request,id):
 
     return render(request,'give_back.html',context)
 
+
+
+
+# @login_required
+# def register_referring(request, id):
+#     form = ReferringForm(request.POST or None)
+#     family = Family.objects.get(pk=id)
+#     neigh = Neighborhood.objects.all()
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             fam = form.save(commit=False)
+#             fam.family = family
+#             fam.neighborhood_id = request.POST['neigh_id']
+#             form.save()
+#             return redirect('/busqueda_referente/')
+#     return render(request, 'register_referring.html', {'form': form,
+#                                                        'neigh': neigh})
+
+# @login_required
+# def register_referring_f(request):
+#     form = FamilyForm_r(request.POST or None)
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             ref = form.save(commit=False)
+#             ref.role = 'r'
+#             ref.birth = request.POST['birth']
+#             ref.save()
+#             family = Family.objects.last()
+#             return redirect('/registrar_referente_f/'+str(ref.id)+'/')
+#     return render(request, 'register_referring_f.html', {'form': form})
+
+@login_required
+def register_referring(request):
+    form_refering = ReferringForm(request.POST or None)
+    form_family = FamilyForm_r(request.POST or None)
+
+    # import ipdb; ipdb.set_trace()
+    neigh = Neighborhood.objects.all()
+    if request.method == 'POST':
+        if form_refering.is_valid() and form_family.is_valid() :
+            # import ipdb; ipdb.set_trace()
+            fam = form_family.save(commit=False)
+            fam.role = 'r'
+            fam.birth = request.POST['birth']
+            fam.save()
+            family = Family.objects.last()
+
+            ref = form_refering.save(commit=False)
+            ref.family = family
+            ref.neighborhood_id = request.POST['neigh_id']
+            ref.save()
+
+            return redirect('/busqueda_referente/')
+
+
+    form = {'form_refering':form_refering,'form_family':form_family,'neigh':neigh}
+    template = 'register_referring.html'
+
+    return render(request, template, form)
 
 
 @login_required

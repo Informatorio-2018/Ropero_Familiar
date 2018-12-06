@@ -5,33 +5,51 @@
 {% block content %}
 	<h3 class="center-align">Registro de Referente</h3>
 	<form method="POST">
-		<div class="row">
-			<div class="col s12 m8 push-m2">	
-				{% csrf_token %}
-				{{form.as_p}}
-				<div class="input-field">
-		    		<select name="neigh_id">
-				      <option value="" disabled selected>Elegir Barrio</option>
-				      {% for n in neigh %}
-				      	<option value={{n.id}}>{{n.name}}</option>
-				      {% endfor %}
-		    		</select>
-		    		<label>Barrio</label>
-		  		</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col s12 m6 push-m3">
-				<button type="submit" class="btn-large boton-perfil">Guardar</button>
-			</div>
-		</div>
+		{% csrf_token %}
+
+		{{form_family.firstname.label_tag}}
+		{{form_family.firstname}}
+		{{form_family.lastname.label_tag}}
+		{{form_family.lastname}}
+		{{form_family.dni.label_tag}}
+		{{form_family.dni}}
+		{{form_family.birth.label_tag}}
+		<input type="text" class="datepicker" name='birth'>
+		{{form_refering.as_p}}
+		<div class="input-field col s12">
+    		<select name="neigh_id">
+		      <option value="" disabled selected>Elegir Barrio</option>
+		      {% for n in neigh %}
+		      	<option value={{n.id}}>{{n.name}}</option>
+		      {% endfor %}
+    		</select>
+    		<label>Barrio</label>
+  		</div>  		
+		<button type="submit" class="btn">Guardar</button>
 	</form>
 
 {% endblock %}
 {% block extra_js %}
+
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$('select').formSelect();
-			});
+    		$('.datepicker').datepicker(
+    			{ 
+		            firstDay: true, 
+		            format: 'yyyy-mm-dd',
+		            yearRange: 100,
+		            i18n: {
+		                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+		                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+		                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+		                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+		                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"]
+                }
+        	});
+
+    		$('select').formSelect();	
+
+  		});	
 	</script>
+
 {% endblock %}
