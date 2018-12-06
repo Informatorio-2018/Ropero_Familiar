@@ -88,6 +88,11 @@
         ADMINISTRAR
     </div>
     <li  class="grey lighten-3">
+      <a href="{% url 'adm_home' %}">
+        <i class="material-icons">person</i>Home
+      </a>
+    </li>
+    <li  class="grey lighten-3">
       <a href="{% url 'load_types_donation' %}">
         <i class="material-icons">card_giftcard</i>Tipos de Donaciones
       </a>
@@ -111,7 +116,7 @@ insert_chart_outlined</i>Reporte de donaciones</a>
     </li>    
     <li class="divider"></li>
     <li class="grey lighten-3">
-      <a href="{% url 'logout' %}"><i class="material-icons">meeting_room</i>Logout</a>
+      <a href="{% url 'logout' %}"><i class="material-icons">arrow_back</i>Logout</a>
     </li>
 
   </ul>
