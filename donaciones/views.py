@@ -988,6 +988,10 @@ def profile_user(request):
 
     return render(request, 'profile_user.html', {'user': user})
 
+@login_required
+def credits(request):
+    return render(request,'credits.html',{})
+
 def profile_user_edit(request, id):
     user = User.objects.get(pk=id)
     profile = Profile.objects.get(user_id=id)
@@ -1028,3 +1032,4 @@ def change_password(request, id):
     else:
         form = PasswordChangeForm(user)
     return render(request, 'change_password.html', {'form': form})
+

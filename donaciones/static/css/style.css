@@ -201,3 +201,6 @@ body{
     	display: inline;
 	}
 }
+
+.image-container img{
+	max-width: 150px;

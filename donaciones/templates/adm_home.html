@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block title %}Bienvenido{% endblock %}
 
 {% block content %}
@@ -118,7 +117,7 @@
 					{% for u in users %}
 				        <li class="collection-item">
 				        	<div>
-				        		{{u.first_name}}
+				        		{{u.username|lower}}
 				        		<span class="secondary-content">
 				        			{% if u.last_login is not Null %}
 				        				{{u.last_login|date:"d/m/Y"}}
