@@ -21,24 +21,29 @@
     </ul>
 	
         
-
-<ul class="center-align">
-	<li>
-		<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn boton-home">Ropero</a>
-	</li>
-	<div class="separador"></div>
-	<li>
-		<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn boton-home">Acondicionar</a>
-	</li>
-	<div class="separador"></div>
-	<li>
-		<a href="#" class="waves-effect waves-light btn boton-home">Basura</a>
-	</li>
-	<div class="separador"></div>
-	<li>
-		<a href="{% url 'home' %}" class="btn waves-effect waves-light ">Volver</a>
-	</li>
-</ul>
+<div class="row">
+	<div class="row">
+		<div class="col s12 m6">
+			<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn-large waves-effect waves-light btn-large boton-home">Ropero</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col s12 m6">
+			<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn-large boton-home">Acondicionar</a>
+		</div>
+	</div>
+	<div class="row">	
+		<div class="col s12 m6">
+			<a href="#" class="waves-effect waves-light btn-large boton-home">Basura</a>
+		</div>
+	</div>
+	<div class="row">	
+		<div class="col s12 m6">
+			<a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home">Volver</a>
+		</div>
+	</div>
+	</div>
+</div>
 	
 </div>
 {% endblock %}

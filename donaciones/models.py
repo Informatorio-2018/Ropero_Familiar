@@ -97,7 +97,7 @@ class ResponsableFix(models.Model):
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
     phone = models.IntegerField()
     adress = models.CharField(max_length=80, verbose_name='Dirección')
-    state=models.BooleanField(null=True)
+    state=models.BooleanField(default=0)
 
     def __str__(self):
         return self.name
@@ -107,7 +107,9 @@ class Carry(models.Model):
     types = models.CharField(max_length=30, verbose_name='Tipo de Donación')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
+    quantity_back = models.DecimalField(default=0,max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad devolver')
     responsable = models.ForeignKey(ResponsableFix, on_delete=models.CASCADE, related_name='responsable')
+
     
     def __str__(self):
         return self.responsable.name

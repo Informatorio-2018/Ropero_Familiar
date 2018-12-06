@@ -475,6 +475,18 @@ def list_sort(request):
 def list_fix(request):
     resp=ResponsableFix.objects.all()
     carry=Carry.objects.filter(quantity__gt=0)
+    
+
+
+    for r in resp:
+        q1=Q(responsable_id=r.id)
+        q2=Q(quantity__gt=0)
+        if Carry.objects.filter(q1 & q2).count() > 0:
+            r.state = 0
+            r.save()
+
+
+
 
     context={'resp':resp,'carry':carry}
     return render(request,'list_fix.html',context)
@@ -486,46 +498,29 @@ def give_back(request,id):
     responsable=ResponsableFix.objects.get(id=id_resp)
     types = TypesDonation.objects.all()
     # others = Carry.objects.filter(responsable=id_resp)
-    q1=Q(responsable=id_resp)
-    q2=Q(quantity__gt=0)
-    print('es :',Carry.objects.filter(q1 & q2).count())
-    # cont=others.objects.filter(quantity__gt=0).count()
-
+    
     type_edit = types.get(name=carry.types)
     if carry.types == type_edit.name:
         type_edit.quantity_total += carry.quantity
         type_edit.save()
+        carry.quantity_back+=carry.quantity
         carry.quantity=0
         carry.save()
-    # if Carry.objects.filter(q1 & q2).count() > 0:
-    #     print('entra')
-    #     responsable.state == True
-    #     responsable.save()
-    # else:
-    #     print('entra')
-    #     responsable.state == False
-    #     responsable.save()
 
 
-        # carry.delete()
+    q1=Q(responsable=id_resp)
+    q2=Q(quantity__gt=0)
+
+    if Carry.objects.filter(q1 & q2).count() > 0:
+        print('todavia falta devolver')
+        responsable.state = 0
+        responsable.save()
+    else:
+        print('Ya devolvio todo')
+        responsable.state = 1
+        responsable.save()
+        
     return redirect('list_fix')
-
-    # if request.method == 'POST':
-        # if detail.donation_type == type_edit.name:
-        #     type_edit.quantity_total -= detail.quantity
-        #     type_edit.save()
-        # form = CarryForm(request.POST, instance=carry)
-        # if form.is_valid():
-        #     form.save()
-            # Suma al total la cantidad editada
-            # if detail.donation_type == type_edit.name:
-            #     type_edit.quantity_total += detail.quantity
-            #     type_edit.save()
-            # return redirect('give_back', id=id_donator)
-    # else:
-    #     form = DetailsDonationForm(instance=detail)
-    
-    # return render(request,'give_back.html')
 
 def agregate_responsable(request):
     resp=ResponsableFix.objects.all()
@@ -534,35 +529,6 @@ def agregate_responsable(request):
     context={'resp':resp}
     return render(request,'agregate_responsable.html',context)
 
-
-
-# @login_required
-# def register_referring(request, id):
-#     form = ReferringForm(request.POST or None)
-#     family = Family.objects.get(pk=id)
-#     neigh = Neighborhood.objects.all()
-#     if request.method == 'POST':
-#         if form.is_valid():
-#             fam = form.save(commit=False)
-#             fam.family = family
-#             fam.neighborhood_id = request.POST['neigh_id']
-#             form.save()
-#             return redirect('/busqueda_referente/')
-#     return render(request, 'register_referring.html', {'form': form,
-#                                                        'neigh': neigh})
-
-# @login_required
-# def register_referring_f(request):
-#     form = FamilyForm_r(request.POST or None)
-#     if request.method == 'POST':
-#         if form.is_valid():
-#             ref = form.save(commit=False)
-#             ref.role = 'r'
-#             ref.birth = request.POST['birth']
-#             ref.save()
-#             family = Family.objects.last()
-#             return redirect('/registrar_referente_f/'+str(ref.id)+'/')
-#     return render(request, 'register_referring_f.html', {'form': form})
 
 @login_required
 def register_referring(request):
@@ -738,7 +704,7 @@ def login(request):
         if user is not None:
             log(request,user)
             request.session['member_id'] = user.id
-            request.session.set_expiry(3600) #86400 = 24hs     # 3600 = 1hr
+            request.session.set_expiry(14400) #86400 = 24hs     # 3600 = 1hr
 
             return redirect('home')
     form = LoginForm()
