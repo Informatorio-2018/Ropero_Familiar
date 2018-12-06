@@ -941,6 +941,7 @@ def adm_home(request):
     others = all_others.aggregate(total_o=Sum('quantity'))
     desc_others = []
     cant_others = []
+    my_list = []
     a=0
     if  all_others.count() > 0:
         for i in all_others:
