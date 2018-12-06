@@ -3,23 +3,23 @@
 {% block title %} Familias {% endblock %}
 
 {% block content %}
-	<div class="contenedor z-depth-3 white">
-		<h2 class="center-align">Familias</h2>
-		<form action="/busqueda_referente/" method="POST">
-			<div class="row">
-				<div class="input-field">
-					{% csrf_token %}
-					{{form}}
-					<span class="helper-text" data-error="wrong" data-success="right">Ingrese nombre o apellido del referente que desea buscar</span>
-				</div>
-				<div class="col s12 m6 push-m3">	
-					<input type="submit" value="Buscar" class="btn-large boton-perfil">
-				</div>
-				<div class="fixed-action-btn">
-					<a href="/registrar_referente_f/" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
-				</div>
+
+<div class="contenedor z-depth-3 white">
+	<h2 class="center-align">Referente</h2>
+	<form action="/busqueda_referente/" method="POST">
+		<div class="row">
+			<div class="input-field">
+				{% csrf_token %}
+				{{form}}
+				<span class="helper-text" data-error="wrong" data-success="right">Ingrese nombre o apellido del referente que desea buscar</span>
 			</div>
-		</form>
-	</div>
+			<div class="col s12 m6 push-m3">	
+				<input type="submit" value="Buscar" class="btn-large boton-perfil">
+			</div>
+			<div class="fixed-action-btn">
+				<a href="/registrar_referente/" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
+			</div>
+	</form>
+</div>
  
 {% endblock %}
