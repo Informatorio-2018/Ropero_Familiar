@@ -5,19 +5,19 @@
 {% block content %}
   <div class="contenedor z-depth-3 white">
     <h3 class="center-align">Resumen de Donación</h3>
-      <ul class="collection with-header">
-        <li class="collection-header"><h4>{{ donator.name }}  <a class=" modal-trigger"  href="#edit_name"><i class="material-icons">edit</i></a></h4>
+      <ul class="collection with-header z-depth-2">
+        <li class="collection-header grey lighten-3"><h4>{{ donator.name }}  <a class="modal-trigger secondary-content btn"  href="#edit_name"><i class="material-icons">edit</i></a></h4>
         </li>
         {% for res in resumes %}
-          <li class="collection-item row">
+          <li class="collection-item row grey lighten-4">
             <div class="col s7">
               {{res.donation_type}} {{res.quantity}} {{ res.get_unit_measure_display }}
             </div>
             <div class="col s1 right">
-              <a href="#modal_delete{{res.id}}" class="modal-trigger right-align"><i class="material-icons">delete</i></a>
+              <a href="#modal_delete{{res.id}}" class="modal-trigger right-align secondary-content btn"><i class="material-icons">delete</i></a>
             </div>
             <div class="col s1 right">
-              <a href="{% url 'edit_donation' res.id %}" class="modal-trigger right"><i class="small material-icons">edit</i></a>
+              <a href="{% url 'edit_donation' res.id %}" class="modal-trigger right secondary-content btn"><i class="small material-icons">edit</i></a>
             </div>
 
             <!-- Modal Structure delete donation -->
