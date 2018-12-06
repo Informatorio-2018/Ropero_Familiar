@@ -546,22 +546,22 @@ def register_referring(request):
             fam.role = 'r'
             fam.birth = request.POST['birth']
             fam.save()
-            family = Family.objects.last()
 
+            family = Family.objects.get(id=fam.id)
+
+            family.ref = fam.id
+            family.save()
+            
             ref = form_refering.save(commit=False)
-            ref.family = fam
+            ref.family = family
             ref.neighborhood_id = request.POST['neigh_id']
             ref.save()
-            ref_id = fam.id
-
-            return redirect('/referente/'+str(ref_id)+'/')
-
+            return redirect('/referente/'+str(ref.id)+'/')
 
     form = {'form_refering':form_refering,'form_family':form_family,'neigh':neigh}
     template = 'register_referring.html'
 
     return render(request, template, form)
-
 
 @login_required
 def register_family(request, id):
@@ -720,19 +720,25 @@ def logout(request):
 @login_required
 def closet(request):
     fam = Family.objects.all()
+    ref = Referring.objects.all()
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
+            # import ipdb; ipdb.set_trace()
             query = form.cleaned_data['query']
-            q1 = Q(firstname__contains=query)
-            q2 = Q(lastname__contains=query)
-            fam = Family.objects.filter(q1 | q2)
+            # q1 = Q(firstname__contains=query)
+            # q2 = Q(lastname__contains=query)
+            # fam = Family.objects.filter(q1 | q2)
+            buscar = "'"+query+"'"
+            sql = "SELECT * FROM donaciones_family f INNER JOIN donaciones_referring r ON f.ref == r.family_id WHERE f.firstname == %s or f.lastname == %s"%(buscar,buscar)            
+            fami = Family.objects.raw(sql)
+            fam = list(fami)
             return render(request, 'closet_search_out.html', {'fam': fam,
                                                               'query': query})
     else:
         form = SearchForm()
     return render(request,'entry_closet.html',{'form':form,
-                                               'fam':fam})
+                                         'fam':fam})
 
 @login_required
 def entry_ok(request,id):
@@ -740,7 +746,7 @@ def entry_ok(request,id):
     today_month = datetime.date.today().month
     today = datetime.date.today()
     all_entry = FamilyEntry.objects.all()
-    import ipdb; ipdb.set_trace()
+    # import ipdb; ipdb.set_trace()
     while True:
         try:
             entry = FamilyEntry.objects.get(family_id=id,last_entry__year=today.year,last_entry__month=today.month,last_entry__day=today.day)
