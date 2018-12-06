@@ -3,13 +3,16 @@
 {% block title %}Ropero{% endblock %}
 
 {% block content %}
-	<h2 class="center-align">Personas en el ropero</h2>
-	<ul class="collection">
-		{% for person in peoples %}
-			<a class="collection-item" href="{% url 'sale' person.id %}"><i class="material-icons right">shopping_cart</i>{{person}}</a>
-		{% endfor %}
-   </ul>
-
-
-   
+	<div class="contenedor z-depth-3 white">
+		<h2 class="center-align">Personas en el ropero</h2>
+		<ul class="collection">
+			{% if peoples %}
+				{% for person in peoples %}
+					<a class="collection-item" href="{% url 'sale' person.id %}"><i class="material-icons right">shopping_cart</i>{{person}}</a>
+				{% endfor %}
+			{% else %}
+				<div class="collection-item">No hay personas comprando</div>
+			{% endif %}
+	   </ul>
+	</div>
 {% endblock %}

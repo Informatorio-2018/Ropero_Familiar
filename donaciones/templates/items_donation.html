@@ -3,73 +3,76 @@
 {% block title %} Recibir Donación {% endblock %}
 
 {% block content %}
-	<div class="row">
-		<h4 class="center-align">Donación recibida de {{donator.name}}</h4>
+	<div class="contenedor z-depth-3 white">
+		<div class="row">
+			<h4 class="center-align">Donación recibida de {{donator.name}}</h4>
+		</div>
+		<div class="row">
+			<h5 class="col s12">Elegir tipo de donación</h5>
+		</div>
+		<ul class="collapsible popout">
+	    {% for t in types %}
+				<li>
+					{% if details %}
+						<div id="col_{{t.name}}" class="collapsible-header center-align">
+							<h6><strong>{{t.name}}</strong></h6>  {% for d in details %}	{% if d.donation_type == t.name %}
+							<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity }} {{d.unit_measure}}</strong> </span>
+								<script type="text/javascript">
+		 							$(function() {
+		 								if ({{ d.quantity }} > 0){
+											$("#col_{{t.name}}").addClass("disable-col");
+		 								}
+									});
+								</script>
+							 {% endif %} {% endfor %}
+						</div>
+					{% else %}
+						<div id="col_{{t.name}}" class="collapsible-header center-align ">
+							<h6><strong>{{ t.name }}</strong></h6>
+						</div>
+					{% endif %}
+		     	<div class="collapsible-body">
+		     		<form method="POST">
+	      			{% csrf_token %}
+	      			<div class="row">
+		      			<div class="col s4 offset-s4">
+		     					{% if t.name == 'Otros' %}
+		     						{{form_details}}
+		     						{{form_others}}
+		     						<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
+		     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
+		     					{% else %}
+		     						{{ form_details}}
+		     						<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
+		     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
+		     					{% endif %}
+		      			</div>
+		      			<div class="col s4 left">
+		      				<label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
+		      			</div>
+		      			<div class="col m4 s12 center-align offset-m4">
+									<button id="btn_{{t.name}}" class="waves-effect waves-light btn-large boton-home" type="submit">Agregar</button>
+	    					</div>
+		      		</div>
+		      	
+		      	</form>
+		      </div>
+				</li>
+			{% endfor %}
+	  </ul>
+	  <div class="row">
+	  	{% if details %}
+	  		<div class="col m4 s12 offset-m4">
+	  			<a class="waves-effect waves-light btn-large boton-home" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
+	  		</div>
+	  	{% else %}
+	  		<div class="col m4 s12 offset-m4">
+	  			<a class="waves-effect waves-light btn-large boton-home disabled" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
+	  		</div>
+	  	{% endif %}
+	  </div>
 	</div>
-	<div class="row">
-		<h5 class="col s12">Elegir tipo de donación</h5>
-	</div>
-	<ul class="collapsible popout">
-    {% for t in types %}
-			<li>
-				{% if details %}
-					<div id="col_{{t.name}}" class="collapsible-header center-align">
-						<h6><strong>{{t.name}}</strong></h6>  {% for d in details %}	{% if d.donation_type == t.name %}
-						<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity }} {{d.unit_measure}}</strong> </span>
-							<script type="text/javascript">
-	 							$(function() {
-	 								if ({{ d.quantity }} > 0){
-										$("#col_{{t.name}}").addClass("disable-col");
-	 								}
-								});
-							</script>
-						 {% endif %} {% endfor %}
-					</div>
-				{% else %}
-					<div id="col_{{t.name}}" class="collapsible-header center-align ">
-						<h6><strong>{{ t.name }}</strong></h6>
-					</div>
-				{% endif %}
-	     	<div class="collapsible-body">
-	     		<form method="POST">
-      			{% csrf_token %}
-      			<div class="row">
-	      			<div class="col s4 offset-s4">
-	     					{% if t.name == 'Otros' %}
-	     						{{form_details}}
-	     						{{form_others}}
-	     						<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
-	     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
-	     					{% else %}
-	     						{{ form_details}}
-	     						<input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
-	     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
-	     					{% endif %}
-	      			</div>
-	      			<div class="col s4 left">
-	      				<label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
-	      			</div>
-	      			<div class="col m4 s12 center-align offset-m4">
-								<button id="btn_{{t.name}}" class="waves-effect waves-light btn-large boton-home" type="submit">Agregar</button>
-    					</div>
-	      		</div>
-	      	
-	      	</form>
-	      </div>
-			</li>
-		{% endfor %}
-  </ul>
-  <div class="row">
-  	{% if details %}
-  		<div class="col m4 s12 offset-m4">
-  			<a class="waves-effect waves-light btn-large boton-home" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
-  		</div>
-  	{% else %}
-  		<div class="col m4 s12 offset-m4">
-  			<a class="waves-effect waves-light btn-large boton-home disabled" href="{% url 'resume_donation' donator.id %}">Siguiente</a>
-  		</div>
-  	{% endif %}
-  </div>
+
 {% endblock %} 
 
 {% block extra_js %}

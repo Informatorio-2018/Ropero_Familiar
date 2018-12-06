@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.timezone import datetime as datetime_django
 import datetime
 from decimal import Decimal
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 @login_required
 def receive_donation(request):
@@ -1003,3 +1005,44 @@ def profile_user(request):
     user = request.user
 
     return render(request, 'profile_user.html', {'user': user})
+
+def profile_user_edit(request, id):
+    user = User.objects.get(pk=id)
+    profile = Profile.objects.get(user_id=id)
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user)
+        form_profile = ProfileUpdateForm(request.POST, instance=profile)
+        if form.is_valid() and form_profile.is_valid():
+            form.save()
+            form_profile.save()
+            return redirect('profile_user')
+    else:
+        form = UserRegisterForm(instance=user)
+        form_profile = ProfileUpdateForm(instance=profile)
+    context = {'form': form, 'form_profile':form_profile}
+    return render(request, 'profile_user_edit.html', context)
+
+# def user_change_pass(request, id):
+#     user = User.objects.get(pk=id)
+#     if request.method == 'POST':
+#         form = UserPasswordForm(request.POST, instance=user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile_user')
+#     else:
+#         form = UserPasswordForm(instance=user)
+#     context = {'form':form}
+#     return render(request, 'user_change_pass.html', context)
+
+def change_password(request, id):
+    user = User.objects.get(pk=id)
+    if request.method == 'POST':
+        form = PasswordChangeForm(user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return redirect('profile_user')
+        
+    else:
+        form = PasswordChangeForm(user)
+    return render(request, 'change_password.html', {'form': form})

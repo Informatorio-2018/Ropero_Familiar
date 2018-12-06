@@ -23,79 +23,82 @@
 {% endblock %}
 
 {% block content %}
-	<div class="row">
-		<h3 class="col s11">{{entry.family.lastname}}, {{entry.family.firstname}}</h3>
-		<h4 class="right-align">Subtotal: ${{sale.total}}</h4>
-	</div>
-	<ul class="collapsible popout">
-		{% for type in types %}
-	    <li>
-	    	{% if sale_details %}
-					<div id="col_{{type.id}}" class="collapsible-header center-align">
-						<h6><strong>{{ type.name }}</strong></h6> {% for sale in sale_details %}{% if sale.product_type == type.name %} <span class="badge" data-badge-caption="">
-							<strong>{{ sale.quantity }} {{sale.unit_measure}} - ${{sale.total}}</strong></span>
+	<div class="contenedor z-depth-3 white">
+		<div class="row">
+			<h3 class="col s11">{{entry.family.lastname}}, {{entry.family.firstname}}</h3>
+			<h4 class="right-align">Subtotal: ${{sale.total}}</h4>
+		</div>
+		<ul class="collapsible popout">
+			{% for type in types %}
+		    <li>
+		    	{% if sale_details %}
+						<div id="col_{{type.id}}" class="collapsible-header center-align">
+							<h6><strong>{{ type.name }}</strong></h6> {% for sale in sale_details %}{% if sale.product_type == type.name %} <span class="badge" data-badge-caption="">
+								<strong>{{ sale.quantity }} {{sale.unit_measure}} - ${{sale.total}}</strong></span>
 
-						<!-- Script que desactiva tipo ya cargado -->
-						<script type="text/javascript">
- 							$(function() {
- 								if ({{ sale.quantity }} > 0){
-									$("#col_{{type.id}}").addClass("disable-col");
- 								}
-							});
-						</script>
-						 {% endif %} {% endfor %}
-					</div>
-				{% else %}
-					<div id="col_{{type.name}}" class="collapsible-header center-align ">
-						<h6><strong>{{ type.name }}</strong></h6>
-					</div>
-				{% endif %}
-	      <div class="collapsible-body">
-	      	<form method="POST">
-	      		{% csrf_token %}
-		      	<div class="row">
-		      			<div class="col s4 offset-s4">
-		     						{{ form }}
-		     						<div class="input-field">						       
-							        <span class="helper-text" data-error="wrong" data-success="right">Ingrese la cantidad a vender</span>
-							      </div>
-		     						<!-- input's hiden para enviar por POST-->
-		     						<input class="hide" type="text" name="product_type" value="{{ type.name }}">
-		     						<input class="hide" type="text" name="unit_measure" value="{{ type.unit_measure }}">
-		     						<input class="hide" type="number" name="price" value="{{ type.price }}">
-		      			</div>
-		      			<div class="col s4 left">
-		      				<label id="label_{{type.name}}" class="validate"  for="id_unit_measure">{{ type.get_unit_measure_display }}</label>
-		      			</div>
-		      			<div class="col s2 right">
-		      				<strong class="grey-text text-darken-2"><span class="right">Precio sugerido por {{ type.get_unit_measure_display }}: ${{ type.price}}</span></strong>
-		      			</div>
-		      			{% if type.quantity_total >= 0 %}
-		      				<div class="col m4 s12 center-align offset-m4">
-										<button id="btn_{{type.name}}" class="waves-effect waves-light btn-large boton-home" type="submit">Agregar</button>
-	    						</div>
-		      			{% else %}
-		      				<div class="col m4 s12 center-align offset-m4">
-										<button class="btn waves-effect waves-light disabled"  type="submit">Agregar</button>
-	    						</div>
-		      			{% endif %}
-		      	</div>
-	      	</form>
-	      </div>
-	    </li>
-		{% endfor %}
-  </ul>
-  <div class="row">
-  	{% if sale_details %}
-  		<div class="col m4 s12 offset-m4">
-  			<a class="waves-effect waves-light btn-large boton-home" href="{% url 'summary_sale' entry.id %}">Siguiente</a>
-  		</div>
-  	{% else %}
-  		<div class="col m4 s12 offset-m4">
-  			<a class="waves-effect waves-light btn-large boton-home disabled" href="{% url 'summary_sale' entry.id %}">Siguiente</a>
-  		</div>
-  	{% endif %}
-  </div>
+							<!-- Script que desactiva tipo ya cargado -->
+							<script type="text/javascript">
+	 							$(function() {
+	 								if ({{ sale.quantity }} > 0){
+										$("#col_{{type.id}}").addClass("disable-col");
+	 								}
+								});
+							</script>
+							 {% endif %} {% endfor %}
+						</div>
+					{% else %}
+						<div id="col_{{type.name}}" class="collapsible-header center-align ">
+							<h6><strong>{{ type.name }}</strong></h6>
+						</div>
+					{% endif %}
+		      <div class="collapsible-body">
+		      	<form method="POST">
+		      		{% csrf_token %}
+			      	<div class="row">
+			      			<div class="col s6 m4 offset-m4">
+			     						{{ form }}
+			     						<div class="input-field">						       
+								        <span class="helper-text" data-error="wrong" data-success="right">Ingrese la cantidad a vender</span>
+								      </div>
+			     						<!-- input's hiden para enviar por POST-->
+			     						<input class="hide" type="text" name="product_type" value="{{ type.name }}">
+			     						<input class="hide" type="text" name="unit_measure" value="{{ type.unit_measure }}">
+			     						<input class="hide" type="number" name="price" value="{{ type.price }}">
+			      			</div>
+			      			<div class="col s6 m2 right push-s1">
+			      				<strong class="grey-text text-darken-2"><span class="right">Precio sugerido por {{ type.get_unit_measure_display }}: ${{ type.price}}</span></strong>
+			      			</div>
+			      			<div class="col s4 left">
+			      				<label id="label_{{type.name}}" class="validate"  for="id_unit_measure">{{ type.get_unit_measure_display }}</label>
+			      			</div>
+			      			{% if type.quantity_total >= 0 %}
+			      				<div class="col m4 s12 center-align offset-m4">
+											<button id="btn_{{type.name}}" class="waves-effect waves-light btn-large boton-home" type="submit">Agregar</button>
+		    						</div>
+			      			{% else %}
+			      				<div class="col m4 s12 center-align offset-m4">
+											<button class="btn waves-effect waves-light disabled"  type="submit">Agregar</button>
+		    						</div>
+			      			{% endif %}
+			      	</div>
+		      	</form>
+		      </div>
+		    </li>
+			{% endfor %}
+	  </ul>
+	  <div class="row">
+	  	{% if sale_details %}
+	  		<div class="col m4 s12 offset-m4">
+	  			<a class="waves-effect waves-light btn-large boton-home" href="{% url 'summary_sale' entry.id %}">Siguiente</a>
+	  		</div>
+	  	{% else %}
+	  		<div class="col m4 s12 offset-m4">
+	  			<a class="waves-effect waves-light btn-large boton-home disabled" href="{% url 'summary_sale' entry.id %}">Siguiente</a>
+	  		</div>
+	  	{% endif %}
+	  </div>
+	  	
+	</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -119,7 +122,7 @@
 	<!--Controla que no se ingrese 0 en cantidad -->
 	<script type="text/javascript">
 		$(document).ready(function(){
-			$("[id='btn_Ropa Verano']").click(function () {
+			$("[id='btn_Ropa Verano']").click(function (event) {
 			var num = $('#input_ropaverano').val();
 			if (num <= 0) {
 				alert("El valor ingresado deber ser mayor a 0");
@@ -127,7 +130,7 @@
 			}
 			});
 
-			$("[id='btn_Ropa Invierno']").click(function () {
+			$("[id='btn_Ropa Invierno']").click(function (event) {
 			var num = $('#input_ropainvierno').val();
 			if (num <= 0) {
 				alert("El valor ingresado deber ser mayor a 0");
@@ -135,7 +138,7 @@
 			}
 			});
 
-			$("#btn_Calzados").click(function () {
+			$("#btn_Calzados").click(function (event) {
 			var num = $('#input_calzados').val();
 			if (num <= 0) {
 				alert("El valor ingresado deber ser mayor a 0");
@@ -143,7 +146,7 @@
 			}
 			});
 
-			$("#btn_Accesorios").click(function () {
+			$("#btn_Accesorios").click(function (event) {
 			var num = $('#input_accesorios').val();
 			if (num <= 0) {
 				alert("El valor ingresado deber ser mayor a 0");
@@ -151,7 +154,7 @@
 			}
 			});
 
-			$("#btn_Otros").click(function () {
+			$("#btn_Otros").click(function (event) {
 			var num = $('#input_otros').val();
 			if (num <= 0) {
 				alert("El valor ingresado deber ser mayor a 0");
