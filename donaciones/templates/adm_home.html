@@ -61,9 +61,29 @@
 						<tbody>
 							<tr>
 								<td>Ropa Verano</td>
-								<td>{{clothes_rv}}</td>
-								<td></td>
+								<td>{% if clothes_rv is not None %}{{clothes_rv}}{% else %}No hubo{% endif %}</td>
+								<td>{% if clothes_rvp is not None %}{{clothes_rvp}}${% else %}0${% endif %}</td>
 							</tr>
+							<tr>
+								<td>Ropa Invierno</td>
+								<td>{% if clothes_ri is not None %}{{clothes_ri}}{% else %}No hubo{% endif %}</td>
+								<td>{% if clothes_rip is not None %}{{clothes_rip}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Calzado</td>
+								<td>{% if acc_sold is not None %}{{acc_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if acc_soldp is not None %}{{acc_soldp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Accesorios</td>
+								<td>{% if shod_sold is not None %}{{shod_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if shod_soldp is not None %}{{shod_soldp}}${% else %}0${% endif %}</td>
+							</tr>
+							<tr>
+								<td>Otros</td>
+								<td>{% if others_sold is not None %}{{others_sold}}{% else %}No hubo{% endif %}</td>
+								<td>{% if others_soldp is not None %}{{others_soldp}}${% else %}0${% endif %}</td>
+							</tr>							
 						</tbody>
 					</table>
 				</div>

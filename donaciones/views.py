@@ -764,12 +764,22 @@ def closet(request):
     else:
         form = SearchForm()
     return render(request,'entry_closet.html',{'form':form,
-                                         'fam':fam})
+                                               'fam':fam})
 
 @login_required
 def entry_ok(request,id):
     fam = Family.objects.get(pk=id)
     today_month = datetime.date.today().month
+    today = datetime.date.today()
+    all_entry = FamilyEntry.objects.all()
+    import ipdb; ipdb.set_trace()
+    while True:
+        try:
+            entry = FamilyEntry.objects.get(family_id=id,last_entry__year=today.year,last_entry__month=today.month,last_entry__day=today.day)
+            break
+        except FamilyEntry.DoesNotExist:
+            entry = None
+            break
 
     if fam.role == 'r':
         last_buy = fam.referring.last_buy
@@ -777,25 +787,27 @@ def entry_ok(request,id):
         ref = Referring.objects.get(family_id=fam.ref)
         last_buy = ref.last_buy
 
-    if last_buy:
-        last_buy_date = last_buy.month
-        if (today_month)-(last_buy_date) > 0:
+    if entry == None:
+        if last_buy:
+            last_buy_date = last_buy.month
+            if ((today_month)-(last_buy_date) > 0):
+                fam_e = FamilyEntry()
+                fam_e.family = fam
+                fam_e.save()
+                return render(request,'entry_ok.html',{'fam':fam})
+            else:
+                return render(request,'entry_fail.html',{'fam':fam})
+        else:
             fam_e = FamilyEntry()
             fam_e.family = fam
             fam_e.save()
             return render(request,'entry_ok.html',{'fam':fam})
-        else:
-            return render(request,'entry_fail.html',{'fam':fam})
     else:
-        fam_e = FamilyEntry()
-        fam_e.family = fam
-        fam_e.save()
-        return render(request,'entry_ok.html',{'fam':fam})
+        return render(request,'entry_fail.html',{'fam':fam})
 
 @login_required
 def register_user(request):
     if request.method == 'POST':
-        # import ipdb; ipdb.set_trace()
         form_user = UserRegisterForm(request.POST)
         if form_user.is_valid():
             user = form_user.save(commit=False)
@@ -941,6 +953,7 @@ def adm_home(request):
     others = all_others.aggregate(total_o=Sum('quantity'))
     desc_others = []
     cant_others = []
+    my_list = []
     a=0
     if  all_others.count() > 0:
         for i in all_others:
@@ -957,6 +970,13 @@ def adm_home(request):
     shod_sold = sold.filter(product_type='Calzado').aggregate(total_ss=Sum('quantity'))
     all_others_sold = sold.filter(product_type='Otros').aggregate(total_os=Sum('quantity'))
 
+    # Precio
+    clothes_rvp = sold.filter(product_type='Ropa Verano').aggregate(total_rvp=Sum('price'))
+    clothes_rip = sold.filter(product_type='Ropa Invierno').aggregate(total_rip=Sum('price'))
+    acc_soldp = sold.filter(product_type='Accesorios').aggregate(total_asp=Sum('price'))
+    shod_soldp = sold.filter(product_type='Calzado').aggregate(total_ssp=Sum('price'))
+    all_others_soldp = sold.filter(product_type='Otros').aggregate(total_osp=Sum('price'))
+
     return render(request,'adm_home.html',{# Donaciones
                                            'dona':donations,
                                            'today':today,
@@ -970,7 +990,13 @@ def adm_home(request):
                                            'clothes_ri':clothes_ri['total_ri'],
                                            'acc_sold':acc_sold['total_as'],
                                            'shod_sold':shod_sold['total_ss'],
-                                           'others_sold':all_others_sold['total_os'],})
+                                           'others_sold':all_others_sold['total_os'],
+                                           # Precios
+                                           'clothes_rvp':clothes_rvp['total_rvp'],
+                                           'clothes_rip':clothes_rip['total_rip'],
+                                           'acc_soldp':acc_soldp['total_asp'],
+                                           'shod_soldp':shod_soldp['total_ssp'],
+                                           'others_soldp':all_others_soldp['total_osp'],})
 
 @login_required
 def profile_user(request):
