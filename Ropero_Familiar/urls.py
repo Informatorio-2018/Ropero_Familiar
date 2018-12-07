@@ -51,5 +51,5 @@ urlpatterns = [
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
     path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
     path('perfil_usuario/', views.profile_user, name='profile_user'),
-    path('creditos/',views.credits),
+    path('creditos/',views.credits, name="credits"),
 ]

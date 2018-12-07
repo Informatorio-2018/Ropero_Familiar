@@ -980,7 +980,7 @@ def adm_home(request):
 
     arts = TypesProducts.objects.all()
 
-    adonations = DetailsDonation.objects.all()
+    adonations = TypesDonation.objects.all()
 
     # import ipdb; ipdb.set_trace()
     return render(request,'adm_home.html',{# Donaciones
