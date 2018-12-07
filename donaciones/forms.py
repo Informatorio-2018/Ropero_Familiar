@@ -60,30 +60,34 @@ class LoadTypeProductForm(forms.ModelForm):
 
 
 class SortProductForm(forms.ModelForm):
-        
+
     class Meta:
         model = SortProducts
-        fields = ('types','quantity',)
+        fields = ('types', 'quantity',)
 
 
 class FixProductForm(forms.ModelForm):
     class Meta:
-        model= FixProducts
-        fields=('types','quantity',)
+        model = FixProducts
+        fields = ('types', 'quantity',)
 
         # CHOICES=TypesDonation.objects.all()
         # model = FixProducts
         # fields = ('name','quantity',)
         # widgets={'name':forms.Select(choices=( (x.name, x.name) for x in CHOICES ))}
+
+
 class ResponsableForm(forms.ModelForm):
     class Meta:
         model = ResponsableFix
-        fields = ('name','lastname','phone','adress',)
+        fields = ('name', 'lastname', 'phone', 'adress',)
+
 
 class CarryForm(forms.ModelForm):
     class Meta:
         model = Carry
         fields = ('quantity',)
+
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='Búsqueda')
@@ -103,27 +107,49 @@ class EditNeighForm(forms.ModelForm):
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=20, label='Nombre de Usuario')
-    password = forms.CharField(max_length=20, widget=forms.PasswordInput(),label='Contraseña')
+    password = forms.CharField(max_length=20, widget=forms.PasswordInput(), label='Contraseña')
 
 
 class UserRegisterForm(UserCreationForm):
-    phone_number = forms.CharField(max_length=10, label='Número de telefono')
+    phone_number = forms.IntegerField(label='Número de telefono')
 
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'phone_number',)
 
+
 class DonationsReportForm(forms.Form):
     donation = forms.CharField(label='Donaciones')
-    begin = forms.DateField(label='Desde',required=False)
-    finish = forms.DateField(label='Hasta',required=False)
+    begin = forms.DateField(label='Desde', required=False)
+    finish = forms.DateField(label='Hasta', required=False)
+
 
 class SalesDetailsForm(forms.ModelForm):
     class Meta:
         model = SalesDetails
         fields = ('quantity',)
 
+
 class TotalForm(forms.ModelForm):
     class Meta:
         model = Sale
         fields = ('total',)
+
+
+class UserUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone_number']
+
+
+class UserPasswordForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username']
