@@ -17,8 +17,8 @@
               <a href="#modal_delete{{res.id}}" class="modal-trigger right-align secondary-content btn"><i class="material-icons">delete</i></a>
             </div>
             <div class="col s1 right">
-              <a href="{% url 'edit_donation' res.id %}" class="modal-trigger right secondary-content btn"><i class="small material-icons">edit</i></a>
-            </div>
+              <!--<a href="{% url 'edit_donation' res.id %}" class="modal-trigger right secondary-content btn"><i class="small material-icons">edit</i></a>
+            </div>-->
 
             <!-- Modal Structure delete donation -->
             <div id="modal_delete{{res.id}}" class="modal">
@@ -35,14 +35,26 @@
           </li>
         {% endfor %}
       </ul>
+      <div class="row">
+        <div class="col s12 m6">
+          <a href="{% url 'items_donation' donator.id %}" class="btn waves-effect waves-light green darken-1"><i class="material-icons">add</i></a>
+          <span>Agregar un nuevo tipo de donación</span>
+        </div>
+      </div>
       <div class="input-field">
         <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">edit</i> para editar </span>
         <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">delete</i> para eliminar </span>
       </div>
     <div class="row">
-      <div class="col m4 s12 offset-m4">
-        <a class="waves-effect waves-light btn-large boton-home " href="{% url 'finish_donation' donator.id %}">Siguiente</a>
-      </div>
+      {% if resumes %}
+        <div class="col m4 s12 offset-m4">
+          <a class="waves-effect waves-light btn-large boton-home " href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+        </div>
+      {% else %}
+        <div class="col m4 s12 offset-m4">
+          <a class="waves-effect waves-light btn-large boton-home disabled" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+        </div>
+      {% endif %}
     </div> 
 
 

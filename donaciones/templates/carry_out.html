@@ -24,73 +24,41 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
+  <h3 class="center-align"> Voluntario {{responsable.name}}</h3>
   <div class="row">
-    <h4 class="center-align"> Voluntario {{responsable.name}}</h4>
-  </div>
-  <h4 class="center-align">Disponible para acondicionar </h4>
-
-  <ul class="collection">
-  {% for p in types %}
-    <li class="collection-item avatar">
-      <img src="images/yuna.jpg" alt="" class="circle">
-          <span class="title">{{p.name}}</span>
-          <p>{{p.quantity_total}} {{p.unit_measure}}<br>
-            
-          </p>
-          <a class="secondary-content"><i class="material-icons">fiber_manual_record</i></a>
-      </li> 
-  {% endfor %}
-    </ul>
-    
-  
-
-  <ul class="collapsible popout">
-    {% for t in types %}
+    <div class="texto-ayuda">"Articulos disponibles para acondicionar"</div>
+    <ul class="collapsible">
+      {% for t in types %}
       <li>
-        {% if carry %}
-          <div id="col_{{t.name}}" class="collapsible-header center-align">
-            {{t.name}}  {% for d in carry %}  {% if d.types == t.name %} 
-            <span class="new badge" data-badge-caption="Agregados">{{ d.quantity }} {{d.unit_measure}}</span>
-            <script type="text/javascript">
-              $(function() {
-                if ({{ d.quantity }} > 0){
-                  $("#col_{{t.name}}").addClass("disable-col");
-                }
-              });
-            </script>
-             {% endif %} 
-            {% endfor %}
-          </div>
-        {% else %}
-          <div id="col_{{t.name}}" class="collapsible-header center-align ">
-            {{ t.name }}
-          </div>
-        {% endif %}
+        <div class="collapsible-header">
+          <div>{{t.name}} {{t.quantity_total}} {{t.unit_measure}}</div> 
+        </div>
         <div class="collapsible-body">
           <form method="POST">
             {% csrf_token %}
             <div class="row">
               <div class="col s4 offset-s4">
                 {{ form_carry}}
-                  <input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
-                  <input class="hide" id="id_types" type="text" name="types" value="{{ t.name }}">
+                <input class="hide" id="id_unit_measure" type="text" name="unit_measure" value="{{ t.unit_measure }}">
+                <input class="hide" id="id_types" type="text" name="types" value="{{ t.name }}">
               
               </div>
               <div class="col s4 left">
                 <label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
               </div>
               <div class="col s6 center-align offset-s3">
-                <button id="btn_{{t.name}}" class="btn waves-effect waves-light" type="submit">Agregar</button>
+                <button class="btn modal-trigger btn-large" type="submit">Agregar</button>
               </div>
             </div>
           
           </form>
+          
         </div>
       </li>
     {% endfor %}
   </ul>
   <div class="center-align">
-    <a class="waves-effect waves-light btn modal-trigger" href="{% url 'resume_fix' responsable.id %}">finalizar</a>
+    <a class="btn modal-trigger btn-large modal-trigger" href="{% url 'resume_fix' responsable.id %}">finalizar</a>
   </div>
   
 </div>

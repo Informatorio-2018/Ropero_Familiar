@@ -923,7 +923,7 @@ def adm_home(request):
     donations = DetailsDonation.objects.filter(donation__date__year=today.year,donation__date__month=today.month,donation__date__day=today.day)
     clothes = donations.filter(donation_type='Ropa').aggregate(total_c=Sum('quantity'))
     accesories = donations.filter(donation_type='Accesorios').aggregate(total_a=Sum('quantity'))
-    shod = donations.filter(donation_type='Calzado').aggregate(total_s=Sum('quantity'))
+    shod = donations.filter(donation_type='Calzados').aggregate(total_s=Sum('quantity'))
     all_others = donations.filter(donation_type='Otros')
     others = all_others.aggregate(total_o=Sum('quantity'))
     desc_others = []
@@ -942,14 +942,14 @@ def adm_home(request):
     clothes_rv = sold.filter(product_type='Ropa Verano').aggregate(total_rv=Sum('quantity'))
     clothes_ri = sold.filter(product_type='Ropa Invierno').aggregate(total_ri=Sum('quantity'))
     acc_sold = sold.filter(product_type='Accesorios').aggregate(total_as=Sum('quantity'))
-    shod_sold = sold.filter(product_type='Calzado').aggregate(total_ss=Sum('quantity'))
+    shod_sold = sold.filter(product_type='Calzados').aggregate(total_ss=Sum('quantity'))
     all_others_sold = sold.filter(product_type='Otros').aggregate(total_os=Sum('quantity'))
 
     # Precio
     clothes_rvp = sold.filter(product_type='Ropa Verano').aggregate(total_rvp=Sum('price'))
     clothes_rip = sold.filter(product_type='Ropa Invierno').aggregate(total_rip=Sum('price'))
     acc_soldp = sold.filter(product_type='Accesorios').aggregate(total_asp=Sum('price'))
-    shod_soldp = sold.filter(product_type='Calzado').aggregate(total_ssp=Sum('price'))
+    shod_soldp = sold.filter(product_type='Calzados').aggregate(total_ssp=Sum('price'))
     all_others_soldp = sold.filter(product_type='Otros').aggregate(total_osp=Sum('price'))
 
     users = User.objects.filter(is_superuser=0)
