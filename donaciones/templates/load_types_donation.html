@@ -2,17 +2,18 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 
-{% block title %}  Tipos de Articulos {% endblock %}
+{% block title %}  Tipos Donacion {% endblock %}
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
+	<div class="center-align"><h3>Cargar Tipos de donacion</h3></div>
 	<form method="post">
 		{% csrf_token %}
 		<div class="input-field">
 			{{ form.as_p }}
 		</div>
 		<div class="center-align">
-			<button class="btn waves-effect waves-light" type="submit">Guardar</button>
+			<button class="btn modal-trigger btn-large" type="submit">Guardar</button>
 		</div>
 	</form>
 </div>

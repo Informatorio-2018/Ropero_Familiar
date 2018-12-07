@@ -1,27 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %} Para Acondicionar {% endblock %}
+{% block title %} Voluntarios {% endblock %}
 
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-	<h1>Voluntarios</h1>
- <ul class="collapsible">
- 	{% for r in resp %}
- 		<li>
-      <div class="collapsible-header">
-        <span>{{r.name}}</span>
-        <a href="{% url 'carry_out' r.id %}" class="modal-trigger right"><i class="material-icons">send</i></a> 
-      		</div>
-    	</li>
-	{% endfor %}
-</ul>
-
-<div class="fixed-action-btn">
-  <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
-    <i class="large material-icons">add</i>
-  </a>
-</div>
+  <h3 class="center-align">Voluntarios</h3>
+  <ul class="collection with-header lighten-3 z-depth-1">
+ 	  {% for r in resp %}
+      <a class="collection-item" href="{% url 'carry_out' r.id %}"><i class="material-icons right">pan_tool</i>{{r.name}}</a>
+    {% endfor %}
+  </ul>
+  <div class="fixed-action-btn">
+    <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
 </div>
 {% endblock %}
 

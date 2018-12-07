@@ -1,15 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %} Tipos De Articuos {% endblock %}
+{% block title %} Actualizar Precios {% endblock %}
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
 <h4 class="center-align">Tipos de Articulos</h4>
-	 <div class="collection">
+	 <div class="collection lighten-3 z-depth-1">
 	 	{% for t in types %}
         <a href="{% url 'update_price_article' t.id %}" class="collection-item">{{t.name}}</a>
         {% endfor %}
       </div>
+      <ul class="center-align">
+	<li>
+		<a href="{% url 'adm_home' %}" class="btn modal-trigger btn-large ">Volver</a>
+	</li>
+</ul>
  </div>
 {% endblock %}	
 
