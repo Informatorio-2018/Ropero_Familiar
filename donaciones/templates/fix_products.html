@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %} Acondicionar {% endblock %}
 
 {% block alert %}
@@ -28,36 +28,50 @@
 <div class="contenedor z-depth-3 white">
 <h3 class="center-align">Para Acondicionar</h3>
 
-<ul class="collection">
-  {% for p in control %}
-    <li class="collection-item avatar">
-      <img src="images/yuna.jpg" alt="" class="circle">
+<div class="row">
+
+  <div class="col s12 m6">
+    <div class="texto-ayuda">Donaciones sin clasificar"</div>
+    <ul class="collection">
+      {% for p in control %}
+        <li class="collection-item avatar">
+
+          {% if p.name == "Ropa" %}
+            <img src="{% static 'images/icon-ropa.png' %}" alt="" class="circle">
+          {% elif p.name == "Calzado" %}
+            <img src="{% static 'images/icon-calzado.png' %}" alt="" class="circle">
+          {% elif p.name == "Accesorios" %}
+            <img src="{% static 'images/icon-accesorio.png' %}" alt="" class="circle">
+          {% elif p.name == "Otros" %}
+            <img src="{% static 'images/icon-otro.png' %}" alt="" class="circle">
+          {% endif %}
+          
           <span class="title">{{p.name}}</span>
-          <p>{{p.quantity_total}} {{p.unit_measure}}<br>
-            
-          </p>
-          <a class="secondary-content"><i class="material-icons">fiber_manual_record</i></a>
-      </li> 
-  {% endfor %}
-    </ul>
+          <p>{{p.quantity_total}} {{p.unit_measure}}</p>
+          </li> 
+      {% endfor %}
+        </ul>
+  </div>
 
 
+  <div class="col s12 m6">
+    <div class="texto-ayuda">Seleccione el tipo de producto para acondicionar, la cantidad y presione "Guardar"</div>
 
+      <form method="POST">
+        {% csrf_token %}
+        {{form}}
+        <button type="submit" data-target="modal1" class="btn modal-trigger">Guardar</button>
+      </form>
 
+  </div>
 
-  <form method="POST">
-    {% csrf_token %}
-    {{form}}
-    <button type="submit" data-target="modal1" class="btn modal-trigger">Guardar</button>
-  </form>
-  <ul class="center-align">
-    <div class="separador"></div>
-    <li>
-      <a href="{% url 'list_sort' %}" class="waves-effect waves-light btn">Volver</a>
-    </li>
-  </ul>
-
-
+</div>
+      <ul class="center-align">
+        <div class="separador"></div>
+        <li>
+          <a href="{% url 'list_sort' %}" class="waves-effect waves-light btn">Volver</a>
+        </li>
+      </ul>
 
 </div>
 {% endblock %}

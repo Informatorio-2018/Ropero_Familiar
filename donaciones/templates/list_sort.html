@@ -1,49 +1,77 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %} Para Clasificar {% endblock %}
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
 
-
 <h3 class="center-align">Para Clasificar</h3>
-	<ul class="collection">
-	{% for t in list_donations %}
-		<li class="collection-item avatar">
-			<img src="images/yuna.jpg" alt="" class="circle">
-      		<span class="title">{{t.name}}</span>
-      		<p>{{t.quantity_total}} {{t.unit_measure}}<br>
-         		
-      		</p>
-      		<a class="secondary-content"><i class="material-icons">fiber_manual_record</i></a>
-    	</li> 
-	{% endfor %}
-    </ul>
-	
-        
 <div class="row">
-	<div class="row">
+
 		<div class="col s12 m6">
-			<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn-large waves-effect waves-light btn-large boton-home">Ropero</a>
+
+			<div class="texto-ayuda">Donaciones sin clasificar</div>
+
+			<ul class="collection grey lighten-3 z-depth-1">
+			{% for t in list_donations %}
+				<li class="collection-item avatar">
+					{% if t.name == "Ropa" %}
+						<img src="{% static 'images/icon-ropa.png' %}" alt="" class="circle">
+					{% elif t.name == "Calzado" %}
+						<img src="{% static 'images/icon-calzado.png' %}" alt="" class="circle">
+					{% elif t.name == "Accesorios" %}
+						<img src="{% static 'images/icon-accesorio.png' %}" alt="" class="circle">
+					{% elif t.name == "Otros" %}
+						<img src="{% static 'images/icon-otro.png' %}" alt="" class="circle">
+
+					{% endif %}
+
+		      		<span class="title">{{t.name}}</span>
+		      		<p>{{t.quantity_total}} {{t.unit_measure}}<br>
+		         		
+		      		</p>
+		    	</li> 
+			{% endfor %}
+		  </ul>
+		
+		</div>
+
+
+        
+
+
+	<div class="texto-ayuda">Seleccione el destino de los artículos clasificados</div>
+
+	<div class="separador"></div>
+
+	<div class="col s12 m6">
+		<div class="row">
+			<div class="col s12 valign-wrapper" >
+				<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn-large waves-effect waves-light btn-large boton-home">Ropero</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12">
+				<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn-large boton-home">Acondicionar</a>
+			</div>
+		</div>
+		<div class="row">	
+			<div class="col s12">
+				<a href="#" class="waves-effect waves-light btn-large boton-home">Basura</a>
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col s12 m6">
-			<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn-large boton-home">Acondicionar</a>
-		</div>
-	</div>
+
+
+</div>
 	<div class="row">	
-		<div class="col s12 m6">
-			<a href="#" class="waves-effect waves-light btn-large boton-home">Basura</a>
-		</div>
-	</div>
-	<div class="row">	
+		<div class="col m3"></div>
 		<div class="col s12 m6">
 			<a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home">Volver</a>
 		</div>
+		<div class="col m3"></div>
 	</div>
-	</div>
-</div>
 	
 </div>
 {% endblock %}
