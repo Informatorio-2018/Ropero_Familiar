@@ -111,11 +111,11 @@ class LoginForm(forms.Form):
 
 
 class UserRegisterForm(UserCreationForm):
-    phone_number = forms.IntegerField(label='Número de telefono')
+    # phone_number = forms.IntegerField(label='Número de telefono')
 
     class Meta:
         model = User
-        fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'phone_number',)
+        fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'is_staff')
 
 
 class DonationsReportForm(forms.Form):
@@ -136,6 +136,18 @@ class TotalForm(forms.ModelForm):
         fields = ('total',)
 
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone_number']
+
+    # def clean_phone_number(self):
+    #     phone_number = self.cleaned_data.get('phone_number', None)
+    #     if (len(str(phone_number)) != 10):
+    #         raise ValidationError('Longitud de número no valida')
+    #     return phone_no
+
+
 class UserUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -146,10 +158,4 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone_number']
-
-
-class UserPasswordForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username']
+        fields = ['phone_number', 'image']

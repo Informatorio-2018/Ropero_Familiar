@@ -4,10 +4,11 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
+		<a class="right-align secondary-content btn" href="#"><i class="material-icons">clear</i></a>
 		<h6>Fecha: {{entry.last_entry|date:"d/m/Y"}}</h6>
 		<h4 class="center-align">Bono Contribución Ropero Familiar</h4>
-		<table class="highlight">
-	    <thead>
+		<table class="highlight z-depth-2">
+	    <thead class="grey lighten-3">
 	      <tr>
 	          <th>Producto</th>
 	          <th>Cantidad</th>
@@ -15,38 +16,66 @@
 	      </tr>
 	    </thead>
 
-	    <tbody>
+	    <tbody class="grey lighten-4">
 	    	{% for det in details %}
-		      <tr>
+		      <tr class="collection" id="tr_{{ det.id }}">
 		        <td>{{det.product_type}}</td>
-		        <td>{{det.quantity}} {{det.unit_measure}}</td>
-		        <td>$ {{det.total}}  <a href="#modal{{det.id}}" class="modal-trigger right"><i class="material-icons">delete</i></a></td>
+		        <td>{{ det.quantity|floatformat }} {{det.unit_measure}}</td>
+		        <td>$ {{det.total}}  <a href="#modal{{det.id}}" class="modal-trigger right-align secondary-content btn"><i class="material-icons">delete</i></a></td>
 		      </tr>
-			  <!-- Modal Structure -->
-			  <div id="modal{{det.id}}" class="modal">
-			    <div class="modal-content">
-			      <h4>Eliminar Detalle de venta</h4>
-			      <h6>¿Desea eliminar del <i class="tiny material-icons">shopping_cart</i>: {{det.product_type}} - {{det.quantity}} {{det.unit_measure}}?</h6>
-			    </div>
-			    <div class="modal-footer">
-			    	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-			      <a href="{% url 'delete_sale' det.id %}" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
-			    </div>
-			  </div>
+
+				  <!-- Modal Structure delete sale -->
+				  <div id="modal{{det.id}}" class="modal">
+				    <div class="modal-content">
+				      <h4>Eliminar Detalle de venta</h4>
+				      <h6>¿Desea eliminar del <i class="tiny material-icons">shopping_cart</i>: {{det.product_type}} - {{det.quantity}} {{det.unit_measure}}?</h6>
+				    </div>
+				    <div class="modal-footer">
+				    	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+				    	<button onclick="deleteSale('{{ det.id }}')" class="modal-close waves-effect waves-green btn-flat">Aceptar</button>
+				    </div>
+				  </div>
+
+				  <script type="text/javascript">
+	          //Desactiva el btn siguiente si no hay tipos de donaciones
+	          function btnDisabled(){
+	            var items = document.getElementsByClassName('collection');
+	            console.log(items.length);
+	            if(items.length == 0) {
+	              $("#btn_fin").attr('disabled', 'disabled');
+	            } else {
+	              $("#btn_fin").removeAttr("disabled");
+	            }
+	          }
+
+	          function deleteSale(saleTypeId) {
+	            var request = $.ajax({
+	                type: "POST",
+	                url: "{% url 'delete_sale' %}",
+	                data: {
+	                    "csrfmiddlewaretoken": "{{ csrf_token }}",
+	                    "sale_type_id": saleTypeId                    
+	                },
+	            });
+	            request.done(function(response) {
+	              // Elimina sin actualizar el tipo de venta eliminado.
+	              $(document).ready(function() {
+	                $("tr#tr_"+response["type_id"]).remove();
+	                btnDisabled();
+	              });
+	            });
+	          }
+	        </script>
 	    	{% endfor %}
 	    </tbody>
 	  </table>
-	  <div class="separador"></div>
+	  <div class="input-field">
+      <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">clear</i> para cancelar venta</span>
+      <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">delete</i> para eliminar</span>
+    </div>
 	  <div class="row">
-	  	<div class="col s12 m6">
-	  		<a href="{% url 'sale_detail' entry.id %}" class="btn waves-effect waves-light green darken-1"><i class="material-icons">add</i></a>
-	  		<span>Agregar un nuevo tipo de venta</span>
-	  	</div>
-	  	<div class="row hide-on-med-and-up"></div>
-	  	<div class="col s12 m6">
-	  		<a class="btn waves-effect waves-light red"><i class="material-icons">delete_forever</i></a>
-	  		<span>Cancelar Venta</span>
-	  	</div>
+  		<a href="{% url 'sale_detail' entry.id %}" class="btn waves-effect waves-light green darken-1"><i class="material-icons">add</i></a>
+  		<span>Agregar un nuevo tipo de venta</span>
 	  </div>
 		<form method="POST">
 		{% csrf_token %} 
@@ -62,9 +91,15 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col m4 s12 offset-m4">
-			  	<button class="waves-effect waves-light btn-large boton-home" type="submit">Finalizar</button>
-			 	</div>
+				{% if details %}
+					<div class="col m4 s12 offset-m4">
+			  		<button id="btn_fin" class="waves-effect waves-light btn-large boton-home" type="submit">Finalizar</button>
+			 		</div>
+			 	{% else %}
+				 	<div class="col m4 s12 offset-m4">
+				  	<button id="btn_fin" class="waves-effect waves-light btn-large boton-home disabled" type="submit">Finalizar</button>
+				 	</div>
+				{% endif %}
 			</div>
 		</form>
 			
@@ -79,13 +114,4 @@
 		});
 	</script>
 
-	<script type="text/javascript">
-		document.addEventListener('DOMContentLoaded', function() {
-    		var elems = document.querySelectorAll('.fixed-action-btn');
-    		var instances = M.FloatingActionButton.init(elems, {
-      	direction: 'left',
-      	hoverEnabled: false
-    	});
-  	});
-	</script>
 {% endblock %}

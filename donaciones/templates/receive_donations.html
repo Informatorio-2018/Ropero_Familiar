@@ -12,12 +12,22 @@
 					{{ form.name.label_tag }}
 					<span class="helper-text" data-error="wrong" data-success="right">Ingrese el nombre o razón social del donador</span>
 		    </div>
-        <div class="col s12 m4 push-m2">
+        <div class="col s12 m4 push-m2 hide-on-small-only">
           <a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home" >Volver</a>
         </div>
-        <div class="col s12 m4 push-m2">
+        <div class="col s12 m4 push-m2 hide-on-small-only">
           <button class="waves-effect waves-light btn-large boton-home" type="submit">Siguiente</button>
         </div>
+
+        <!--Buttons small-->
+        <div class="hide-on-med-and-up">
+        	<div class="col s12">
+          	<button class="waves-effect waves-light btn-large boton-home" type="submit">Siguiente</button>
+          	<div class="separador"></div>
+          	<a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home" >Volver</a>
+        	</div>
+        </div>
+
 			</div>
 		</form>
 	</div>	

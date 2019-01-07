@@ -46,3 +46,16 @@ favorite</i> EN 2018
 		</div>
 	</div>	
 {% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+			{% if messages %}
+	  		{% for message in messages %}
+			  	var toastHTML = '<span>{{message}}</span>';
+			  	M.toast({html: toastHTML, classes: 'red darken-4'});   
+	  		{% endfor %}
+			{% endif %}
+		});
+	</script>
+{% endblock %}

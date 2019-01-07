@@ -14,13 +14,17 @@
 	    {% for t in types %}
 				<li>
 					{% if details %}
-						<div id="col_{{t.name}}" class="collapsible-header center-align">
+						<div id="col_{{t.id}}" class="collapsible-header center-align">
 							<h6><strong>{{t.name}}</strong></h6>  {% for d in details %}	{% if d.donation_type == t.name %}
-							<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity }} {{d.unit_measure}}</strong> </span>
+							<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity|floatformat }} {{d.unit_measure}}</strong> </span>
+								<!-- Script que desactiva tipo ya cargado -->
 								<script type="text/javascript">
-		 							$(function() {
-		 								if ({{ d.quantity }} > 0){
-											$("#col_{{t.name}}").addClass("disable-col");
+		 							$(document).ready(function() {
+		 								var quanStr = '{{d.quantity}}';
+		 								var quanComma = quanStr.replace(",",".");
+		 								var quan = Math.ceil(quanComma);
+		 								if (quan > 0){
+											$("#col_{{t.id}}").addClass("disable-col");
 		 								}
 									});
 								</script>
@@ -35,7 +39,7 @@
 		     		<form method="POST">
 	      			{% csrf_token %}
 	      			<div class="row">
-		      			<div class="col s4 offset-s4">
+		      			<div class="col s10 offset-m4 m4">
 		     					{% if t.name == 'Otros' %}
 		     						{{form_details}}
 		     						{{form_others}}
@@ -47,7 +51,7 @@
 		     						<input class="hide" id="id_donation_type" type="text" name="donation_type" value="{{ t.name }}">
 		     					{% endif %}
 		      			</div>
-		      			<div class="col s4 left">
+		      			<div class="col s2 m4 left">
 		      				<label id="label_{{t.name}}" class="validate"  for="id_unit_measure">{{ t.get_unit_measure_display }}</label>
 		      			</div>
 		      			<div class="col m4 s12 center-align offset-m4">

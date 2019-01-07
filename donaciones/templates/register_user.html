@@ -60,13 +60,22 @@
         </div>
         <div class="input-field col s12">
           <i class="material-icons prefix">phone_android</i>
-          {{form_user.phone_number}}
-          {{form_user.phone_number.label_tag}}
-          {% if form_user.phone_number.errors %}
-            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.phone_number.errors}}</span>
+          {{form_profile.phone_number}}
+          {{form_profile.phone_number.label_tag}}
+          {% if form_profile.phone_number.errors %}
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_profile.phone_number.errors}}</span>
           {% else %}
-           <span class="helper-text" data-error="wrong" data-success="right">{{form_user.phone_number.help_text}}</span>
+           <span class="helper-text" data-error="wrong" data-success="right">Maximo 10 digitos. Requerido.</span>
           {% endif %}
+        </div>
+        <div class="col s12">
+          <p>
+            <label>
+              <input class="filled-in" type="checkbox" name="is_staff" id="id_is_staff">
+              <span>Administrador</span><br>
+              <span class="helptext">Indica si el usuario sera administrador.</span>
+            </label>
+          </p>
         </div>
       </div>
       <div class="row">

@@ -8,11 +8,9 @@
     <div class="row center-align" id="alert_box">
       <div class="col s12 ">
         <div class="card #e53935 red darken-1">
-          <div class="col s1 push-s11">
-            <i id="alert_close" class="material-icons rigth white-text" aria-hidden="true">close</i>
-          </div>
+          <i id="alert_close" class="material-icons right-align secondary-content white-text" aria-hidden="true">close</i>
           <div class="card-content white-text">
-            <span class="card-title"><h5>Atencion</h5></span>
+            <span class="card-title"><p><i class="material-icons" aria-hidden="true">error</i>Atención</p></span>
             <p>{{alert}}</p>
           </div>
         </div>
@@ -21,6 +19,7 @@
   </div> 
  {% endif %}
 {% endblock %}
+
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
@@ -34,12 +33,12 @@
 		    	{% if sale_details %}
 						<div id="col_{{type.id}}" class="collapsible-header center-align">
 							<h6><strong>{{ type.name }}</strong></h6> {% for sale in sale_details %}{% if sale.product_type == type.name %} <span class="badge" data-badge-caption="">
-								<strong>{{ sale.quantity }} {{sale.unit_measure}} - ${{sale.total}}</strong></span>
+								<strong>{{ sale.quantity|floatformat }} {{sale.unit_measure}} - ${{sale.total}}</strong></span>
 
 							<!-- Script que desactiva tipo ya cargado -->
 							<script type="text/javascript">
-	 							$(function() {
-	 								if ({{ sale.quantity }} > 0){
+	 							$(document).ready(function() {
+	 								if ({{ sale.total }} > 0){
 										$("#col_{{type.id}}").addClass("disable-col");
 	 								}
 								});
@@ -52,21 +51,22 @@
 						</div>
 					{% endif %}
 		      <div class="collapsible-body">
+      			<div class="row center-align">
+      				<h6>
+      					<strong class="grey-text text-darken-2 center-align">Precio sugerido por {{type.get_unit_measure_display }}: ${{ type.price}}
+      					</strong>
+      				</h6>
+      			</div>
 		      	<form method="POST">
 		      		{% csrf_token %}
 			      	<div class="row">
-			      			<div class="col s6 m4 offset-m4">
-			     						{{ form }}
-			     						<div class="input-field">						       
-								        <span class="helper-text" data-error="wrong" data-success="right">Ingrese la cantidad a vender</span>
-								      </div>
-			     						<!-- input's hiden para enviar por POST-->
-			     						<input class="hide" type="text" name="product_type" value="{{ type.name }}">
-			     						<input class="hide" type="text" name="unit_measure" value="{{ type.unit_measure }}">
-			     						<input class="hide" type="number" name="price" value="{{ type.price }}">
-			      			</div>
-			      			<div class="col s6 m2 right push-s1">
-			      				<strong class="grey-text text-darken-2"><span class="right">Precio sugerido por {{ type.get_unit_measure_display }}: ${{ type.price}}</span></strong>
+			      			<div class="col s8 m4 offset-m4 input-field">
+		     						{{ form }}
+						        <span class="helper-text" data-error="wrong" data-success="right">Ingrese la cantidad a vender</span>
+		     						<!-- input's hiden para enviar por POST-->
+		     						<input class="hide" type="text" name="product_type" value="{{ type.name }}">
+		     						<input class="hide" type="text" name="unit_measure" value="{{ type.unit_measure }}">
+		     						<input type="number" class="hide"  name="price" value="{{ type.price }}">
 			      			</div>
 			      			<div class="col s4 left">
 			      				<label id="label_{{type.name}}" class="validate"  for="id_unit_measure">{{ type.get_unit_measure_display }}</label>
@@ -217,6 +217,22 @@
 	    $( "#alert_box" ).fadeOut( "slow", function() {
 	    });
 	  });
+</script>
+
+<script type="text/javascript">
+	var slider = document.getElementById('test-slider');
+	  noUiSlider.create(slider, {
+	   start: [20, 80],
+	   connect: true,
+	   step: 1,
+	   range: {
+	     'min': 0,
+	     'max': 100
+	   },
+	   format: wNumb({
+	     decimals: 0
+	   })
+	  }); 
 </script>
 
 {% endblock %}
