@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.contrib import messages
 from .forms import *
 from .models import *
 from django.db.models import Q, Sum
@@ -9,6 +11,8 @@ import datetime
 from decimal import Decimal
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 @login_required
 def receive_donation(request):
@@ -92,17 +96,42 @@ def edit_donation(request, id):
         form = DetailsDonationForm(instance=detail)
     return render(request, 'edit_donation.html', {'form': form})
 
+# @login_required
+# def delete_donation(request, id):
+#     detail = get_object_or_404(DetailsDonation, pk=id)
+#     id_donator = detail.donation_id
+#     types = TypesDonation.objects.all()
+#     type_res = TypesDonation.objects.get(name=detail.donation_type)
+#     if request.method == 'POST':
+#         if detail.donation_type == type_res.name:
+#             type_res.quantity_total -= detail.quantity
+#             type_res.save()
+#         detail.delete()
+#         delete_ok = True
+#         return redirect('resume_donation', id=id_donator)
+    # detail = get_object_or_404(DetailsDonation, pk=id)
+    # id_donator = detail.donation_id
+    # types = TypesDonation.objects.all()
+    # type_res = TypesDonation.objects.get(name=detail.donation_type)
+    # if detail.donation_type == type_res.name:
+    #     type_res.quantity_total -= detail.quantity
+    #     type_res.save()
+    # detail.delete()
+    # delete_ok = True
+    # return redirect('resume_donation', id=id_donator)
 @login_required
-def delete_donation(request, id):
-    detail = get_object_or_404(DetailsDonation, pk=id)
-    id_donator = detail.donation_id
+def delete_donation(request):
+    # import ipdb; ipdb.set_trace()
+    id = request.POST.get('donation_type_id')
+    detail = DetailsDonation.objects.get(pk=id)
     types = TypesDonation.objects.all()
     type_res = TypesDonation.objects.get(name=detail.donation_type)
     if detail.donation_type == type_res.name:
         type_res.quantity_total -= detail.quantity
         type_res.save()
+    response = {'type': detail.donation_type}
     detail.delete()
-    return redirect('resume_donation', id=id_donator)
+    return JsonResponse(response)
 
 @login_required
 def finish_donation(request, id):
@@ -782,21 +811,27 @@ def entry_ok(request,id):
         return render(request,'entry_fail.html',{'fam':fam})
 
 @login_required
+@staff_member_required(login_url='home')
 def register_user(request):
     if request.method == 'POST':
         form_user = UserRegisterForm(request.POST)
+        form_profile = ProfileForm(request.POST)
         if form_user.is_valid():
             user = form_user.save(commit=False)
             user.username = user.username.upper()
             user.save()
-            profile = Profile()
-            profile.user_id = user.id
-            profile.phone_number = request.POST['phone_number']
-            profile.save()
+            form_profile = ProfileForm(request.POST, instance=user.profile)
+            if form_profile.is_valid():
+                prof = form_profile.save(commit=False)
+                prof.phone_number = request.POST["phone_number"]
+                prof.save()
+            username = form_user.cleaned_data.get('username')
+            messages.success(request, f'La cuenta fue creada, ahora {username} puede iniciar sesion')
             return redirect('home')
     else:
         form_user = UserRegisterForm()
-    return render(request, 'register_user.html', {'form_user': form_user})
+        form_profile = ProfileForm()
+    return render(request, 'register_user.html', {'form_user': form_user, 'form_profile': form_profile})
 
 @login_required
 def peoples_closet(request):
@@ -850,11 +885,17 @@ def sale_detail(request,id):
     if request.method == 'POST':
         form = SalesDetailsForm(request.POST)
         if form.is_valid():
+            # import ipdb; ipdb.set_trace()
             detail = form.save(commit=False)
             detail.product_type = request.POST['product_type']
             detail.unit_measure = request.POST['unit_measure']
-            detail.price = request.POST['price'] 
-            detail.total = int(detail.price) * int(detail.quantity)
+            detail.price = request.POST['price']
+            # Para cantidad en kg con num despues de la coma
+            if (Decimal(detail.quantity) % 1 == 0):
+                detail.total = int(detail.price) * int(detail.quantity)
+            else:
+                 detail.total = float(detail.price) * float(detail.quantity)
+            
             detail.sale_id = sale.id
             detail.save()
 
@@ -903,8 +944,10 @@ def summary_sale(request, id):
     return render(request, 'summary_sale.html', context)
   
 @login_required
-def delete_sale(request, id):
-    detail = get_object_or_404(SalesDetails, pk=id)
+def delete_sale(request):
+    # import ipdb; ipdb.set_trace()
+    id = request.POST.get('sale_type_id')
+    detail = SalesDetails.objects.get(pk=id)
     sale = Sale.objects.get(pk=detail.sale_id)
     sale.total -= detail.total
     sale.save()
@@ -913,8 +956,9 @@ def delete_sale(request, id):
     if detail.product_type == type_sum.name:
         type_sum.quantity_total += detail.quantity
         type_sum.save()
+    response = {'type_id': detail.id}
     detail.delete()
-    return redirect('summary_sale', id=sale.entry_id)
+    return JsonResponse(response)
 
 @login_required
 def adm_home(request):
@@ -999,7 +1043,7 @@ def profile_user_edit(request, id):
     profile = Profile.objects.get(user_id=id)
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=user)
-        form_profile = ProfileUpdateForm(request.POST, instance=profile)
+        form_profile = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
         if form.is_valid() and form_profile.is_valid():
             form.save()
             form_profile.save()

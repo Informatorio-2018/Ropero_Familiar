@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from donaciones import views
@@ -10,7 +12,7 @@ urlpatterns = [
     path('recibir_donacion/<int:id>/resumen', views.resume_donation, name='resume_donation'),
     path('recibir_donacion/<int:id>/resumen/finalizar', views.finish_donation, name='finish_donation'),
     path('editar_donacion/<int:id>/', views.edit_donation, name='edit_donation'),
-    path('eliminar_donacion/<int:id>/', views.delete_donation, name='delete_donation'),
+    path('eliminar_donacion/', views.delete_donation, name='delete_donation'),
     path('home/', views.home, name='home'),
     # path('registrar_referente_f/', views.register_referring_f, name="register_referring_f"),
     # path('registrar_referente_f/<int:id>/', views.register_referring, name="register_referring"),
@@ -49,10 +51,13 @@ urlpatterns = [
     path('personas_ropero/venta/<int:id>/', views.sale, name="sale"),
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
-    path('eliminar_venta/<int:id>/', views.delete_sale, name='delete_sale'),
+    path('eliminar_venta/', views.delete_sale, name='delete_sale'),
     path('perfil_usuario/', views.profile_user, name='profile_user'),
-    path('creditos/',views.credits, name="credits"),
+    path('creditos/', views.credits, name="credits"),
     path('perfil_usuario/<int:id>/editar', views.profile_user_edit, name='profile_user_edit'),
     path('usuario/<int:id>/cambiar_pass', views.change_password, name='change_password'),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,6 +3,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 import decimal
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+from PIL import Image
 
 
 # Create your models here.
@@ -71,6 +74,7 @@ class FamilyEntry(models.Model):
     last_entry = models.DateField(auto_now_add=True, null=True)
     family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name='ingresos_familias')
 
+
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
     phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono
@@ -99,7 +103,7 @@ class ResponsableFix(models.Model):
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
     phone = models.IntegerField()
     adress = models.CharField(max_length=80, verbose_name='Dirección')
-    state=models.BooleanField(default=0)
+    state = models.BooleanField(default=0)
 
     def __str__(self):
         return self.name
@@ -111,7 +115,7 @@ class Carry(models.Model):
     types = models.CharField(max_length=30, verbose_name='Tipo de Donación')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
-    quantity_back = models.DecimalField(default=0,max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad devolver')
+    quantity_back = models.DecimalField(default=0, max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad devolver')
     responsable = models.ForeignKey(ResponsableFix, on_delete=models.CASCADE, related_name='responsable')
 
     def __str__(self):
@@ -161,9 +165,38 @@ class SalesDetails(models.Model):
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name='sales')
 
 
+# Borra la imagen anterior del perfil
+def custom_upload_to(instance, filename):
+    old_instance = Profile.objects.get(pk=instance.pk)
+    old_instance.image.delete()
+    return 'profile_pics/' + filename
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.PositiveIntegerField(verbose_name='Numero de telefono')
+    phone_number = models.PositiveIntegerField(verbose_name='Numero de telefono', null=True)
+    image = models.ImageField(verbose_name='Imagen', upload_to=custom_upload_to, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user.username} Perfil'
+
+    def save(self, **kwargs):
+        super().save()
+        if self.image:
+            img = Image.open(self.image.path)
+
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img = img.resize(output_size, Image.ANTIALIAS)
+                img.save(self.image.path)
+
+
+@receiver(post_save, sender=User)
+def ensure_profile_exists(sender, instance, **kwargs):
+    if kwargs.get('created', False):
+        Profile.objects.get_or_create(user=instance)
+        print("Se acaba de crear un usuario y su perfil enlazado")
+
 
 # class ListSort(models.Model):
 #     name=models.CharField(max_length=30)

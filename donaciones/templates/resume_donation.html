@@ -9,50 +9,76 @@
         <li class="collection-header grey lighten-3"><h4>{{ donator.name }}  <a class="modal-trigger secondary-content btn"  href="#edit_name"><i class="material-icons">edit</i></a></h4>
         </li>
         {% for res in resumes %}
-          <li class="collection-item row grey lighten-4">
+          <li class="collection-item row grey lighten-4" id="{{res.donation_type}}"> 
             <div class="col s7">
-              {{res.donation_type}} {{res.quantity}} {{ res.get_unit_measure_display }}
+              {{res.donation_type}} {{ res.quantity|floatformat }} (U. de medida: {{ res.get_unit_measure_display }})
             </div>
             <div class="col s1 right">
               <a href="#modal_delete{{res.id}}" class="modal-trigger right-align secondary-content btn"><i class="material-icons">delete</i></a>
             </div>
-            <div class="col s1 right">
-              <!--<a href="{% url 'edit_donation' res.id %}" class="modal-trigger right secondary-content btn"><i class="small material-icons">edit</i></a>
-            </div>-->
 
             <!-- Modal Structure delete donation -->
             <div id="modal_delete{{res.id}}" class="modal">
               <div class="modal-content">
-                <h4>Eliminar donación</h4>
-                <p>¿Desea eliminar ({{res.donation_type}} {{res.quantity}} {{ res.get_unit_measure_display }}) del resumen de donación? </p>
+                <h4 class="hide-on-small-only">Eliminar donación</h4>
+                <h5 class="hide-on-med-and-up">Eliminar donación</h5>
+                <p>¿Desea eliminar ({{res.donation_type}} {{ res.quantity|floatformat }} {{ res.get_unit_measure_display }}) del resumen de donación? </p>
               </div>
               <div class="modal-footer">
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
-                <a href="{% url 'delete_donation' res.id %}" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+                <button onclick="deleteDonation('{{ res.id }}')" class="modal-close waves-effect waves-green btn-flat">Aceptar</button>
               </div>
             </div>
 
+            <script type="text/javascript">
+              //Desactiva el btn siguiente si no hay tipos de donaciones
+              function btnDisabled(){
+                var items = document.getElementsByClassName('collection-item');
+                console.log(items.length);
+                if(items.length == 0) {
+                  $("#btn_next").attr('disabled', 'disabled');
+                } else {
+                  $("#btn_next").removeAttr("disabled");
+                }
+              }
+
+              function deleteDonation(donationTypeId) {
+                var request = $.ajax({
+                    type: "POST",
+                    url: "{% url 'delete_donation' %}",
+                    data: {
+                        "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        "donation_type_id": donationTypeId                    
+                    },
+                });
+                request.done(function(response) {
+                  // Elimina sin actualizar el "li" de tipo de donacion eliminado.
+                  $(document).ready(function() {
+                    $("li#"+response["type"]).remove();
+                    btnDisabled();
+                  });
+                });
+              }
+            </script>
           </li>
         {% endfor %}
       </ul>
-      <div class="row">
-        <div class="col s12 m6">
-          <a href="{% url 'items_donation' donator.id %}" class="btn waves-effect waves-light green darken-1"><i class="material-icons">add</i></a>
-          <span>Agregar un nuevo tipo de donación</span>
-        </div>
-      </div>
       <div class="input-field">
         <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">edit</i> para editar </span>
         <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons">delete</i> para eliminar </span>
       </div>
+      <div class="row">
+        <a href="{% url 'items_donation' donator.id %}" class="btn waves-effect waves-light green darken-1"><i class="material-icons">add</i></a>
+        <span>Agregar un nuevo tipo de donación</span>
+      </div>
     <div class="row">
       {% if resumes %}
         <div class="col m4 s12 offset-m4">
-          <a class="waves-effect waves-light btn-large boton-home " href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+          <a class="waves-effect waves-light btn-large boton-home " id="btn_next" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
         </div>
       {% else %}
         <div class="col m4 s12 offset-m4">
-          <a class="waves-effect waves-light btn-large boton-home disabled" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
+          <a class="waves-effect waves-light btn-large boton-home disabled" id="btn_next" href="{% url 'finish_donation' donator.id %}">Siguiente</a>
         </div>
       {% endif %}
     </div> 
@@ -82,8 +108,9 @@
       <form method="POST">
         {% csrf_token %}
         <div class="modal-content">
-        <h4>Editar Razón Social o Nombre</h4>
-        {{don_form}}  
+          <h4 class="hide-on-small-only">Editar Razón Social o Nombre</h4>
+          <h6 class="hide-on-med-and-up ">Editar Razón Social o Nombre</h6>
+          {{don_form}}  
         </div>
         <div class="modal-footer">
           <a href="#!" class="modal-close waves-effect waves-light btn-flat">Cancelar</a>
@@ -103,4 +130,5 @@
       $('.modal').modal();
     });
   </script>
+ 
 {% endblock %}

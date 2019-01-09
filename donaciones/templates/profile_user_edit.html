@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-  	<form method="POST">
+  	<form method="POST" enctype="multipart/form-data">
     	{% csrf_token %}
       <h4 class="center-align">Editar Perfil</h4>
       <div class="row">
@@ -38,6 +38,23 @@
            <span class="helper-text" data-error="wrong" data-success="right">{{form_profile.phone_number.help_text}}</span>
           {% endif %}
         </div>
+
+        <div class="file-field input-field col s12">
+          <div class="btn">
+            <span>{{form_profile.image.label_tag}}</span>
+            <input type="file" name="image" accept="image/*" id="id_image">
+          </div>
+          <div class="file-path-wrapper">
+            <input class="file-path validate" type="text">
+          </div>
+          {% if user.profile.image %}
+            <span class="helper-text" data-error="wrong" data-success="right">Actualmente: <a href="{{ user.profile.image.url}}">{{ user.profile.image.url}}</a></span>
+          {% endif %}
+        </div>
+        <label class="col s12">
+          <input type="checkbox" name="image-clear" id="image-clear_id"/>
+          <span>Limpiar</span>
+        </label>
       </div>
       <div class="row">
         <div class="col s12 m4 push-m4">
