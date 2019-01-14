@@ -168,9 +168,11 @@ except:
 if not err:
     conexion.commit()
     print("BARRIOS REGISTRADOS!")
+    input()
 else:
     conexion.rollback()
     print("NO SE PUDIERON REGISTRAR LOS DATOS BARRIO!")
+    input()
 
 
 consulta.close()

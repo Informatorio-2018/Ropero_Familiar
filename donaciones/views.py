@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404 
 from django.http import JsonResponse
 from django.contrib import messages
 from .forms import *
@@ -1038,6 +1038,7 @@ def profile_user(request):
 def credits(request):
     return render(request,'credits.html',{})
 
+@login_required
 def profile_user_edit(request, id):
     user = User.objects.get(pk=id)
     profile = Profile.objects.get(user_id=id)
@@ -1066,6 +1067,7 @@ def profile_user_edit(request, id):
 #     context = {'form':form}
 #     return render(request, 'user_change_pass.html', context)
 
+@login_required
 def change_password(request, id):
     user = User.objects.get(pk=id)
     if request.method == 'POST':
@@ -1078,4 +1080,35 @@ def change_password(request, id):
     else:
         form = PasswordChangeForm(user)
     return render(request, 'change_password.html', {'form': form})
+
+@login_required
+def sales_report(request):
+
+    today = datetime_django.today()
+    types = TypesProducts.objects.all()
+
+    data = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
+    if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
+
+        begin = request.POST['begin']
+        begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
+        finish = request.POST['finish']
+        finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
+        sale = request.POST.getlist('sale_id')
+        q1 = Q(sale__entry__last_entry__gte=begin)
+        q2 = Q(sale__entry__last_entry__lte=finish)
+        q3 = Q(product_type__in=sale)
+
+        report = list(SalesDetails.objects.filter(q3 & q1 & q2).values('product_type',
+                                                                        'unit_measure',
+                                                                        'total',
+                                                                        'quantity',
+                                                                        'sale__entry__last_entry',
+                                                                        'sale__entry__family__firstname',
+                                                                        'sale__entry__family__lastname',))
+        return JsonResponse(report, safe=False)
+
+    return render(request, 'sales_report.html', {'data':data, 'types': types})
+
 
