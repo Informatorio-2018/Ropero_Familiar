@@ -1089,7 +1089,8 @@ def sales_report(request):
 
     data = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
+
 
         begin = request.POST['begin']
         begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
@@ -1119,6 +1120,8 @@ def sales_report(request):
         for i in range(0,len(report2)):
             report2[i]['product_total'] = float(report2[i]['product_total'])
 
+
+        report = report + report2
         return JsonResponse(report, safe=False)
 
     return render(request, 'sales_report.html', {'data':data, 'types': types})
