@@ -58,7 +58,7 @@
                   $('#id_title').removeClass("hide");
                   var content = $;
                   for (var i = 0; i < report.length; i++) {
-                    content += ('<tr>'+'<td>'+report[i]["sale__entry__family__firstname"]+", "+report[i]["sale__entry__family__lastname"]+'</td>'+'<td>'+report[i]["product_type"]+'</td>'+'<td>'+report[i]["quantity"]+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
+                    content += ('<tr>'+'<td>'+report[i].sale__entry__family__firstname+", "+report[i].sale__entry__family__lastname+'</td>'+'<td>'+report[i].product_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
                   }
                   $('#table-report tbody').html(content);
                   ScrollBottomSubmit();
@@ -81,7 +81,7 @@
       <div class="col s12 card" id="report-ajax">
         <div id="id_title"></div>
         <div id="title_null"></div>
-        <table class="hide" id="table-report">
+        <table class="hide centered" id="table-report">
           <thead>
             <tr>
                 <th>Nombre</th>

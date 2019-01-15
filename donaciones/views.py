@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from .forms import *
 from .models import *
-from django.db.models import Q, Sum
+from django.db.models import Q, Sum, F
 from django.contrib.auth import authenticate, login as log, logout as logout_django
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import datetime as datetime_django
@@ -1089,7 +1089,7 @@ def sales_report(request):
 
     data = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
     if request.method == 'POST':
-        # import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
 
         begin = request.POST['begin']
         begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
@@ -1100,6 +1100,7 @@ def sales_report(request):
         q2 = Q(sale__entry__last_entry__lte=finish)
         q3 = Q(product_type__in=sale)
 
+        # Reporte de ventas con tipo de prod, fecha inicio y fecha final
         report = list(SalesDetails.objects.filter(q3 & q1 & q2).values('product_type',
                                                                         'unit_measure',
                                                                         'total',
@@ -1107,6 +1108,17 @@ def sales_report(request):
                                                                         'sale__entry__last_entry',
                                                                         'sale__entry__family__firstname',
                                                                         'sale__entry__family__lastname',))
+        
+        # Reporte 2 con total por producto
+        report2 = list(SalesDetails.objects.filter(q3 & q1 & q2).values(product_type_total=F('product_type')).annotate(product_total=Sum('quantity')))
+
+        # Cambio en report cantidad en decimal por float
+        for i in range(0,len(report)):
+            report[i]['quantity'] = float(report[i]['quantity'])
+
+        for i in range(0,len(report2)):
+            report2[i]['product_total'] = float(report2[i]['product_total'])
+
         return JsonResponse(report, safe=False)
 
     return render(request, 'sales_report.html', {'data':data, 'types': types})
