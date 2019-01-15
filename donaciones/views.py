@@ -148,44 +148,9 @@ def finish_donation(request, id):
     return render(request, 'finish_donation.html', context)
 
 
-@login_required
-def donations_report(request):
-    dona = TypesDonation.objects.all()
-    today = datetime.date.today()
-    if request.method == 'POST':
-
-        begin = request.POST['begin']
-        finish = request.POST['finish']
-        donation = request.POST['dona_id']
-
-        if begin == '':
-            begin = today
-        else:
-            begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
-        if finish == '':
-            finish = today
-        else:
-            finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
-
-
-        q1 = Q(donation__date__gte=begin)
-        q2 = Q(donation__date__lte=finish)
-        q3 = Q(donation_type__exact=donation)
-        report = DetailsDonation.objects.filter(q3 & q1 & q2).aggregate(total=Sum('quantity'))
-        all_reports = DetailsDonation.objects.filter(q3 & q1 & q2)
-
-        return render(request,'donations_report_result.html',{'report':report['total'],
-                                                              'don':donation,
-                                                              'begin': begin,
-                                                              'finish':finish,
-                                                              'all':all_reports})
-
-    else:
-        form = DonationsReportForm()
-    return render(request,'donations_report.html',{'form':form,
-                                                   'dona':dona})
 
 @login_required
+@staff_member_required(login_url='home')
 def load_types_donation(request):
 
     if request.method == 'POST':
@@ -198,6 +163,7 @@ def load_types_donation(request):
 
 
 @login_required
+@staff_member_required(login_url='home')
 def load_types_products(request):
     # TypesProducts.objects.filter(id=request.POST['id_type']).update(price=request.POST['price']) 
     types=TypesProducts.objects.all()
@@ -207,6 +173,7 @@ def load_types_products(request):
     return render(request, 'load_types_product.html',context)
 
 @login_required
+@staff_member_required(login_url='home')
 def update_price_article(request,id):
     article = TypesProducts.objects.get(pk=id)
     if request.method == "POST":
@@ -696,6 +663,7 @@ def edit_family(request,id):
     return render(request,'edit_family.html',{'form':form, 'family':family})
 
 @login_required
+@staff_member_required(login_url='home')
 def neigh(request):
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
@@ -707,6 +675,7 @@ def neigh(request):
                                           'neigh': neigh})
 
 @login_required
+@staff_member_required(login_url='home')
 def edit_neigh(request,id):
     neigh = Neighborhood.objects.get(pk=id)
     if request.method == 'POST':
@@ -719,6 +688,7 @@ def edit_neigh(request,id):
                                              'neigh':neigh})
 
 @login_required
+@staff_member_required(login_url='home')
 def del_neigh(request, id):
     neigh = get_object_or_404(Neighborhood, pk=id)
     neigh.delete()
@@ -961,35 +931,17 @@ def delete_sale(request):
     return JsonResponse(response)
 
 @login_required
+@staff_member_required(login_url='home')
 def adm_home(request):
-    today = datetime.date.today()
-    # Donaciones realizadas hoy
-    donations = DetailsDonation.objects.filter(donation__date__year=today.year,donation__date__month=today.month,donation__date__day=today.day)
-    clothes = donations.filter(donation_type='Ropa').aggregate(total_c=Sum('quantity'))
-    accesories = donations.filter(donation_type='Accesorios').aggregate(total_a=Sum('quantity'))
-    shod = donations.filter(donation_type='Calzados').aggregate(total_s=Sum('quantity'))
-    all_others = donations.filter(donation_type='Otros')
-    others = all_others.aggregate(total_o=Sum('quantity'))
-    desc_others = []
-    cant_others = []
-    my_list = []
-    a=0
-    if  all_others.count() > 0:
-        for i in all_others:
-            desc_others.append(all_others[a].otherdetail.description)
-            cant_others.append(all_others[a].quantity)
-            my_list = zip(desc_others,cant_others)
-            a+=1
+    today = datetime.date.today()  
 
-    # Ventas realizadas hoy
-    sold = SalesDetails.objects.filter(sale__entry__last_entry__year=today.year,sale__entry__last_entry__month=today.month,sale__entry__last_entry__day=today.day)
-    clothes_rv = sold.filter(product_type='Ropa Verano').aggregate(total_rv=Sum('quantity'))
-    clothes_ri = sold.filter(product_type='Ropa Invierno').aggregate(total_ri=Sum('quantity'))
-    acc_sold = sold.filter(product_type='Accesorios').aggregate(total_as=Sum('quantity'))
-    shod_sold = sold.filter(product_type='Calzados').aggregate(total_ss=Sum('quantity'))
-    all_others_sold = sold.filter(product_type='Otros').aggregate(total_os=Sum('quantity'))
+    data_s = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
+
+    data_d = DetailsDonation.objects.filter(donation__date__month=today.month).values('donation_type').annotate(total=Sum('quantity'))
+
 
     # Precio
+    sold = SalesDetails.objects.filter(sale__entry__last_entry__year=today.year,sale__entry__last_entry__month=today.month,sale__entry__last_entry__day=today.day)
     clothes_rvp = sold.filter(product_type='Ropa Verano').aggregate(total_rvp=Sum('price'))
     clothes_rip = sold.filter(product_type='Ropa Invierno').aggregate(total_rip=Sum('price'))
     acc_soldp = sold.filter(product_type='Accesorios').aggregate(total_asp=Sum('price'))
@@ -1004,19 +956,9 @@ def adm_home(request):
 
     # import ipdb; ipdb.set_trace()
     return render(request,'adm_home.html',{# Donaciones
-                                           'dona':donations,
-                                           'today':today,
-                                           'clothes':clothes['total_c'],
-                                           'accesories':accesories['total_a'],
-                                           'shod':shod['total_s'],
-                                           'others':others['total_o'],
-                                           'my_list':my_list,
-                                           # Ventas
-                                           'clothes_rv':clothes_rv['total_rv'],
-                                           'clothes_ri':clothes_ri['total_ri'],
-                                           'acc_sold':acc_sold['total_as'],
-                                           'shod_sold':shod_sold['total_ss'],
-                                           'others_sold':all_others_sold['total_os'],
+                                           'data_d':data_d,
+                                           #Ventas
+                                           'data_s':data_s,
                                            # Precios
                                            'clothes_rvp':clothes_rvp['total_rvp'],
                                            'clothes_rip':clothes_rip['total_rip'],
@@ -1082,14 +1024,16 @@ def change_password(request, id):
     return render(request, 'change_password.html', {'form': form})
 
 @login_required
+@staff_member_required(login_url='home')
 def sales_report(request):
 
     today = datetime_django.today()
     types = TypesProducts.objects.all()
 
     data = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
+
     if request.method == 'POST':
-        import ipdb; ipdb.set_trace()
+        # import ipdb; ipdb.set_trace()
 
         begin = request.POST['begin']
         begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
@@ -1124,3 +1068,84 @@ def sales_report(request):
     return render(request, 'sales_report.html', {'data':data, 'types': types})
 
 
+# @login_required
+# @staff_member_required(login_url='home')
+# def donations_report(request):
+#     dona = TypesDonation.objects.all()
+#     today = datetime.date.today()
+#     if request.method == 'POST':
+
+#         begin = request.POST['begin']
+#         finish = request.POST['finish']
+#         donation = request.POST['dona_id']
+
+#         if begin == '':
+#             begin = today
+#         else:
+#             begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
+#         if finish == '':
+#             finish = today
+#         else:
+#             finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
+
+
+#         import ipdb; ipdb.set_trace()
+
+#         q1 = Q(donation__date__gte=begin)
+#         q2 = Q(donation__date__lte=finish)
+#         q3 = Q(donation_type__exact=donation)
+#         report = DetailsDonation.objects.filter(q3 & q1 & q2).values('donation_type').annotate(total=Sum('quantity'))
+#         all_reports = DetailsDonation.objects.filter(q3 & q1 & q2)
+
+#         return render(request,'donations_report_result.html',{'report':report,
+#                                                               'don':donation,
+#                                                               'begin': begin,
+#                                                               'finish':finish,
+#                                                               'all':all_reports})
+
+#     else:
+#         form = DonationsReportForm()
+#     return render(request,'donations_report.html',{'form':form,
+#                                                    'dona':dona})
+
+@login_required
+@staff_member_required(login_url='home')
+def donations_report(request):
+
+    today = datetime_django.today()
+    types = TypesDonation.objects.all()
+
+    data = DetailsDonation.objects.filter(donation__date__month=today.month).values('donation_type').annotate(total=Sum('quantity'))
+
+    if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
+
+        begin = request.POST['begin']
+        begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
+        finish = request.POST['finish']
+        finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
+        donation = request.POST.getlist('dona_id')
+        q1 = Q(donation__date__gte=begin)
+        q2 = Q(donation__date__lte=finish)
+        q3 = Q(donation_type__in=donation)
+
+        # Reporte de ventas con tipo de prod, fecha inicio y fecha final
+        report = list(DetailsDonation.objects.filter(q3 & q1 & q2).values('donation_type',
+                                                                        'unit_measure',
+                                                                        'quantity',
+                                                                        'donation__date',
+                                                                        'donation__name',))
+        
+        # Reporte 2 con total por producto
+        # report2 = list(SalesDetails.objects.filter(q3 & q1 & q2).values(product_type_total=F('product_type')).annotate(product_total=Sum('quantity')))
+
+        # Cambio en report cantidad en decimal por float
+        for i in range(0,len(report)):
+            report[i]['quantity'] = float(report[i]['quantity'])
+
+        # for i in range(0,len(report2)):
+        #     report2[i]['product_total'] = float(report2[i]['product_total'])
+
+        return JsonResponse(report, safe=False)
+
+    return render(request, 'donations_report.html', {'data':data, 'types': types})

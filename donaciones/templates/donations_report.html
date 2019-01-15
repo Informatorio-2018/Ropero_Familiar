@@ -1,92 +1,169 @@
 {% extends "base.html" %}
 
-{% block title %}Reporte de Donaciones{% endblock %}
+{% block title %}Reporte de Ventas{% endblock %}
 
 {% block content %}
-  <div class="contenedor z-depth-3 white">
-    <h2 class="center-align">Reporte de Donaciones</h2>
+  <div id="contenedor" class="contenedor z-depth-3 white">
+    <div class="row">
+      <h2 class="center-align">Reporte de donaciones</h2>
+      <div id="graphic_sale" class="col s12 m6"></div>
+      <div class="col s12 m6">
+        <form method="POST" id="form-report" action="{% url 'donations_report' %}">
+         <div class="input-field">
+          {% csrf_token %}
+            <select multiple name="dona_id">
+              <option value="" disabled selected>Elija tipo de donaciones</option>
+              {% for type in types %}
+                <option value='{{ type.name }}'>{{type.name}}</option>
+              {% endfor %}
+            </select>
+            <span class="helper-text" data-error="wrong" data-success="right">Seleccione el tipo de donación del que desea un reporte</span>
+          </div>
+          <div class="row"></div>
+         <div class="input-field">
+            <input type="text" class="datepicker" name='begin' id='id_begin' required>
+            <label for="id_begin" class="">Desde:</label>
+            <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
+          </div>
+          <div class="row"></div>
+           <div class="input-field">
+            <input type="text" class="datepicker" name='finish' id='id_finish' required>
+            <label for="id_finish" class="">Hasta:</label>
+            <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
+          </div>
 
-        <form action="/adm/reporte_donaciones/" method="POST">
-
-          <div class="input-field">
-            {% csrf_token %}
-              <select name="dona_id">
-                <option value="" disabled>Articulo</option>
-                {% for d in dona %}
-                  <option value={{d.name}}>{{d.name}}</option>
-                {% endfor %}
-              </select>
-              <span class="helper-text" data-error="wrong" data-success="right">Seleccione el tipo de articulo del que desea un reporte</span>
+          <div class="row">
+            <div class="col s12 m8 push-m2">
+              <input type="submit" value="Generar Reporte" class="btn-large boton-perfil" id="btn_buscar">
             </div>
-
-            <div class="input-field">
-              <input type="text" class="datepicker" name='begin' id='begin'>
-              {{form.begin.label_tag}}
-              <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
-            </div>
-
-            <div class="input-field"> 
-              <input type="text" class="datepicker" name='finish' id='finish'>
-              {{form.finish.label_tag}}
-              <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de fin del reporte</span>
-            </div>
-
-            <div class="row">
-              <div class="col s12 m6 push-m3">
-                <input type="submit" value="Buscar" class="btn-large boton-perfil" id="btn_buscar">
-              </div>
-            </div>
-
+          </div>
         </form>
-  </div>
+      </div>
 
-{% endblock %}
+      <!--Script form-report submit sin recargar -->
+      <script type="text/javascript">
+        $(document).ready(function(){
+          $('#form-report').submit(function(){
+            $.ajax({
+              data: $(this).serialize(),
+              type: $(this).attr('method'),
+              url: $(this).attr('action'),
+              success: function(report){
+                if (report.length > 0) {
+                  $('#null').remove()
+                  //Aca recupero los datos y muestro en template
+                  var title = $('<h4 class="center-align">Reporte generado</h4>')
+                  $('#id_title').html(title);
+                  $('#table-report').removeClass("hide")
+                  $('#id_title').removeClass("hide");
+                  var content = $;
+                  for (var i = 0; i < report.length; i++) {
+                    content += ('<tr>'+'<td>'+report[i].donation__name+'</td>'+'<td>'+report[i].donation_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'</tr>')
+                  }
+                  $('#table-report tbody').html(content);
+                  ScrollBottomSubmit();
+                } else {
+                  var title_null = $('<h4 class="center-align" id="null">No se realizaron donaciones durante el periodo de tiempo seleccionado</h4>')
+                  $('#title_null').html(title_null);
+                  $('#table-report').addClass("hide");
+                  $('#id_title').addClass("hide");
+                  ScrollBottomSubmit();
+                }
+              }
+            });
+            return false;
+          });
+        });
+      </script>
+      <!-- Acá termina script form-report -->
+
+      <div class="row"></div>
+      <div class="col s12 card" id="report-ajax">
+        <div id="id_title"></div>
+        <div id="title_null"></div>
+        <table class="hide centered" id="table-report">
+          <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Donación</th>
+                <th>Cantidad</th>
+            </tr>
+          </thead>
+
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+{% endblock %} 
+
 
 {% block extra_js %}
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$('select').formSelect();
-			});
-	</script>
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-    		$('.datepicker').datepicker(
-    			{ 
-            firstDay: true, 
-            format: 'yyyy-mm-dd',
-            yearRange: 100,
-            i18n: {
-                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
-                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
-                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
-                cancel: ['Cancelar'],
-                done: ['Aceptar'],
-            }
-        });
-  		});
-	</script>
-
   <script type="text/javascript">
     $(document).ready(function(){
-      $("#btn_buscar").click(function(event){
-        var str1 = $('#begin').val();
-        var str2 = $('#finish').val();
-        if (str1 > str2){
-          alert('La fecha de inicio no puede ser mayor a la final');
-          event.preventDefault();
-        }
+      $('select').formSelect();
       });
-      $("#btn_buscar").click(function(event){
-        var str1 = $('#begin').val();
-        var str2 = $('#finish').val();
-        if (str1 == str2){
-          alert('Las fechas no pueden ser iguales');
-          event.preventDefault();
-        }
+  </script>
+
+  <!-- Grafico columnas -->
+ <script type="text/javascript">
+    Highcharts.chart('graphic_sale', {
+      chart: {
+         type: 'column'
+      },
+      title: {
+         text: 'Donaciones del mes'
+      },
+      xAxis: {
+         categories: ['Tipos de donaciones'],
+         crosshair: true
+      },
+      yAxis: {
+      min: 0,
+      title: {
+        text: 'Cantidad'
+      }
+      },
+      series:[ 
+      {% for d in data %}
+        {
+          name: '{{d.donation_type}}',
+          data: [{{d.total|safe}}]
+        },
+      {% endfor %} 
+      ]
+    }); 
+ </script>
+
+  <!-- DatePicker -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.datepicker').datepicker(
+        { 
+          firstDay: true, 
+          format: 'yyyy-mm-dd',
+          yearRange: 100,
+          i18n: {
+              months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+              monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+              weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+              weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+              weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
+              cancel: ['Cancelar'],
+              done: ['Aceptar'],
+          }
       });
     });
-  </script>	
+  </script>
+
+  <!--Forzar scroll abajo del al generar reporte-->
+  <script type="text/javascript">
+    function ScrollBottomSubmit(){
+      var height = $(document).height();
+      $("html, body").animate({scrollTop:height+"px"});
+    };
+  </script>
+
 {% endblock %}
