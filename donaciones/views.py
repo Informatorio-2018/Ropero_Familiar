@@ -1063,6 +1063,8 @@ def sales_report(request):
         for i in range(0,len(report2)):
             report2[i]['product_total'] = float(report2[i]['product_total'])
 
+
+        report = report + report2
         return JsonResponse(report, safe=False)
 
     return render(request, 'sales_report.html', {'data':data, 'types': types})

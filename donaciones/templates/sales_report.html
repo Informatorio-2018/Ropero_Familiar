@@ -50,6 +50,7 @@
               url: $(this).attr('action'),
               success: function(report){
                 if (report.length > 0) {
+                  console.log(report);
                   $('#null').remove()
                   //Aca recupero los datos y muestro en template
                   var title = $('<h4 class="center-align">Reporte generado</h4>')
@@ -57,10 +58,18 @@
                   $('#table-report').removeClass("hide")
                   $('#id_title').removeClass("hide");
                   var content = $;
+                  var content2 = $;
                   for (var i = 0; i < report.length; i++) {
-                    content += ('<tr>'+'<td>'+report[i].sale__entry__family__firstname+", "+report[i].sale__entry__family__lastname+'</td>'+'<td>'+report[i].product_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
+                    if(report[i].product_type!==undefined){
+                      content += ('<tr>'+'<td>'+report[i].sale__entry__family__firstname+", "+report[i].sale__entry__family__lastname+'</td>'+'<td>'+report[i].product_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
+                      
+                    }else{
+                      content2 += ('<p>'+report[i].product_type_total+': '+report[i].product_total+'</p>');
+
+                    }
                   }
                   $('#table-report tbody').html(content);
+                  
                   ScrollBottomSubmit();
                 } else {
                   var title_null = $('<h4 class="center-align" id="null">No se realizaron ventas durante el periodo de tiempo seleccionado</h4>')
