@@ -934,41 +934,28 @@ def delete_sale(request):
 @staff_member_required(login_url='home')
 def adm_home(request):
     today = datetime.date.today()  
-
+    #Datos ventas
     data_s = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
-
+    #Datos donaciones
     data_d = DetailsDonation.objects.filter(donation__date__month=today.month).values('donation_type').annotate(total=Sum('quantity'))
-
-
-    # Precio
-    sold = SalesDetails.objects.filter(sale__entry__last_entry__year=today.year,sale__entry__last_entry__month=today.month,sale__entry__last_entry__day=today.day)
-    clothes_rvp = sold.filter(product_type='Ropa Verano').aggregate(total_rvp=Sum('price'))
-    clothes_rip = sold.filter(product_type='Ropa Invierno').aggregate(total_rip=Sum('price'))
-    acc_soldp = sold.filter(product_type='Accesorios').aggregate(total_asp=Sum('price'))
-    shod_soldp = sold.filter(product_type='Calzados').aggregate(total_ssp=Sum('price'))
-    all_others_soldp = sold.filter(product_type='Otros').aggregate(total_osp=Sum('price'))
-
+    # Precios
+    # prices = SalesDetails.objects.filter(sale__entry__last_entry__year=today.year,sale__entry__last_entry__month=today.month,sale__entry__last_entry__day=today.day).values('product_type').annotate(total=Sum('price'))
+    #Usuarios
     users = User.objects.filter(is_superuser=0)
-
+    #Lista de articulos
     arts = TypesProducts.objects.all()
 
-    adonations = TypesDonation.objects.all()
+    donations = TypesDonation.objects.all()
 
     # import ipdb; ipdb.set_trace()
     return render(request,'adm_home.html',{# Donaciones
                                            'data_d':data_d,
                                            #Ventas
                                            'data_s':data_s,
-                                           # Precios
-                                           'clothes_rvp':clothes_rvp['total_rvp'],
-                                           'clothes_rip':clothes_rip['total_rip'],
-                                           'acc_soldp':acc_soldp['total_asp'],
-                                           'shod_soldp':shod_soldp['total_ssp'],
-                                           'others_soldp':all_others_soldp['total_osp'],
 
                                            'users':users,
                                            'arts':arts,
-                                           'donations':adonations})
+                                           'donations':donations})
 
 @login_required
 def profile_user(request):
