@@ -180,8 +180,15 @@ body{
 	width: 100%;
 }
 
-/*-------------------------------------------*/
+/*-------------Termina tbody scroll--------------*/
 
+#collapsible-report > li > a{
+	padding: 0 32px;
+}
+
+#collapsible-report > li > div > ul > li> a{
+	margin-left: 20px;
+}
 
 /* TABLETA */
 @media screen and(max-width: 768px){
