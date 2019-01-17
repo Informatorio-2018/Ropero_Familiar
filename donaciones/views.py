@@ -1041,7 +1041,7 @@ def sales_report(request):
                                                                         'sale__entry__family__lastname',))
         
         # Reporte 2 con total por producto
-        report2 = list(SalesDetails.objects.filter(q3 & q1 & q2).values(product_type_total=F('product_type')).annotate(product_total=Sum('quantity')))
+        report2 = list(SalesDetails.objects.filter(q3 & q1 & q2).values('unit_measure',product_type_total=F('product_type')).annotate(product_total=Sum('quantity')))
 
         # Cambio en report cantidad en decimal por float
         for i in range(0,len(report)):

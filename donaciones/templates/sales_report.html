@@ -50,32 +50,32 @@
               url: $(this).attr('action'),
               success: function(report){
                 if (report.length > 0) {
-                  console.log(report);
                   $('#null').remove()
                   //Aca recupero los datos y muestro en template
-                  var title = $('<h4 class="center-align">Reporte generado</h4>')
+                  var title = $('<h3 class="center-align">Reporte generado</h3>')
                   $('#id_title').html(title);
                   $('#table-report').removeClass("hide")
                   $('#id_title').removeClass("hide");
+                  $('#title-table').removeClass("hide");
                   var content = $;
-                  var content2 = $;
+                  var content2 = '';
                   for (var i = 0; i < report.length; i++) {
                     if(report[i].product_type!==undefined){
                       content += ('<tr>'+'<td>'+report[i].sale__entry__family__firstname+", "+report[i].sale__entry__family__lastname+'</td>'+'<td>'+report[i].product_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
                       
                     }else{
-                      content2 += ('<p>'+report[i].product_type_total+': '+report[i].product_total+'</p>');
-
+                      content2 += ('<p>'+'Total '+report[i].product_type_total+' - '+report[i].product_total+" (Unidad: "+report[i].unit_measure+')'+'</p>');
                     }
                   }
                   $('#table-report tbody').html(content);
-                  
+                  $('#product_total').html(content2);
                   ScrollBottomSubmit();
                 } else {
                   var title_null = $('<h4 class="center-align" id="null">No se realizaron ventas durante el periodo de tiempo seleccionado</h4>')
                   $('#title_null').html(title_null);
                   $('#table-report').addClass("hide");
                   $('#id_title').addClass("hide");
+                  $('#title-table').addClass("hide");
                   ScrollBottomSubmit();
                 }
               }
@@ -90,6 +90,7 @@
       <div class="col s12 card" id="report-ajax">
         <div id="id_title"></div>
         <div id="title_null"></div>
+        <h4 class="center-align hide" id="title-table">Detalles de ventas</h4>
         <table class="hide centered" id="table-report">
           <thead>
             <tr>
@@ -103,6 +104,24 @@
           <tbody>
           </tbody>
         </table>
+        <div id="product_total"></div>
+          <!--<div class="card">
+            <div class="card-content">
+              <h5 class="center-align">Total vendido por tipo de producto</h5>
+            </div>
+            <div class="card-tabs">
+              <ul class="tabs tabs-fixed-width">
+                <li class="tab"><a href="#test4">Ropa Verano</a></li>
+                <li class="tab"><a class="active" href="#test5">Ropa Invieron</a></li>
+                <li class="tab"><a href="#test6">Calzados</a></li>
+              </ul>
+            </div>
+            <div class="card-content grey lighten-4">
+              <div id="test4">5 kg</div>
+              <div id="test5">10 kg</div>
+              <div id="test6">20 par</div>
+            </div>
+          </div>-->
       </div>
 
     </div>
@@ -111,6 +130,13 @@
 
 
 {% block extra_js %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.tabs').tabs();
+    });
+        
+  </script>
+
   <script type="text/javascript">
     $(document).ready(function(){
       $('select').formSelect();

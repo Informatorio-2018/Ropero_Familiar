@@ -180,11 +180,20 @@ body{
 	width: 100%;
 }
 
-/*-------------------------------------------*/
+/*-------------Termina tbody scroll--------------*/
 
+
+#collapsible-report > li > a{
+	padding: 0 32px;
+}
+
+#collapsible-report > li > div > ul > li> a{
+	margin-left: 20px;
+}
 .scroll-home{
 	height: 175px;
 	overflow:auto;
+
 }
 
 /* TABLETA */

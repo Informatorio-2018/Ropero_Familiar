@@ -30,106 +30,125 @@
         <img class="logo-topbar" src="{% static 'images/logo-top-bar-flia-conin-lt.gif' %}">
       </a>
       <ul class="right">
-		<li>
-      {% if user.is_authenticated %}
-			<a href="#" data-target="slide-out" class="sidenav-trigger">
-	        	<i class="material-icons">menu</i>
-	 		</a>
-      {% endif %}
-	 	</li>
+    		<li>
+          {% if user.is_authenticated %}
+    			<a href="#" data-target="slide-out" class="sidenav-trigger">
+    	        	<i class="material-icons">menu</i>
+    	 		</a>
+          {% endif %}
+    	 	</li>
       </ul>
     </div>
 
   	 
-  <ul id="slide-out" class="sidenav">
-    <li>
-      <div class="user-view">
-      <div class="background"></div>
-      <a href="{% url 'profile_user' %}">
-        {% if user.profile.image %}
-          <img class="circle" src="{{ user.profile.image.url }}">
-        {% else %}
-          <img class="circle" src="{% static 'images/avatar.png' %}">
-        {% endif %}
-      </a>
-      <div class="nombre-usuario">
-        <a href="#name"><span class="name">{{ user.username }}</span></a>
+    <ul id="slide-out" class="sidenav grey lighten-3">
+      <li>
+        <div class="user-view">
+          <div class="background"></div>
+          <a href="{% url 'profile_user' %}">
+            {% if user.profile.image %}
+              <img class="circle" src="{{ user.profile.image.url }}">
+            {% else %}
+              <img class="circle" src="{% static 'images/avatar.png' %}">
+            {% endif %}
+          </a>
+          <div class="nombre-usuario">
+            <a href="#name"><span class="name">{{ user.username }}</span></a>
+          </div>
+        </div>
+      </li>
+      <div class="grey darken-4 white-text title-menu">
+          DONACIONES
       </div>
-    </div>
-  </li>
-    <div class="grey darken-4 white-text title-menu">
-        DONACIONES
-    </div>
-    <li class="grey lighten-3">
-      <a href="{% url 'receive_donation' %}"><i class="material-icons">card_giftcard</i>Recibir Donación</a></li>
-    <li class="divider"></li>
-    <li  class="grey lighten-3">
-      <a href="{% url 'list_sort' %}">
-        <i class="material-icons">save_alt</i>Clasificar Donaciones
-      </a>
-    </li>
-    <li class="divider"></li>
-    <li class="grey lighten-3">
-      <a href="{% url 'list_fix' %}"><i class="material-icons">build</i>Acondicionar</a></li>
-    <div class="grey darken-4 white-text title-menu">
-        ROPERO FAMILIAR
-    </div>
-    <li class="grey lighten-3">
-      <a href="{% url 'closet' %}"><i class="material-icons">store</i>Ingreso al Ropero</a>
-    </li>
-    <li class="grey lighten-3">
-      <a href="{% url 'peoples_closet' %}"><i class="material-icons">monetization_on</i>Registrar Venta</a>
-    </li>
-    <div class="grey darken-4 white-text title-menu">
-        FAMILIAS
-    </div>
-    <li class="grey lighten-3">
-      <a href="{% url 'referring_search' %}"><i class="material-icons">supervised_user_circle</i>Buscar Familia</a></li>
-    <li class="divider"></li>
-    <li  class="grey lighten-3">
-      <a href="{% url 'register_referring' %}">
-        <i class="material-icons">group_add</i>Registrar Familia
-      </a>
-    </li>
+      <li class="grey lighten-3">
+        <a href="{% url 'receive_donation' %}"><i class="material-icons">card_giftcard</i>Recibir Donación</a></li>
+      <li class="divider"></li>
+      <li  class="grey lighten-3">
+        <a href="{% url 'list_sort' %}">
+          <i class="material-icons">save_alt</i>Clasificar Donaciones
+        </a>
+      </li>
+      <li class="divider"></li>
+      <li class="grey lighten-3">
+        <a href="{% url 'list_fix' %}"><i class="material-icons">build</i>Acondicionar</a></li>
+      <div class="grey darken-4 white-text title-menu">
+          ROPERO FAMILIAR
+      </div>
+      <li class="grey lighten-3">
+        <a href="{% url 'closet' %}"><i class="material-icons">store</i>Ingreso al Ropero</a>
+      </li>
+      <li class="divider"></li>
+      <li class="grey lighten-3">
+        <a href="{% url 'peoples_closet' %}"><i class="material-icons">monetization_on</i>Registrar Venta</a>
+      </li>
+      <div class="grey darken-4 white-text title-menu">
+          FAMILIAS
+      </div>
+      <li class="grey lighten-3">
+        <a href="{% url 'referring_search' %}"><i class="material-icons">supervised_user_circle</i>Buscar Familia</a></li>
+      <li class="divider"></li>
+      <li  class="grey lighten-3">
+        <a href="{% url 'register_referring' %}">
+          <i class="material-icons">group_add</i>Registrar Familia
+        </a>
+      </li>
+      <!-- Opciones usuario staff -->
+      {% if user.is_staff %}
+        <div class="grey darken-4 white-text title-menu">
+            ADMINISTRAR
+        </div>
+        <li  class="grey lighten-3">
+          <a href="{% url 'adm_home' %}">
+            <i class="material-icons">person</i>Home
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li  class="grey lighten-3">
+          <a href="{% url 'load_types_donation' %}">
+            <i class="material-icons">card_giftcard</i>Tipos de Donaciones
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li  class="grey lighten-3">
+          <a href="{% url 'load_types_products' %}">
+            <i class="material-icons">loyalty</i>Actualizar Precios
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li class="grey lighten-3">
+          <a href="{% url 'neigh' %}"><i class="material-icons">view_quilt</i>Barrios</a>
+        </li>
+        <li class="divider"></li>
+        <li class="grey lighten-3">
+          <ul id="collapsible-report" class="collapsible collapsible-accordion">
+            <li>
+              <a class="collapsible-header waves-effect waves-blue"><i class="material-icons">insert_chart_outlined</i>Reportes<i class="material-icons right" style="margin-right:0;">arrow_drop_down</i></a>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a class="waves-effect waves-blue" href="{% url 'donations_report' %}"><i class="material-icons">insert_chart_outlined</i>Donaciones</a></li>
+                  <li><div class="divider"></div></li>
+                  <li><a class="waves-effect waves-blue" href="{% url 'sales_report' %}"><i class="material-icons">swap_horiz</i>Ventas </a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="divider"></li>
+        <li class="grey lighten-3">
+          <a href="{% url 'register_user' %}"><i class="material-icons">person_add</i>Registrar Usuario</a>
+        </li>
+      {% endif %}
+      <!--Fin opciones usuario staff-->
+      <li class="grey lighten-3">
+        <a href="{% url 'profile_user' %}"><i class="material-icons">person</i>Mi Perfil</a>
+      </li
+      <li class="divider"></li>
+      <li class="grey lighten-3">
+        <a href="{% url 'logout' %}"><i class="material-icons">arrow_back</i>Logout</a>
+      </li>
 
-    <div class="grey darken-4 white-text title-menu">
-        ADMINISTRAR
-    </div>
-    <li  class="grey lighten-3">
-      <a href="{% url 'adm_home' %}">
-        <i class="material-icons">person</i>Home
-      </a>
-    </li>
-    <li  class="grey lighten-3">
-      <a href="{% url 'load_types_donation' %}">
-        <i class="material-icons">card_giftcard</i>Tipos de Donaciones
-      </a>
-    </li>
-    <li  class="grey lighten-3">
-      <a href="{% url 'load_types_products' %}">
-        <i class="material-icons">loyalty</i>Actualizar Precios
-      </a>
-    </li>
-    <li class="divider"></li>
-    <li class="grey lighten-3">
-      <a href="{% url 'neigh' %}"><i class="material-icons">view_quilt</i>Barrios</a>
-    </li>
-    <li class="grey lighten-3">
-      <a href="{% url 'donations_report' %}"><i class="material-icons">
-insert_chart_outlined</i>Reporte de donaciones</a>
-    </li>
-    <li class="divider"></li>
-    <li class="grey lighten-3">
-      <a href="{% url 'register_user' %}"><i class="material-icons">person_add</i>Registrar Usuario</a>
-    </li>    
-    <li class="divider"></li>
-    <li class="grey lighten-3">
-      <a href="{% url 'logout' %}"><i class="material-icons">arrow_back</i>Logout</a>
-    </li>
-
-  </ul>
+    </ul>
   
- 
   </nav>
         
 
@@ -138,15 +157,16 @@ insert_chart_outlined</i>Reporte de donaciones</a>
   
 {% endblock %}    
 
-    <div class="container">
-	{% block content %}
-	
-	{% endblock %}
-    </div>
+  <div class="container">
+  	{% block content %}
+  	
+  	{% endblock %}
+  </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
     $('.sidenav').sidenav();
+    $('.collapsible').collapsible();
   });
 </script>
 
