@@ -182,6 +182,10 @@ body{
 
 /*-------------------------------------------*/
 
+.scroll-home{
+	height: 175px;
+	overflow:auto;
+}
 
 /* TABLETA */
 @media screen and(max-width: 768px){
