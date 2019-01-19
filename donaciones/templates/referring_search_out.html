@@ -8,7 +8,7 @@
 			<h3>Resultados para: "{{query}}"</h3>
 			<div class="row collection">
 				{% for r in ref %}
-					<a href="/referente/{{r.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
+					<a href="/referente/{{r.referring.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
 				{% endfor %}
 			</div>
 		  {% else %}

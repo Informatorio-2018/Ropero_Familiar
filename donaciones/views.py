@@ -564,10 +564,11 @@ def register_referring(request):
 @login_required
 def register_family(request, id):
     form = FamilyForm(request.POST or None)
+    ref = Referring.objects.get(pk=id)
     if request.method == 'POST':
         if form.is_valid():
             fam = form.save(commit=False)
-            fam.ref = id
+            fam.ref = ref.family_id
             fam.role = 'f'
             fam.birth = request.POST['birth']
             fam.save()
@@ -599,21 +600,24 @@ def referring_search(request):
 
 @login_required
 def referring_profile(request, id):
-    ref = Family.objects.get(pk=id)
+    ref = Referring.objects.get(pk=id)
     return render(request, 'referring_profile.html', {'ref': ref})
 
 
 @login_required
 def referring_relatives(request, id):
-    ref = Family.objects.get(pk=id)
-    fam = Family.objects.filter(ref=id)
+    ref = Referring.objects.get(pk=id)
+    fam = Family.objects.filter(ref=ref.family.id)
     return render(request, 'referring_relatives.html', {'ref': ref,
                                                         'fam': fam})
 
 @login_required
 def relative_profile(request,id):
+    # import ipdb; ipdb.set_trace()
     fam = Family.objects.get(pk=id)
-    return render(request, 'relative_profile.html', {'fam': fam})
+    ref = Referring.objects.get(family_id=fam.ref)
+    return render(request, 'relative_profile.html', {'fam': fam,
+                                                    'ref': ref})
 
 
 @login_required
@@ -622,9 +626,9 @@ def home(request):
 
 @login_required
 def edit_referring(request,id):
-    family = Family.objects.get(pk=id)
+    ref = Referring.objects.get(pk=id)
+    family = Family.objects.get(id=ref.family_id)
     neigh = Neighborhood.objects.all()
-    ref = Referring.objects.get(family_id=id)
     if request.method == 'POST':
         form1 = FamilyForm_r(request.POST, instance=family)
         if form1.is_valid():
@@ -727,13 +731,13 @@ def closet(request):
         if form.is_valid():
             # import ipdb; ipdb.set_trace()
             query = form.cleaned_data['query']
-            # q1 = Q(firstname__contains=query)
-            # q2 = Q(lastname__contains=query)
-            # fam = Family.objects.filter(q1 | q2)
-            buscar = "'"+query+"'"
-            sql = "SELECT * FROM donaciones_family f INNER JOIN donaciones_referring r ON f.ref == r.family_id WHERE f.firstname == %s or f.lastname == %s"%(buscar,buscar)            
-            fami = Family.objects.raw(sql)
-            fam = list(fami)
+            q1 = Q(firstname__contains=query)
+            q2 = Q(lastname__contains=query)
+            fam = Family.objects.filter(q1 | q2)
+            # buscar = "'"+query+"'"
+            # sql = "SELECT * FROM donaciones_family f INNER JOIN donaciones_referring r ON f.ref == r.family_id WHERE f.firstname == %s or f.lastname == %s"%(buscar,buscar)            
+            # fami = Family.objects.raw(sql)
+            # fam = list(fami)
             return render(request, 'closet_search_out.html', {'fam': fam,
                                                               'query': query})
     else:
@@ -744,22 +748,22 @@ def closet(request):
 @login_required
 def entry_ok(request,id):
     fam = Family.objects.get(pk=id)
+    ref = Referring.objects.get(family_id = fam.ref)
     today_month = datetime.date.today().month
     today = datetime.date.today()
     all_entry = FamilyEntry.objects.all()
-    # import ipdb; ipdb.set_trace()
     while True:
         try:
-            entry = FamilyEntry.objects.get(family_id=id,last_entry__year=today.year,last_entry__month=today.month,last_entry__day=today.day)
+            entry = FamilyEntry.objects.get(family_id=ref.id,last_entry__month=today.month)
             break
         except FamilyEntry.DoesNotExist:
             entry = None
             break
 
+    import ipdb; ipdb.set_trace()
     if fam.role == 'r':
         last_buy = fam.referring.last_buy
     else:
-        ref = Referring.objects.get(family_id=fam.ref)
         last_buy = ref.last_buy
 
     if entry == None:

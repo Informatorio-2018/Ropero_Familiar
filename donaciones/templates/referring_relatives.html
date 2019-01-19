@@ -4,10 +4,12 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
-		<h2 class="center-align">Familiares de {{ref.lastname}}, {{ref.firstname}}</h2>
+		<h2 class="center-align">Familiares de {{ref.family.lastname}}, {{ref.family.firstname}}</h2>
 		<div class="row collection">
 			{% for f in fam %}
-				<a href="/referente/familiares/perfil_familiar/{{f.id}}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
+				{% if f.role == 'f' %}
+					<a href="/referente/familiares/perfil_familiar/{{f.id}}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
+				{% endif %}
 			{% endfor %}
 		</div>
 		<div class="row">
