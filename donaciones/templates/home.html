@@ -259,7 +259,7 @@
 		</div>
 	</div>
 	<div class="separador"></div>
-	<div class="row">
+	<!-- <div class="row">
 		<div class="col s12 m6">
 			<a href="{% url 'receive_donation' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">card_giftcard</i>Recibir Donación</a>
 		</div>
@@ -276,7 +276,23 @@
 			<div class="row hide-on-med-and-up"></div>
 			<a href="{% url 'peoples_closet' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">monetization_on</i>Registrar Venta</a>
 		</div>
-	</div>	
+	</div>	 -->
+	<div class="row">	
+		<ul class="col s12 m6 collapsible " style="border:0; box-shadow:0 0 0 0">
+	    	<li>
+	      		<div class="collapsible-header waves-effect waves-light btn-large boton-home" style="border:0"><i class="material-icons">filter_drama</i>Ropero Familiar</div>
+	      		<a href="{% url 'closet' %}" class="waves-effect waves-light collapsible-body"><i class="material-icons left">store</i>Ingreso al Ropero</a>
+	      		<div class="collapsible-body"><span>Registrar Venta</span></div>
+	    	</li>
+	  	</ul>
+		<ul class="col s12 m6 collapsible" style="border:0; box-shadow:0 0 0 0">
+	    	<li>
+	      		<div class="collapsible-header waves-effect waves-light btn-large boton-home" style="border:0"><i class="material-icons">filter_drama</i>Ropero Familiar</div>
+	      		<a href="{% url 'closet' %}" class="waves-effect waves-light collapsible-body"><i class="material-icons left">store</i>Ingreso al Ropero</a>
+	      		<div class="collapsible-body"><span>Registrar Venta</span></div>
+	    	</li>
+	  	</ul>  	
+	</div>
 	<div class="separador"></div>
 	<div class="row">
 		<div class="col s12">
@@ -312,5 +328,10 @@ favorite</i> EN 2018
 	  		{% endfor %}
 			{% endif %}
 		});
-	</script>	
+	</script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+    		$('.collapsible').collapsible();
+  		});
+	</script>
 {% endblock %}
