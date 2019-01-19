@@ -1,9 +1,249 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %}Home{% endblock %}
+{% block title %}Bienvenido{% endblock %}
 
 {% block content %}
-	<br>
+		{% if user.is_staff %}
+		<div class="contenedor z-depth-3 white">
+			<div class="row">
+				<h5><span><i class="material-icons">date_range</i></span>
+				Resumen del mes</h5>
+			</div>
+			<div class="row">
+				<div class="col s12 m6">
+					<div class="card z-depth-4">
+						<div class="center-align black white-text">	
+							<span class="card-title"><span><i class="material-icons">card_giftcard</i></span>Donaciones recibidas éste mes</span>
+						</div>
+						<div class="grey lighten-2" id='donations_graph'>
+					    
+					  	</div>		
+						<!-- Grafico columnas -->
+						<script type="text/javascript">
+							Highcharts.chart('donations_graph', {
+							  chart: {
+							     type: 'column'
+							  },
+							  title: {
+							     text: 'Donaciones del mes'
+							  },
+							  xAxis: {
+							     categories: ['Tipos de donaciones'],
+							     crosshair: true
+							  },
+							  yAxis: {
+							  min: 0,
+							  title: {
+							    text: 'Cantidad'
+							  }
+							  },
+							  series:[ 
+							  {% for d in data_d %}
+							    {
+							      name: '{{d.donation_type}}',
+							      data: [{{d.total|safe}}]
+							    },
+							  {% endfor %} 
+							  ]
+							}); 
+						</script>
+					</div>
+				</div>
+
+				<div class="col s12 m6">
+					<div class="card z-depth-3">
+						<div class="center-align  black white-text">	
+							<span class="card-title"><span><i class="material-icons">monetization_on</i></span>Ventas realizadas éste mes</span>
+						</div>
+						<div class="grey lighten-2" id="sales_graph">
+							<!-- ACA VENTAS -->
+						</div>
+						<!-- Grafico columnas -->
+						<script type="text/javascript">
+							Highcharts.chart('sales_graph', {
+							  chart: {
+							     type: 'column'
+							  },
+							  title: {
+							     text: 'Ventas del mes'
+							  },
+							  xAxis: {
+							     categories: ['Tipos de articulos'],
+							     crosshair: true
+							  },
+							  yAxis: {
+							  min: 0,
+							  title: {
+							    text: 'Cantidad'
+							  }
+							  },
+							  series:[ 
+							  {% for d in data_s %}
+							    {
+							      name: '{{d.product_type}}',
+							      data: [{{d.total|safe}}]
+							    },
+							  {% endfor %} 
+							  ]
+							}); 
+						</script>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<h5><span><i class="material-icons">tune
+	</i></span>Ajustes</h5>
+			</div>
+
+			<div class="row">
+				<div class="col s12 m4">
+					<div class="card z-depth-3">
+						<div class="center-align  black white-text">	
+							<span class="card-title">
+								<span>
+									<i class="material-icons">recent_actors</i></span>Usuarios</span>
+						</div>
+
+						<div class="grey lighten-2">
+
+						<ul class="collection with-header scroll-home">
+						{% for u in users %}
+					        <a href="#modal{{u.id}}" class="modal-trigger collection-item">
+					        	<li >
+						        	{{u.username|lower}}
+						        	<span class="secondary-content">
+		<!-- 				        			{% if u.last_login is not Null %}
+						        				{{u.last_login|date:"d/m/Y"}}
+						        			{% else %}
+						        				No entró
+						        			{% endif %} -->
+						        			Ver más
+						        	</span>
+					        	</li>
+					        </a>
+				        {% endfor %}
+				      	</ul>
+				    </div>
+				    <div class="divisor"></div>
+						<div class="card-action right-align">
+							<a href="{% url 'register_user' %}" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO USUARIO"><i class="material-icons">person_add</i></a>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col s12 m4">
+					<div class="card z-depth-3">
+						<div class="center-align  black white-text">	
+							<span class="card-title">
+								<span>
+									<i class="material-icons">layers</i></span>Artículos</span>
+						</div>
+
+						<div class="grey lighten-2">
+
+						<ul class="collection with-header scroll-home">
+						{% for a in arts %}
+					        <li class="collection-item">
+					        	<div>
+					        		{{a.name}}
+					        		<span class="secondary-content">
+					        			${{a.price}}
+					        		</span>
+					        	</div>
+					        </li>
+				        {% endfor %}
+				        
+				      </ul>
+
+				    </div>
+				    <div class="divisor"></div>
+						<div class="card-action right-align">
+							<a href="/tipos_productos/" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="MODIFICAR PRECIOS"><i class="material-icons">monetization_on</i></a>
+						</div>
+						
+					</div>
+				</div>
+
+
+
+				<div class="col s12 m4">
+					<div class="card z-depth-3">
+						<div class="center-align  black white-text">	
+							<span class="card-title">
+								<span>
+									<i class="material-icons">card_giftcard</i></span>Donaciones</span>
+						</div>
+
+						<div class="grey lighten-2">
+
+						<ul class="collection with-header scroll-home">
+						{% for d in donations %}
+					        <li class="collection-item">
+					        	<div>
+					        		{{d.name}}
+					        		<span class="secondary-content">
+					        			{{d.quantity_total}}{{d.unit_measure}}
+					        		</span>
+					        	</div>
+					        </li>
+				        {% endfor %}  
+				      </ul>
+
+				    </div>
+				    <div class="divisor"></div>
+						<div class="card-action right-align">
+							<a href="/cargar_tipos_donacion/" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO TIPO DE DONACIÓN"><i class="material-icons">add</i></a>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
+			
+
+
+
+			{% for u in users %}
+				<div id="modal{{u.id}}" class="modal">
+					<div class="modal-content">
+					  <h4>Información de usuario:</h4>
+						<div class="col s12 m7">
+							<div class="card horizontal">
+							  <div class="card-image">
+							        {% if u.profile.image %}
+	          							<img class="circle" src="{{ u.profile.image.url }}">
+	        						{% else %}
+	          							<img class="circle" src="{% static 'images/avatar.png' %}">
+	        						{% endif %}
+							  </div>
+							  <div class="card-stacked">
+							    <div class="card-content">
+							    	<p>Nombre: {{u.first_name}}</p><br>
+							    	<p>Apellido: {{u.last_name}}</p><br>
+							    	<p>N° de teléfono: {{u.profile.phone_number}}</p><br>
+							    	<p>Email: {{u.email}}</p><br>
+							    	<p>Último ingreso:  {% if u.last_login is not Null %}
+						        							{{u.last_login|date:"d/m/Y"}}
+						        						{% else %}
+						        							No ingresó
+						        						{% endif %}
+						        	</p>
+							    </div>
+							  </div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+					  	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		{% else %}
+			<br>
 	<div class="row white renglon-logos">
 		<div class="col s12 m4 valign-wrapper">
 			<img class="logos-home"src="{% static 'images/fundecch.jpg' %}">	
@@ -40,16 +280,29 @@
 	<div class="separador"></div>
 	<div class="row">
 		<div class="col s12">
-			<a href="{% url 'credits' %}"><img class="logo-info"src="../static/images/informatorio_transp.png"></a>
+			<a href="{% url 'credits' %}"><img class="logo-info"src="{% static 'images/informatorio_transp.png' %}"></a>
 			<p class="center">
 				HECHO CON <i class="material-icons">
 favorite</i> EN 2018
  			</p>	
 		</div>
 	</div>	
-{% endblock %}
+		{% endif %}
+	
 
+{% endblock %}
 {% block extra_js %}
+	<script type="text/javascript">
+	  $(document).ready(function(){
+	    $('.modal').modal();
+	  });	
+	</script>
+
+	<script type="text/javascript">
+	  $(document).ready(function(){
+	    $('.tooltipped').tooltip();
+	  });
+	</script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			{% if messages %}
@@ -59,5 +312,5 @@ favorite</i> EN 2018
 	  		{% endfor %}
 			{% endif %}
 		});
-	</script>
+	</script>	
 {% endblock %}
