@@ -110,15 +110,16 @@
 					{% for u in users %}
 				        <a href="#modal{{u.id}}" class="modal-trigger collection-item">
 				        	<li >
-				        	{{u.username|lower}}
-				        	<span class="secondary-content">
-				        			{% if u.last_login is not Null %}
-				        				{{u.last_login|date:"d/m/Y"}}
-				        			{% else %}
-				        				No entró
-				        			{% endif %}
-				        	</span>
-				        </li>
+					        	{{u.username|lower}}
+					        	<span class="secondary-content">
+	<!-- 				        			{% if u.last_login is not Null %}
+					        				{{u.last_login|date:"d/m/Y"}}
+					        			{% else %}
+					        				No entró
+					        			{% endif %} -->
+					        			Ver más
+					        	</span>
+				        	</li>
 				        </a>
 			        {% endfor %}
 			      	</ul>
@@ -222,7 +223,13 @@
 						    	<p>Nombre: {{u.first_name}}</p><br>
 						    	<p>Apellido: {{u.last_name}}</p><br>
 						    	<p>N° de teléfono: {{u.profile.phone_number}}</p><br>
-						    	<p>Email: {{u.email}}</p>
+						    	<p>Email: {{u.email}}</p><br>
+						    	<p>Último ingreso:  {% if u.last_login is not Null %}
+					        							{{u.last_login|date:"d/m/Y"}}
+					        						{% else %}
+					        							No ingresó
+					        						{% endif %}
+					        	</p>
 						    </div>
 						  </div>
 						</div>

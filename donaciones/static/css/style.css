@@ -193,6 +193,8 @@ body{
 .scroll-home{
 	height: 175px;
 	overflow:auto;
+	background-color: white;
+	margin: 0;
 
 }
 
