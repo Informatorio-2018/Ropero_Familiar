@@ -8,13 +8,19 @@ import datetime
 class FamilyForm_r(forms.ModelForm):
     class Meta:
         model = Family
-        fields = ('firstname', 'lastname', 'dni', 'birth')
+        fields = ('firstname', 'lastname', 'dni')
 
+    def clean_dni(self):
+        dni = self.cleaned_data.get('dni')
+        if len(str(dni)) != 8:
+            raise forms.ValidationError('DNI no valido')
+        return dni      
 
 class FamilyForm(forms.ModelForm):
     class Meta:
         model = Family
-        fields = ('firstname', 'lastname', 'dni', 'birth')
+        fields = ('firstname', 'lastname', 'dni')
+        
 
 
 class DonationForm(forms.ModelForm):
@@ -27,6 +33,14 @@ class ReferringForm(forms.ModelForm):
     class Meta:
         model = Referring
         fields = ('phone', 'adress')
+    
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        # username = username.upper()
+        if len(str(phone)) != 10:
+            raise forms.ValidationError('Número de telefono no valido')
+        return phone      
+    
 
 
 class LoadTypesDonationForm(forms.ModelForm):

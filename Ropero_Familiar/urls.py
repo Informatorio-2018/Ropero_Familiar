@@ -43,7 +43,6 @@ urlpatterns = [
     path('adm/registrar_usuario/', views.register_user, name="register_user"),
     path('adm/reporte_donaciones/', views.donations_report, name="donations_report"),
     path('adm/reporte_ventas/', views.sales_report, name="sales_report"),
-    path('adm/home/', views.adm_home, name="adm_home"),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('ingreso_ropero/', views.closet, name='closet'),

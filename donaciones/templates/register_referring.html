@@ -8,13 +8,14 @@
 	<form method="POST">
 		{% csrf_token %}
 
-		{{form_family.firstname.label_tag}}
+		<!-- {{form_family.firstname.label_tag}}
 		{{form_family.firstname}}
 		{{form_family.lastname.label_tag}}
 		{{form_family.lastname}}
 		{{form_family.dni.label_tag}}
-		{{form_family.dni}}
-		{{form_family.birth.label_tag}}
+		{{form_family.dni}} -->
+		{{form_family}}
+		<label>Fecha de Nacimiento</label>
 		<input type="text" class="datepicker" name='birth'>
 		{{form_refering.as_p}}
 		<div class="input-field col s12">

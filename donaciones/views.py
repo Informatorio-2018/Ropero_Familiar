@@ -619,11 +619,6 @@ def relative_profile(request,id):
     return render(request, 'relative_profile.html', {'fam': fam,
                                                     'ref': ref})
 
-
-@login_required
-def home(request):
-    return render(request, 'home.html', {})
-
 @login_required
 def edit_referring(request,id):
     ref = Referring.objects.get(pk=id)
@@ -934,8 +929,8 @@ def delete_sale(request):
     return JsonResponse(response)
 
 @login_required
-@staff_member_required(login_url='home')
-def adm_home(request):
+# @staff_member_required(login_url='home')
+def home(request):
     today = datetime.date.today()  
     #Datos ventas
     data_s = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
@@ -951,7 +946,7 @@ def adm_home(request):
     donations = TypesDonation.objects.all()
 
     # import ipdb; ipdb.set_trace()
-    return render(request,'adm_home.html',{# Donaciones
+    return render(request,'home.html',{# Donaciones
                                            'data_d':data_d,
                                            #Ventas
                                            'data_s':data_s,
