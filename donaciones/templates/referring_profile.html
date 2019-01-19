@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Pefil de {{ref.firstname}}{% endblock %}
+{% block title %}Pefil de {{ref.family.firstname}}{% endblock %}
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
@@ -9,13 +9,13 @@
 				<div class="card">				
 					<div class="card-content">
 						<span class="card-title">Perfil de Referente</span><br>
-						<p>Nombre: {{ref.firstname}}</p><br>
-						<p>Apellido: {{ref.lastname}}</p><br>
-						<p>DNI: {{ref.dni}}</p><br>
-						<p>Fecha de Nacimiento: {{ref.birth}}</p><br>
-						<p>Dirección: {{ref.referring.adress}}</p><br>
-						<p>Barrio: {{ref.referring.neighborhood}}</p><br>
-						<p>Número de Teléfono: {{ref.referring.phone}}</p>
+						<p>Nombre: {{ref.family.firstname}}</p><br>
+						<p>Apellido: {{ref.family.lastname}}</p><br>
+						<p>DNI: {{ref.family.dni}}</p><br>
+						<p>Fecha de Nacimiento: {{ref.family.birth}}</p><br>
+						<p>Dirección: {{ref.adress}}</p><br>
+						<p>Barrio: {{ref.neighborhood}}</p><br>
+						<p>Número de Teléfono: {{ref.phone}}</p>
 					</div>
 				</div>
 			</div>
