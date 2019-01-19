@@ -117,6 +117,13 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ('username', 'password1', 'password2', 'first_name', 'last_name', 'is_staff')
 
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        username = username.upper()
+        if User.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError('Ya existe un usuario con este nombre')
+        return username
+
 
 class DonationsReportForm(forms.Form):
     donation = forms.CharField(label='Donaciones')
@@ -141,11 +148,12 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['phone_number']
 
-    # def clean_phone_number(self):
-    #     phone_number = self.cleaned_data.get('phone_number', None)
-    #     if (len(str(phone_number)) != 10):
-    #         raise ValidationError('Longitud de número no valida')
-    #     return phone_no
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        # username = username.upper()
+        if len(str(phone_number)) != 10:
+            raise forms.ValidationError('Número de telefono no valido')
+        return phone_number
 
 
 class UserUpdateForm(forms.ModelForm):

@@ -172,9 +172,14 @@ body{
 	table-layout:fixed;
 }
 
-#table-report > thead {
-	width: calc( 100% - 1em )
+#title-table{
+	margin: 0;
 }
+
+
+/*#table-report > thead {
+	width: calc( 100% - 1em )
+}*/
 
 #table-report {
 	width: 100%;

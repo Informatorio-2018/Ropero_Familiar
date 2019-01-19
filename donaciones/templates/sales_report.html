@@ -9,7 +9,7 @@
       <div id="graphic_sale" class="col s12 m6"></div>
       <div class="col s12 m6">
         <form method="POST" id="form-report" action="{% url 'sales_report' %}">
-         <div class="input-field">
+         <div class="input-field" id="input-select">
           {% csrf_token %}
             <select multiple name="sale_id">
               <option value="" disabled selected>Elija tipo de articulo</option>
@@ -26,15 +26,15 @@
             <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
           </div>
           <div class="row"></div>
-           <div class="input-field">
+           <div class="input-field" id="input-finish">
             <input type="text" class="datepicker" name='finish' id='id_finish' required>
             <label for="id_finish" class="">Hasta:</label>
-            <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
+            <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha final del reporte</span>
           </div>
 
           <div class="row">
             <div class="col s12 m8 push-m2">
-              <input type="submit" value="Generar Reporte" class="btn-large boton-perfil" id="btn_buscar">
+              <input type="submit" value="Generar Reporte" class="btn-large boton-perfil" id="btn_report">
             </div>
           </div>
         </form>
@@ -49,33 +49,39 @@
               type: $(this).attr('method'),
               url: $(this).attr('action'),
               success: function(report){
+                $('#report-ajax').show();
                 if (report.length > 0) {
                   $('#null').remove()
                   //Aca recupero los datos y muestro en template
+                  $('#report-ajax').removeClass("hide");
                   var title = $('<h3 class="center-align">Reporte generado</h3>')
                   $('#id_title').html(title);
-                  $('#table-report').removeClass("hide")
+                  $('#table-report').removeClass("hide");
                   $('#id_title').removeClass("hide");
                   $('#title-table').removeClass("hide");
+                  $('#product-total').removeClass("hide");
                   var content = $;
-                  var content2 = '';
+                  var content2 = '<div class="collapsible-header grey lighten-3"><i class="material-icons">touch_app</i>Total vendido por producto</div>';
                   for (var i = 0; i < report.length; i++) {
                     if(report[i].product_type!==undefined){
                       content += ('<tr>'+'<td>'+report[i].sale__entry__family__firstname+", "+report[i].sale__entry__family__lastname+'</td>'+'<td>'+report[i].product_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
                       
                     }else{
-                      content2 += ('<p>'+'Total '+report[i].product_type_total+' - '+report[i].product_total+" (Unidad: "+report[i].unit_measure+')'+'</p>');
+                      content2 += ('<div class="collapsible-body grey lighten-4"><span>'+report[i].product_type_total+": "+report[i].product_total+report[i].unit_measure+'</span></div>');
                     }
                   }
+                  console.log(content2);
                   $('#table-report tbody').html(content);
-                  $('#product_total').html(content2);
+                  $('#coll-content').html(content2);
                   ScrollBottomSubmit();
                 } else {
+                  $('#report-ajax').removeClass("hide");
                   var title_null = $('<h4 class="center-align" id="null">No se realizaron ventas durante el periodo de tiempo seleccionado</h4>')
                   $('#title_null').html(title_null);
                   $('#table-report').addClass("hide");
                   $('#id_title').addClass("hide");
                   $('#title-table').addClass("hide");
+                  $('#product-total').addClass("hide");
                   ScrollBottomSubmit();
                 }
               }
@@ -87,41 +93,34 @@
       <!-- Acá termina script form-report -->
 
       <div class="row"></div>
-      <div class="col s12 card" id="report-ajax">
+      <div class="col s12 card highlight z-depth-2 hide" id="report-ajax">
+        <a class="right-align secondary-content" href="#" id="alert_close"><i class="material-icons">clear</i></a>
         <div id="id_title"></div>
         <div id="title_null"></div>
-        <h4 class="center-align hide" id="title-table">Detalles de ventas</h4>
-        <table class="hide centered" id="table-report">
-          <thead>
+        <table class="hide centered card" id="table-report">
+          <thead class="grey lighten-3">
             <tr>
-                <th>Nombre</th>
+              <th><h5 id="title-table">Detalles De Ventas</h5></th>
+            </tr>
+          </thead>
+          <thead class="grey lighten-3">
+            <tr>
+                <th>Nombre</th> 
                 <th>Producto</th>
                 <th>Cantidad</th>
                 <th>Precio</th>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody class="grey lighten-4">
           </tbody>
         </table>
-        <div id="product_total"></div>
-          <!--<div class="card">
-            <div class="card-content">
-              <h5 class="center-align">Total vendido por tipo de producto</h5>
-            </div>
-            <div class="card-tabs">
-              <ul class="tabs tabs-fixed-width">
-                <li class="tab"><a href="#test4">Ropa Verano</a></li>
-                <li class="tab"><a class="active" href="#test5">Ropa Invieron</a></li>
-                <li class="tab"><a href="#test6">Calzados</a></li>
-              </ul>
-            </div>
-            <div class="card-content grey lighten-4">
-              <div id="test4">5 kg</div>
-              <div id="test5">10 kg</div>
-              <div id="test6">20 par</div>
-            </div>
-          </div>-->
+        <div id="product-total" class="hide">
+          <ul class="collapsible">
+            <li id="coll-content">
+            </li>
+          </ul>
+        </div>
       </div>
 
     </div>
@@ -130,13 +129,6 @@
 
 
 {% block extra_js %}
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $('.tabs').tabs();
-    });
-        
-  </script>
-
   <script type="text/javascript">
     $(document).ready(function(){
       $('select').formSelect();
@@ -201,5 +193,42 @@
       $("html, body").animate({scrollTop:height+"px"});
     };
   </script>
+
+  <!-- Cierra reporte-->
+  <script type="text/javascript">
+    $('#alert_close').click(function(){
+      $( "#report-ajax" ).fadeOut( "slow", function() {
+      });
+    });
+  </script>
+
+  <!--Comprobaciones -->
+  <script type="text/javascript">
+    $(document).ready(function() {document  
+      $("#btn_report").on("click", function(e){
+        var product = $("select[name='sale_id']").val();
+        var begin = new Date($("input[name='begin']").val().replace(/-/g,'/'));
+        var finish = new Date($("input[name='finish']").val().replace(/-/g,'/'));
+
+        //Select sin producto
+        if (product === null || product == '') {
+          e.preventDefault();
+          $('#input-select').children('span').text("Elija al menos un articulo").addClass("red-text");
+        }else {
+          $('#input-select').children('span').text("Seleccione el tipo de articulo del que desea un reporte").removeClass("red-text");
+        }
+
+        //Fecha de inicio mayor a la final
+        if (begin > finish) {
+          e.preventDefault();
+          $('#input-finish').children('span').text("Esta fecha no puede ser anterior a la fecha de inicio").addClass("red-text");
+        } else {
+          $('#input-finish').children('span').text("Ingrese fecha final del reporte").removeClass("red-text");
+        }
+
+      }); 
+    });
+  </script>
+ 
 
 {% endblock %}

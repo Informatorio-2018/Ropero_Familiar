@@ -194,6 +194,9 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def ensure_profile_exists(sender, instance, **kwargs):
     if kwargs.get('created', False):
+        # print(instance.id)
+        # instance.username = instance.username.upper()
+        # # instance.save()
         Profile.objects.get_or_create(user=instance)
         print("Se acaba de crear un usuario y su perfil enlazado")
 

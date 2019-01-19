@@ -790,18 +790,17 @@ def register_user(request):
     if request.method == 'POST':
         form_user = UserRegisterForm(request.POST)
         form_profile = ProfileForm(request.POST)
-        if form_user.is_valid():
+        if form_user.is_valid() and form_profile.is_valid():
+            form_user.save()
             user = form_user.save(commit=False)
-            user.username = user.username.upper()
-            user.save()
             form_profile = ProfileForm(request.POST, instance=user.profile)
             if form_profile.is_valid():
                 prof = form_profile.save(commit=False)
                 prof.phone_number = request.POST["phone_number"]
                 prof.save()
-            username = form_user.cleaned_data.get('username')
-            messages.success(request, f'La cuenta fue creada, ahora {username} puede iniciar sesion')
-            return redirect('home')
+                username = form_user.cleaned_data.get('username')
+                messages.success(request, f'La cuenta fue creada, ahora {username} puede iniciar sesion')
+                return redirect('home')
     else:
         form_user = UserRegisterForm()
         form_profile = ProfileForm()
