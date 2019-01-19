@@ -105,7 +105,7 @@
         <li class="divider"></li>
         <li  class="grey lighten-3">
           <a href="{% url 'load_types_donation' %}">
-            <i class="material-icons">card_giftcard</i>Tipos de Donaciones
+            <i class="material-icons">apps</i>Tipos de Donaciones
           </a>
         </li>
         <li class="divider"></li>
@@ -139,9 +139,12 @@
         </li>
       {% endif %}
       <!--Fin opciones usuario staff-->
+      <div class="grey darken-4 white-text title-menu">
+            USUARIO
+      </div>
       <li class="grey lighten-3">
-        <a href="{% url 'profile_user' %}"><i class="material-icons">person</i>Mi Perfil</a>
-      </li
+        <a href="{% url 'profile_user' %}"><i class="material-icons">person</i>Perfil</a>
+      </li>
       <li class="divider"></li>
       <li class="grey lighten-3">
         <a href="{% url 'logout' %}"><i class="material-icons">arrow_back</i>Logout</a>
