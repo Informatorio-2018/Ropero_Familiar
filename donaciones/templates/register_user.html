@@ -13,7 +13,7 @@
           {{form_user.username}}
           {{form_user.username.label_tag}}
           {% if form_user.username.errors %}
-            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.username.errors}}</span>
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.username.errors|striptags}}</span>
           {% else %}
             <span class="helper-text" data-error="wrong" data-success="right">{{form_user.username.help_text}}</span>
           {% endif %}
@@ -23,7 +23,7 @@
             {{form_user.password1}}
             {{form_user.password1.label_tag}}
             {% if form_user.password1.errors %}
-              <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.password1.errors}}</span>
+              <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.password1.errors|striptags}}</span>
             {% else %}
               <span class="helper-text" data-error="wrong" data-success="right">{{form_user.password1.help_text}}</span>
             {% endif %}
@@ -33,7 +33,7 @@
             {{form_user.password2}}
             {{form_user.password2.label_tag}}
             {% if form_user.password2.errors %}
-              <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.password2.errors}}</span>
+              <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.password2.errors|striptags}}</span>
             {% else %}
               <span class="helper-text" data-error="wrong" data-success="right">{{form_user.password2.help_text}}</span>
             {% endif %}
@@ -43,7 +43,7 @@
           {{form_user.first_name}}
           {{form_user.first_name.label_tag}}
           {% if form_user.first_name.errors %}
-            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.first_name.errors}}</span>
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.first_name.errors|striptags}}</span>
           {% else %}
           <span class="helper-text" data-error="wrong" data-success="right">{{form_user.first_name.help_text}}</span>
           {% endif %}
@@ -53,7 +53,7 @@
           {{form_user.last_name}}
           {{form_user.last_name.label_tag}}
           {% if form_user.last_name.errors %}
-            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.last_name.errors}}</span>
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_user.last_name.errors|striptags}}</span>
           {% else %}
           <span class="helper-text" data-error="wrong" data-success="right">{{form_user.last_name.help_text}}</span>
           {% endif %}
@@ -63,7 +63,7 @@
           {{form_profile.phone_number}}
           {{form_profile.phone_number.label_tag}}
           {% if form_profile.phone_number.errors %}
-            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_profile.phone_number.errors}}</span>
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_profile.phone_number.errors|striptags}}</span>
           {% else %}
            <span class="helper-text" data-error="wrong" data-success="right">Maximo 10 digitos. Requerido.</span>
           {% endif %}

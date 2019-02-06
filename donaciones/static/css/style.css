@@ -203,6 +203,14 @@ body{
 
 }
 
+#col-home > li > div.collapsible-body {
+	padding: 5px 5px 0 5px;
+}
+
+#col-home > li > div.collapsible-body > a {
+	margin-bottom: 5px;
+}
+
 /* TABLETA */
 @media screen and(max-width: 768px){
 	.titulo-topbar{
