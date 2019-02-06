@@ -537,9 +537,7 @@ def register_referring(request):
 
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
-        # import ipdb; ipdb.set_trace()
         if form_refering.is_valid() and form_family.is_valid() :
-            # import ipdb; ipdb.set_trace()
             fam = form_family.save(commit=False)
             fam.role = 'r'
             fam.birth = request.POST['birth']
@@ -586,9 +584,13 @@ def referring_search(request):
             query = form.cleaned_data['query']
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
-            q3 = Q(role__exact='r')
-            ref = Family.objects.filter((q1 & q3) | (q2 & q3))
-            total = Family.objects.filter((q1 & q3) | (q2 & q3)).count()
+            q3 = Q(dni__exact=query)
+            if query.isdigit():
+                ref = Family.objects.filter(q3)
+                total = Family.objects.filter(q3).count()
+            else:
+                ref = Family.objects.filter(q1 or q2)
+                total = Family.objects.filter(q1 or q2).count()                
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query,
                                                                  'total': total})
@@ -728,11 +730,11 @@ def closet(request):
             query = form.cleaned_data['query']
             q1 = Q(firstname__contains=query)
             q2 = Q(lastname__contains=query)
-            fam = Family.objects.filter(q1 | q2)
-            # buscar = "'"+query+"'"
-            # sql = "SELECT * FROM donaciones_family f INNER JOIN donaciones_referring r ON f.ref == r.family_id WHERE f.firstname == %s or f.lastname == %s"%(buscar,buscar)            
-            # fami = Family.objects.raw(sql)
-            # fam = list(fami)
+            q3 = Q(dni__exact=query)
+            if query.isdigit():
+                fam = Family.objects.filter(q3)
+            else:
+                fam = Family.objects.filter(q1 or q2)
             return render(request, 'closet_search_out.html', {'fam': fam,
                                                               'query': query})
     else:
@@ -755,7 +757,7 @@ def entry_ok(request,id):
             entry = None
             break
 
-    import ipdb; ipdb.set_trace()
+    # import ipdb; ipdb.set_trace()
     if fam.role == 'r':
         last_buy = fam.referring.last_buy
     else:
