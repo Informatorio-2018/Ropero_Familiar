@@ -239,7 +239,6 @@ body{
 
 
 
-
 @media screen and (min-width: 993px){
 	nav a.sidenav-trigger {
     	display: inline;
@@ -248,3 +247,8 @@ body{
 
 .image-container img{
 	max-width: 150px;
+}
+
+.graphs{
+	height: 400px;
+}

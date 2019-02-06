@@ -6,8 +6,13 @@
 {% block content %}
 <div class="contenedor z-depth-3 white">
 
-<h3 class="center-align">Para Clasificar</h3>
+{% if list_donations %}
+	<h3 class="center-align">Para Clasificar</h3>
+{% else %}
+	<h3 class="center-align">No Hay Nada Para Clasificar</h3>
+{% endif %}
 <div class="row">
+	{% if list_donations %}
 
 		<div class="col s12 m6">
 
@@ -37,33 +42,33 @@
 		
 		</div>
 
+	       
+		<div class="texto-ayuda">Seleccione el destino de los artículos clasificados</div>
 
-        
+		<div class="separador"></div>
 
-
-	<div class="texto-ayuda">Seleccione el destino de los artículos clasificados</div>
-
-	<div class="separador"></div>
-
-	<div class="col s12 m6">
-		<div class="row">
-			<div class="col s12 valign-wrapper" >
-				<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn-large waves-effect waves-light btn-large boton-home">Ropero</a>
+		<div class="col s12 m6">
+			<div class="row">
+				<div class="col s12 valign-wrapper" >
+					<a href="{% url 'sort_products' %}" class="waves-effect waves-light btn-large waves-effect waves-light btn-large boton-home">Ropero</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn-large boton-home">Acondicionar</a>
+				</div>
+			</div>
+			<div class="row">	
+				<div class="col s12">
+					<a href="#" class="waves-effect waves-light btn-large boton-home">Basura</a>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col s12">
-				<a href="{% url 'fix_products' %}" class="waves-effect waves-light btn-large boton-home">Acondicionar</a>
-			</div>
-		</div>
-		<div class="row">	
-			<div class="col s12">
-				<a href="#" class="waves-effect waves-light btn-large boton-home">Basura</a>
-			</div>
-		</div>
+	{% else %}
+	<div class="center-align">
+		<img src="{% static 'images/nada.gif' %}" class="responsive-img">
 	</div>
-
-
+	{% endif %}
 </div>
 	<div class="row">	
 		<div class="col m3"></div>

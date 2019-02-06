@@ -15,38 +15,44 @@
 						<div class="center-align black white-text">	
 							<span class="card-title"><span><i class="material-icons">card_giftcard</i></span>Donaciones recibidas éste mes</span>
 						</div>
-						<div class="grey lighten-2" id='donations_graph'>
-					    
-					  	</div>		
-						<!-- Grafico columnas -->
-						<script type="text/javascript">
-							Highcharts.chart('donations_graph', {
-							  chart: {
-							     type: 'column'
-							  },
-							  title: {
-							     text: 'Donaciones del mes'
-							  },
-							  xAxis: {
-							     categories: ['Tipos de donaciones'],
-							     crosshair: true
-							  },
-							  yAxis: {
-							  min: 0,
-							  title: {
-							    text: 'Cantidad'
-							  }
-							  },
-							  series:[ 
-							  {% for d in data_d %}
-							    {
-							      name: '{{d.donation_type}}',
-							      data: [{{d.total|safe}}]
-							    },
-							  {% endfor %} 
-							  ]
-							}); 
-						</script>
+						{% if data_d %}
+							<div class="grey lighten-2" id='donations_graph'>
+						    
+						  	</div>		
+							<!-- Grafico columnas -->
+							<script type="text/javascript">
+								Highcharts.chart('donations_graph', {
+								  chart: {
+								     type: 'column'
+								  },
+								  title: {
+								     text: ''
+								  },
+								  xAxis: {
+								     categories: ['Tipos de donaciones'],
+								     crosshair: true
+								  },
+								  yAxis: {
+								  min: 0,
+								  title: {
+								    text: 'Cantidad'
+								  }
+								  },
+								  series:[ 
+								  {% for d in data_d %}
+								    {
+								      name: '{{d.donation_type}}',
+								      data: [{{d.total|safe}}]
+								    },
+								  {% endfor %} 
+								  ]
+								}); 
+							</script>
+						{% else %}
+							<div class="graphs">
+								<h4 style="margin:0; padding-top: 150px" class="center-align">No hubo donaciones éste mes</h4>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 
@@ -55,38 +61,44 @@
 						<div class="center-align  black white-text">	
 							<span class="card-title"><span><i class="material-icons">monetization_on</i></span>Ventas realizadas éste mes</span>
 						</div>
-						<div class="grey lighten-2" id="sales_graph">
-							<!-- ACA VENTAS -->
-						</div>
-						<!-- Grafico columnas -->
-						<script type="text/javascript">
-							Highcharts.chart('sales_graph', {
-							  chart: {
-							     type: 'column'
-							  },
-							  title: {
-							     text: 'Ventas del mes'
-							  },
-							  xAxis: {
-							     categories: ['Tipos de articulos'],
-							     crosshair: true
-							  },
-							  yAxis: {
-							  min: 0,
-							  title: {
-							    text: 'Cantidad'
-							  }
-							  },
-							  series:[ 
-							  {% for d in data_s %}
-							    {
-							      name: '{{d.product_type}}',
-							      data: [{{d.total|safe}}]
-							    },
-							  {% endfor %} 
-							  ]
-							}); 
-						</script>
+						{% if data_s %}
+							<div class="grey lighten-2 graphs" id="sales_graph">
+								<!-- ACA VENTAS -->
+							</div>
+							<!-- Grafico columnas -->
+							<script type="text/javascript">
+								Highcharts.chart('sales_graph', {
+								  chart: {
+								     type: 'column'
+								  },
+								  title: {
+								     text: ''
+								  },
+								  xAxis: {
+								     categories: ['Tipos de articulos'],
+								     crosshair: true
+								  },
+								  yAxis: {
+								  min: 0,
+								  title: {
+								    text: 'Cantidad'
+								  }
+								  },
+								  series:[ 
+								  {% for d in data_s %}
+								    {
+								      name: '{{d.product_type}}',
+								      data: [{{d.total|safe}}]
+								    },
+								  {% endfor %} 
+								  ]
+								}); 
+							</script>
+						{% else %}
+							<div class="graphs">
+								<h4 style="margin:0; padding-top: 150px" class="center-align">No hubo ventas éste mes</h4>
+							</div>
+						{% endif %}
 					</div>
 				</div>
 			</div>
