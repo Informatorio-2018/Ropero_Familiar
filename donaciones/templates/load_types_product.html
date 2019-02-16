@@ -4,12 +4,16 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-<h4 class="center-align">Tipos de Articulos</h4>
-	 <div class="collection lighten-3 z-depth-1">
+<h4 class="center-align">Actualizar Precios</h4>
+	 <ul class="collection lighten-3 z-depth-1">
 	 	{% for t in types %}
-        <a href="{% url 'update_price_article' t.id %}" class="collection-item">{{t.name}}</a>
+	 		<a class="collection-item" href="{% url 'update_price_article' t.id %}">
+	 			{{t.name}}
+	 			<div class="secondary-content">${{t.price}}</div>
+	 		</a>
+	 			{# <a href="{% url 'update_price_article' t.id %}">{{t.name}}<p class="secondary-content">$ {{t.price}}</p></a> #}
         {% endfor %}
-      </div>
+      </ul>
       <ul class="center-align">
 	<li>
 		<a href="{% url 'home' %}" class="btn modal-trigger btn-large ">Volver</a>
