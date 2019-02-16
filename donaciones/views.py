@@ -589,8 +589,8 @@ def referring_search(request):
                 ref = Family.objects.filter(q3)
                 total = Family.objects.filter(q3).count()
             else:
-                ref = Family.objects.filter(q1 or q2)
-                total = Family.objects.filter(q1 or q2).count()                
+                ref = Family.objects.filter(q1 | q2)
+                total = Family.objects.filter(q1 | q2).count()                
             return render(request, 'referring_search_out.html', {'ref': ref,
                                                                  'query': query,
                                                                  'total': total})
