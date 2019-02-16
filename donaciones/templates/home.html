@@ -6,14 +6,14 @@
 		{% if user.is_staff %}
 		<div class="contenedor z-depth-3 white">
 			<div class="row">
-				<h5><span><i class="material-icons">date_range</i></span>
+				<h5><span><i class="material-icons align-v-icon">date_range</i></span>
 				Resumen del mes</h5>
 			</div>
 			<div class="row">
 				<div class="col s12 m6">
 					<div class="card z-depth-4">
 						<div class="center-align black white-text">	
-							<span class="card-title"><span><i class="material-icons">card_giftcard</i></span>Donaciones recibidas éste mes</span>
+							<span class="card-title"><span><i class="material-icons align-v-icon">card_giftcard</i></span>Donaciones recibidas éste mes</span>
 						</div>
 						{% if data_d %}
 							<div class="grey lighten-2" id='donations_graph'>
@@ -59,7 +59,7 @@
 				<div class="col s12 m6">
 					<div class="card z-depth-3">
 						<div class="center-align  black white-text">	
-							<span class="card-title"><span><i class="material-icons">monetization_on</i></span>Ventas realizadas éste mes</span>
+							<span class="card-title"><span><i class="material-icons align-v-icon">monetization_on</i></span>Ventas realizadas éste mes</span>
 						</div>
 						{% if data_s %}
 							<div class="grey lighten-2 graphs" id="sales_graph">
@@ -103,10 +103,10 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<h5><span><i class="material-icons">tune
-	</i></span>Ajustes</h5>
-			</div>
+		<div class="row">
+			<h5><span><i class="material-icons align-v-icon">tune
+			</i></span>Ajustes</h5>
+		</div>
 
 			<div class="row">
 				<div class="col s12 m4">
@@ -114,7 +114,7 @@
 						<div class="center-align  black white-text">	
 							<span class="card-title">
 								<span>
-									<i class="material-icons">recent_actors</i></span>Usuarios</span>
+									<i class="material-icons align-v-icon">recent_actors</i></span>Usuarios</span>
 						</div>
 
 						<div class="grey lighten-2">
@@ -150,7 +150,7 @@
 						<div class="center-align  black white-text">	
 							<span class="card-title">
 								<span>
-									<i class="material-icons">layers</i></span>Artículos</span>
+									<i class="material-icons align-v-icon">layers</i></span>Artículos</span>
 						</div>
 
 						<div class="grey lighten-2">
@@ -185,7 +185,7 @@
 						<div class="center-align  black white-text">	
 							<span class="card-title">
 								<span>
-									<i class="material-icons">card_giftcard</i></span>Donaciones</span>
+									<i class="material-icons align-v-icon">card_giftcard</i></span>Donaciones</span>
 						</div>
 
 						<div class="grey lighten-2">
@@ -255,59 +255,41 @@
 			{% endfor %}
 		</div>
 	{% else %}
-		<br>
-		<div class="row white renglon-logos">
-			<div class="col s12 m4 valign-wrapper">
-				<img class="logos-home"src="{% static 'images/fundecch.jpg' %}">	
-			</div>
-			<div class="col s12 m4">
-				<img class="logos-home"src="{% static 'images/flia_conin.jpg' %}">		
-			</div>
-			<div class="col s12 m4">
+	<br>
+	<div class="row white renglon-logos">
+		<div class="col s12 m4 valign-wrapper">
+			<img class="logos-home"src="{% static 'images/fundecch.jpg' %}">	
+		</div>
+		<div class="col s12 m4">
+			<img class="logos-home"src="{% static 'images/flia_conin.jpg' %}">		
+		</div>
+		<div class="col s12 m4">
 
-				<p class="texto-ropero">
-					Ropero Familiar permite que todos los integrantes de la familia tengan abrigo y zapatos.
-				</p>
-			</div>
-		</div>
-		<div class="separador"></div>
-	<!-- <div class="row">
-		<div class="col s12 m6">
-			<a href="{% url 'receive_donation' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">card_giftcard</i>Recibir Donación</a>
-		</div>
-		<div class="col s12 m6">
-			<div class="row hide-on-med-and-up"></div>
-			<a href="{% url 'list_sort' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">save_alt</i>Clasificar Donaciones</a>
+			<p class="texto-ropero">
+				Ropero Familiar permite que todos los integrantes de la familia tengan abrigo y zapatos.
+			</p>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col s12 m6">
-			<a href="{% url 'closet' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">store</i>Ingreso al Ropero</a>
-		</div>
-		<div class="col s12 m6">
-			<div class="row hide-on-med-and-up"></div>
-			<a href="{% url 'peoples_closet' %}" class="waves-effect waves-light btn-large boton-home"><i class="material-icons left">monetization_on</i>Registrar Venta</a>
-		</div>
-	</div>	 -->
+	<div class="separador"></div>
 	<div class="row">	
 		<ul class="col s12 m6 collapsible" id="col-home" style="border:0; box-shadow:0 0 0 0">
-	    	<li>
-      		<div class="collapsible-header waves-effect waves-light btn-large boton-home" style="border:0"><i class="material-icons">filter_drama</i>Donaciones</div>
-      		<div class="collapsible-body">
-      			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">card_giftcard</i>Recibir Donación</a>
-      			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">save_alt</i>Clasificar Donaciones</a>
-      			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">build</i>Acondicionar</a>
-      		</div>
-	    	</li>
-	  	</ul>
+    	<li>
+    		<div class="collapsible-header waves-effect waves-light btn-large boton-home valign-wrapper" style="border:0"><i class="material-icons">favorite</i>Donaciones</div>
+    		<div class="collapsible-body">
+    			<a href="{% url 'receive_donation' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">card_giftcard</i>Recibir Donación</a>
+    			<a href="{% url 'list_sort' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">save_alt</i>Clasificar Donaciones</a>
+    			<a href="{% url 'list_fix' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">build</i>Acondicionar</a>
+    		</div>
+    	</li>
+  	</ul>
 		<ul class="col s12 m6 collapsible" id="col-home" style="border:0; box-shadow:0 0 0 0">
     	<li>
-    		<div class="collapsible-header waves-effect waves-light btn-large boton-home" style="border:0"><i class="material-icons">filter_drama</i>Ropero Familiar</div>
+    		<div class="collapsible-header waves-effect waves-light btn-large boton-home valign-wrapper" style="border:0"><i class="material-icons">store</i>Ropero Familiar</div>
     		<div class="collapsible-body">
-    			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">card_giftcard</i>Ingreso al Ropero</a>
-    			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">save_alt</i>Registrar Venta</a>
-    			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">build</i>Buscar Familia</a>
-    			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">build</i>Registrar Familia</a>
+    			<a href="{% url 'closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">input</i>Ingreso al Ropero</a>
+    			<a href="{% url 'peoples_closet' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">monetization_on</i>Registrar Venta</a>
+    			<a href="{% url 'referring_search' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">supervised_user_circle</i>Buscar Familia</a>
+    			<a href="{% url 'register_referring' %}" class="btn-large boton-home waves-effect waves-light"><i class="material-icons left">group_add</i>Registrar Familia</a>
       	</div>
     	</li>
 	  </ul>  	
@@ -317,8 +299,8 @@
 			<div class="col s12 m4 push-m4">
 				<a href="{% url 'credits' %}"><img class="logo-info"src="{% static 'images/informatorio_transp.png' %}"></a>
 				<p class="center">
-					HECHO CON <i class="material-icons">
-	favorite</i> EN 2018
+					HECHO CON <i class="material-icons align-v-icon">
+					favorite</i> EN 2018
 	 			</p>	
 			</div>
 		</div>	

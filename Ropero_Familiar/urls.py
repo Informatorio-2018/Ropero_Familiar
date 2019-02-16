@@ -51,6 +51,7 @@ urlpatterns = [
     path('personas_ropero/venta/<int:id>/', views.sale, name="sale"),
     path('personas_ropero/venta/<int:id>/detalles', views.sale_detail, name="sale_detail"),
     path('personas_ropero/venta/<int:id>/detalles/resumen/', views.summary_sale, name="summary_sale"),
+    path('salir_ropero/<int:id>/', views.exit_closet, name='exit_closet'),
     path('eliminar_venta/', views.delete_sale, name='delete_sale'),
     path('perfil_usuario/', views.profile_user, name='profile_user'),
     path('creditos/', views.credits, name="credits"),

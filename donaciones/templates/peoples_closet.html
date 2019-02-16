@@ -4,15 +4,69 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
-		<h2 class="center-align">Personas en el ropero</h2>
-		<ul class="collection">
+		<h2 class="center-align hide-on-small-only">Personas en el ropero</h2>
+		<h4 class="center-align hide-on-med-and-up">Personas en el ropero</h4>
+		<ul class="collection row" id="col-peoples">
 			{% if peoples %}
 				{% for person in peoples %}
-					<a class="collection-item" href="{% url 'sale' person.id %}"><i class="material-icons right">shopping_cart</i>{{person}}</a>
+					<li class="collection-item row"> 
+            <div class="col l6 m6 s6 valign-wrapper">
+            	<h6>{{ person }}</h6>
+            </div>
+             <div class="col l1 m1 s1 push-s2 push-m2 push-l3">
+              <a class="modal-trigger btn secondary-content" href="#modal_sale{{person.id}}"><i class="material-icons">shopping_cart</i></a>
+            </div>
+            <div class="col l1 m1 s1 push-s4 push-m4 push-l4">
+              <a class="waves-effect waves-light btn modal-trigger right-align secondary-content" href="#modal_out{{person.id}}"><i class="material-icons">remove_shopping_cart</i></a>
+            </div>
+          </li>
+
+				  <!-- Modal Structure Sale-->
+				  <div id="modal_sale{{person.id}}" class="modal">
+				    <div class="modal-content">
+				      <h4>¿Realizar venta?</h4>
+				    </div>
+				    <div class="modal-footer">
+				    	<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+				      <a href="{% url 'sale' person.id %}" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+				    </div>
+				  </div>
+
+				  <!-- Modal Structure Out-->
+				  <div id="modal_out{{person.id}}" class="modal">
+				    <div class="modal-content">
+				      <h4>Salir</h4>
+				      <p>{{person}} saldra del ropero sin comprar</p>
+				    </div>
+				    <div class="modal-footer">
+				      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+				      <a href="{% url 'exit_closet' person.id %}" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+				    </div>
+				  </div>
+
 				{% endfor %}
 			{% else %}
 				<div class="collection-item">No hay personas comprando</div>
 			{% endif %}
-	   </ul>
+	  </ul>
+	  {% if peoples %}
+		  <div class="input-field">
+	      <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons align-v-icon">shopping_cart</i> para realizar venta </span>
+	      <span class="helper-text" data-error="wrong" data-success="right">Presionar en <i class="tiny material-icons align-v-icon">remove_shopping_cart</i> para salir </span>
+	    </div>
+	  {% endif %}
+	  <div class="row">
+	  	<div class="col m4 s12 offset-m4">
+      	<a class="waves-effect waves-light btn-large boton-home" id="btn_next" href="{% url 'home' %}">Volver</a>
+    	</div>
+	  </div>
 	</div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+	$(document).ready(function(){
+    $('.modal').modal();
+  });
+</script>
 {% endblock %}
