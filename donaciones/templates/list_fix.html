@@ -5,33 +5,31 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-
-  <h3 class="center-align">Acondicionando</h3>
-  <div class="texto-ayuda"></div>
-  <ul class="collapsible">
-    {% for r in resp %}
- 		 {% if r.state == 0 %}
- 		 <li>
-      <div class="collapsible-header">
-        <p class="col s12">{{r.name}}  {{r.date}}</p></div>
-      		{% for c in carry %}
-      			{% if r.id == c.responsable_id %}
-      				<div class="collapsible-body">
-                <span>Llevo: {{c.types}}  {{c.quantity}}{{c.unit_measure}}</span>
-      					<a href="{% url 'give_back' c.id %}" class="modal-trigger right">Devolver</a>
-      				</div>
-      			{% endif %}	
-      		{% endfor %}
-    	</li>
- 		{% endif %}
-	{% endfor %}
-</ul>
-<ul class="center-align">
-	<li>
-		<a href="{% url 'agregate_responsable' %}" class="btn modal-trigger btn-large ">Nueva Refaccion</a>
-	</li>
-</ul>
-  
+    <h3 class="center-align">Acondicionando</h3>
+    <div class="helper-text">Lista de voluntarios c</div>
+    <ul class="collapsible">
+        {% for r in resp %}
+            {% if r.state == 0 %}
+                <li>
+                    <div class="collapsible-header">
+                        <p class="col s12">{{r.name}}  {{r.date}}</p>
+                    </div>
+                    {% for c in carry %}
+                        {% if r.id == c.responsable_id %}
+                            <div class="collapsible-body">
+                                <span>Llevo: {{c.types}}  {{c.quantity}}{{c.unit_measure}}</span>
+                                <a href="{% url 'give_back' c.id %}" class="modal-trigger right">Devolver</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+    <div class="center-align">
+        <a href="{% url 'home' %}" class="btn modal-trigger btn-large ">Volver</a>
+        <a href="{% url 'agregate_responsable' %}" class="btn modal-trigger btn-large ">Nueva Refaccion</a>
+    </div>
 </div>
 {% endblock %}
 

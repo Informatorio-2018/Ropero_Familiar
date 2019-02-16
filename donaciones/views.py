@@ -475,20 +475,17 @@ def list_sort(request):
 def list_fix(request):
     resp=ResponsableFix.objects.all()
     carry=Carry.objects.filter(quantity__gt=0)
-    
-
-
+    list_res=[]
     for r in resp:
         q1=Q(responsable_id=r.id)
         q2=Q(quantity__gt=0)
         if Carry.objects.filter(q1 & q2).count() > 0:
+            list_res.append(r)
             r.state = 0
             r.save()
 
-
-
-
-    context={'resp':resp,'carry':carry}
+    print(list_res,'Cantidad de responsables')
+    context={'resp':list_res,'carry':carry}
     return render(request,'list_fix.html',context)
 
 def give_back(request,id):

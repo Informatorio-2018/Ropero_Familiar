@@ -90,7 +90,7 @@ class Referring(models.Model):
 class TypesProducts(models.Model):
     name = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
-    price = models.IntegerField(default=0)
+    price = models.IntegerField(default=0,verbose_name='Precio')
     quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0, validators=[MaxValueValidator(99999999.00), MinValueValidator(0.00)], verbose_name='Cantidad Total')
 
     def __str__(self):
