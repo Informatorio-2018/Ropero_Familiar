@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %} Para Clasificar {% endblock %}
+{% block title %} Clasificar Donaciones {% endblock %}
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
 
 {% if list_donations %}
-	<h3 class="center-align">Para Clasificar</h3>
+	<h3 class="center-align">Clasificar Donaciones</h3>
 {% else %}
 	<h3 class="center-align">No Hay Nada Para Clasificar</h3>
 {% endif %}
@@ -59,7 +59,7 @@
 				</div>
 			</div>
 			<div class="row">	
-				<div class="col s12">
+				<div class="col s12 ">
 					<a href="#" class="waves-effect waves-light btn-large boton-home">Basura</a>
 				</div>
 			</div>
@@ -71,8 +71,7 @@
 	{% endif %}
 </div>
 	<div class="row">	
-		<div class="col m3"></div>
-		<div class="col s12 m6">
+		<div class="col s12 m4 offset-m4 ">
 			<a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home">Volver</a>
 		</div>
 		<div class="col m3"></div>

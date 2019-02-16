@@ -101,7 +101,7 @@ class ResponsableFix(models.Model):
     date = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=30, verbose_name='Nombre')
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
-    phone = models.IntegerField()
+    phone = models.IntegerField(verbose_name='Telefono')
     adress = models.CharField(max_length=80, verbose_name='Dirección')
     state = models.BooleanField(default=0)
 

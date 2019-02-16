@@ -6,7 +6,7 @@
 {% block content %}
 <div class="contenedor z-depth-3 white">
     <h3 class="center-align">Acondicionando</h3>
-    <div class="helper-text">Lista de voluntarios c</div>
+    <div class="helper-text">Lista de voluntarios</div>
     <ul class="collapsible">
         {% for r in resp %}
             {% if r.state == 0 %}
@@ -26,10 +26,11 @@
             {% endif %}
         {% endfor %}
     </ul>
-    <div class="center-align">
-        <a href="{% url 'home' %}" class="btn modal-trigger btn-large ">Volver</a>
-        <a href="{% url 'agregate_responsable' %}" class="btn modal-trigger btn-large ">Nueva Refaccion</a>
+    <div class="row">
+        <a href="{% url 'home' %}" class="col s12 m4 push-m2 btn modal-trigger btn-large ">Volver</a>
+        <a href="{% url 'agregate_responsable' %}" class="col s12 m4 push-m2 btn modal-trigger btn-large ">Nueva Refaccion</a>
     </div>
+    
 </div>
 {% endblock %}
 

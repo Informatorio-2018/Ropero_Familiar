@@ -6,25 +6,20 @@
  
 {% block alert %}
 {% if alert %}
-
-        <div class="container">
-          <div class="row center-align" id="alert_box">
-            <div class="col s12 ">
-              <div class="card #e53935 red darken-1">
-                  <div class="col s2 push-s10">
-                    <i id="alert_close" class="material-icons  white-text" aria-hidden="true">close</i>
-                  </div>
-                <div class="card-content white-text">
-                  <span class="card-title"><h5>Atencion</h5></span>
-                  <p>{{alert}}</p>
-                </div>
-              </div>
-            </div>
-          </div>        
-        </div> 
-    
+  <div class="container">
+    <div class="row center-align" id="alert_box">
+      <div class="col s12 ">
+        <div class="card #e53935 red darken-1">
+          <i id="alert_close" class="material-icons right-align secondary-content white-text" aria-hidden="true">close</i>
+          <div class="card-content white-text">
+            <span class="card-title"><p><i class="material-icons align-v-icon" aria-hidden="true">error</i>Atención</p></span>
+            <p>{{alert}}</p>
+          </div>
+        </div>
+      </div>
+    </div>        
+  </div> 
  {% endif %}
-  
 {% endblock %}  
 
 {% block content %}
@@ -68,19 +63,19 @@
       <form method="POST">
         {% csrf_token %}
         {{form}}
-
-        <button type="submit" class="btn modal-trigger btn-large">Guardar</button>
+        <div class="separador"></div>
+        <div class="row">
+            <button type="submit" class=" col s12 m8 offset-m2 btn modal-trigger btn-large">Guardar</button> 
+        </div>
       </form>
 
     </div>
   </div>
-
-      <ul class="center-align">
-        <div class="separador"></div>
-        <li>
-          <a href="{% url 'list_sort' %}" class="waves-effect btn-large waves-light btn">Volver</a>
-        </li>
-      </ul>
+  <div class="row">
+    <a href="{% url 'list_sort' %}" class="col s12 m4 offset-m4 waves-effect btn-large waves-light btn">Volver</a>
+  </div>
+        
+      
 </div>
 
 {% endblock %}
