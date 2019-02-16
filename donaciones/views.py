@@ -699,20 +699,29 @@ def del_neigh(request, id):
 def login(request):
     if request.user.is_authenticated:
         return redirect('home')
-
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        username = username.upper()
-        user = authenticate(request,username=username,password=password)
+    form = LoginForm(request.POST or None)
+    if request.POST and form.is_valid():
+        #import ipdb; ipdb.set_trace()
+        user = form.login(request)
         if user is not None:
-            log(request,user)
+            log(request, user)
             request.session['member_id'] = user.id
             request.session.set_expiry(14400) #86400 = 24hs     # 3600 = 1hr
-
-            return redirect('home')
-    form = LoginForm()
+            return redirect('home')# Redirect to a success page.
     return render(request,'login.html',{'form': form})
+    # if request.method == "POST":
+    #     username = request.POST['username']
+    #     password = request.POST['password']
+    #     username = username.upper()
+    #     user = authenticate(request,username=username,password=password)
+    #     if user is not None:
+    #         log(request,user)
+    #         request.session['member_id'] = user.id
+    #         request.session.set_expiry(14400) #86400 = 24hs     # 3600 = 1hr
+
+    #         return redirect('home')
+    # form = LoginForm()
+    # return render(request,'login.html',{'form': form})
 
 @login_required
 def logout(request):
@@ -829,6 +838,12 @@ def peoples_closet(request):
     return render(request, 'peoples_closet.html', context)
 
 @login_required
+def exit_closet(request, id):
+    entry = FamilyEntry.objects.get(pk=id)
+    entry.delete()
+    return redirect('peoples_closet')
+
+@login_required
 def sale(request, id):
     #import ipdb; ipdb.set_trace()
     try:
@@ -872,9 +887,28 @@ def sale_detail(request,id):
             # Restar la cantidad vendida de product_types
             type_res = TypesProducts.objects.get(name=detail.product_type)
             if detail.product_type == type_res.name:
+                # Control producto ropa 1.5kg por cada venta
+                if detail.product_type == 'Ropa Invierno' or detail.product_type == 'Ropa Verano':
+                    if detail.quantity > 1.5:
+                        alert = 'Solo se permite 1.5Kg por cada venta'
+                        detail.delete()
+                        form = SalesDetailsForm()
+                        context = {'entry': entry, 'types': types, 'form': form, 
+                                    'sale': sale, 'sale_details': sale_details, 'alert': alert}
+                        return render(request, 'sales.html', context)
+                # Control producto calzado 2 pares por cada venta
+                if detail.product_type == 'Calzados':
+                    if detail.quantity > 2:
+                        alert = 'Solo se permite 2 pares por cada venta'
+                        detail.delete()
+                        form = SalesDetailsForm()
+                        context = {'entry': entry, 'types': types, 'form': form, 
+                                    'sale': sale, 'sale_details': sale_details, 'alert': alert}
+                        return render(request, 'sales.html', context)   
                 if type_res.quantity_total < detail.quantity:
                     alert = 'La cantidad ingresada es mayor a la disponible en el ropero'
                     detail.delete()
+                    form = SalesDetailsForm()
                     context = {'entry': entry, 'types': types, 'form': form, 
                                 'sale': sale, 'sale_details': sale_details, 'alert': alert}
                     return render(request, 'sales.html', context)
@@ -984,17 +1018,6 @@ def profile_user_edit(request, id):
     context = {'form': form, 'form_profile':form_profile}
     return render(request, 'profile_user_edit.html', context)
 
-# def user_change_pass(request, id):
-#     user = User.objects.get(pk=id)
-#     if request.method == 'POST':
-#         form = UserPasswordForm(request.POST, instance=user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('profile_user')
-#     else:
-#         form = UserPasswordForm(instance=user)
-#     context = {'form':form}
-#     return render(request, 'user_change_pass.html', context)
 
 @login_required
 def change_password(request, id):

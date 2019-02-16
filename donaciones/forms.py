@@ -3,6 +3,7 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import datetime
+from django.contrib.auth import authenticate, login
 
 
 class FamilyForm_r(forms.ModelForm):
@@ -14,13 +15,13 @@ class FamilyForm_r(forms.ModelForm):
         dni = self.cleaned_data.get('dni')
         if len(str(dni)) != 8:
             raise forms.ValidationError('DNI no valido')
-        return dni      
+        return dni
+
 
 class FamilyForm(forms.ModelForm):
     class Meta:
         model = Family
         fields = ('firstname', 'lastname', 'dni')
-        
 
 
 class DonationForm(forms.ModelForm):
@@ -33,14 +34,13 @@ class ReferringForm(forms.ModelForm):
     class Meta:
         model = Referring
         fields = ('phone', 'adress')
-    
+
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
         # username = username.upper()
         if len(str(phone)) != 10:
             raise forms.ValidationError('Número de telefono no valido')
-        return phone      
-    
+        return phone
 
 
 class LoadTypesDonationForm(forms.ModelForm):
@@ -122,6 +122,22 @@ class EditNeighForm(forms.ModelForm):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=20, label='Nombre de Usuario')
     password = forms.CharField(max_length=20, widget=forms.PasswordInput(), label='Contraseña')
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        username = username.upper()
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if not user or not user.is_active:
+            raise forms.ValidationError("Error, usuario o contraseña incorrectos.")
+        return self.cleaned_data
+
+    def login(self, request):
+        username = self.cleaned_data.get('username')
+        username = username.upper()
+        password = self.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        return user
 
 
 class UserRegisterForm(UserCreationForm):

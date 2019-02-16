@@ -5,113 +5,195 @@
 {% block content %}
 
 <div class="contenedor z-depth-3 white">
-		       <div class="col s12 separador"></div>
-<div class="row">
-    <h4 class=" titulos center-align"><strong>Full Stack Developers</strong></h4>    
-</div>
+<div class="col s12 separador"></div>
 
-<div class="row">
-    
-    <div class="row center-align">
-        <div class="col s12 l4">
-            <div class="image-container">
+  <div class="row">
+    <div class="card row center-align hoverable">
+      <h4 class=" titulos center-align"><strong>Full Stack Developers</strong></h4>
+      <div class="hide-on-small-only col s12 m4 l4">
+        <div class="image-container">
+        <img class="circle" src=" {% static 'images\facu.jpg' %}">
+        <h5>Facundo Costa</h5>
+        </div>
+      </div>    
+      <div class="hide-on-small-only col s12 m4 l4">
+        <div class="image-container">
+            <img class="circle" src="{% static 'images\cristian.jpg' %}">
+            <h5>Cristian Jovanovich</h5>
+        </div>  
+      </div> 
+      <div class="hide-on-small-only col s12 m4 l4">
+        <div class="image-container">
+        <img class="circle" src="{% static 'images\joe.png' %}">
+        <h5>Joel Maglioni</h5>
+        </div>
+      </div>
+      <div class="hide-on-med-and-up carousel">
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
             <img class="circle" src=" {% static 'images\facu.jpg' %}">
             <h5>Facundo Costa</h5>
-            </div>
-        </div>    
-        <div class="col s12 l4">
-            <div class="image-container">
-                <img class="circle" src="{% static 'images\cristian.jpg' %}">
-                <h5>Cristian Jovanovich</h5>
-            </div>  
-        </div> 
-
-        <div class="col s12 l4">
-          <div class="image-container">
-          <img class="circle" src="{% static 'images\joe.png' %}">
-          <h5>Joel Maglioni</h5>
           </div>
-        </div>       
-	</div>
+        </div> 
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\cristian.jpg' %}">
+            <h5>Cristian Jovanovich</h5>
+          </div>  
+        </div> 
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\joe.png' %}">
+            <h5>Joel Maglioni</h5>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div class="col s12 separador"></div>
-<div class="col s12 separador hide-on-med-and-up"></div>
+    <div class="col s12 separador"></div>
+    <div class="col s12 separador hide-on-med-and-up"></div>
 
-
-<div class="row">
-    <h4 class="titulos center-align"><strong>Frontend Developers</strong></h4>
-</div>
-
-<div class="row center-align">
-    <div class="col l2"></div>
-        <div class="col s12 l4">
-            <div class="image-container">
+    <div class="card row center-align hoverable">
+      <h4 class="titulos center-align"><strong>Frontend Developers</strong></h4>
+      <div class="col l2 m2"></div>
+        <div class="hide-on-small-only col s12 m4 l4">
+          <div class="image-container">
             <img class="circle" src="{% static 'images\maira.jpeg' %}">
             <h5>Maira Medina</h5>
-            </div>
+          </div>
         </div>    
-        <div class="col s12 l4">
+        <div class="hide-on-small-only col s12 m4 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\sabrina.jpg' %}">
+            <h5>Sabrina Aquino</h5>
+          </div>  
+        </div>
+        <div class="hide-on-med-and-up carousel">
+          <div class="carousel-item col s12 l4">
             <div class="image-container">
-                <img class="circle" src="{% static 'images\sabrina.jpg' %}">
-                <h5>Sabrina Aquino</h5>
+              <img class="circle" src="{% static 'images\maira.jpeg' %}">
+              <h5>Maira Medina</h5>
+            </div>
+          </div> 
+          <div class="carousel-item col s12 l4">
+            <div class="image-container">
+              <img class="circle" src="{% static 'images\sabrina.jpg' %}">
+              <h5>Sabrina Aquino</h5>
             </div>  
-        </div> 
-    <div class="col l2"></div>       
-</div>
+          </div> 
+        </div>       
+    </div>
 
-<div class="row center-align">
-    <h4 class="titulos"><strong>Team Leaders</strong></h4>
-</div>
-<div class="row center-align">
-
-	<div class="col l2"></div>
-    <div class="col s12 l4">
+    <div class="card row center-align hoverable">
+      <h4 class="titulos"><strong>Team Leaders</strong></h4>
+      <div class="col l2 m2"></div>
+      <div class="hide-on-small-only col s12 l4 m4">
         <div class="image-container">
+          <img class="circle" src="{% static 'images\matiasnormal.jpg' %}">
+          <h5>Matias Mancuello</h5>
+        </div>
+      </div>
+      <div class="hide-on-small-only col s12 l4 m4">
+        <div class="image-container">
+          <img class="circle" src="{% static 'images\simon.jpg' %}">
+          <h5>Simón Ibalo</h5>
+        </div>  
+      </div>
+      <div class="hide-on-med-and-up carousel">
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
             <img class="circle" src="{% static 'images\matiasnormal.jpg' %}">
             <h5>Matias Mancuello</h5>
-        </div>
-    </div>
-    <div class="col s12 l4">
-        <div class="image-container">
+          </div>
+        </div> 
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
             <img class="circle" src="{% static 'images\simon.jpg' %}">
             <h5>Simón Ibalo</h5>
-        </div>  
+          </div>  
+        </div> 
+      </div>    
+    </div> 
+    
+    <div class="card row center-align hoverable">
+      <h4 class="titulos center-align"><strong>Collaborators</strong></h4>
+      <div class="row hide-on-small-only">
+        <div class="col l2 m2"></div>
+        <div class="col l4 m4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\Brahim.jpg' %}">
+            <h5>Brahim Denysiuk</h5>
+          </div>
+        </div>
+        <div class="hide-on-small-only col l4 m4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\agustin.jpg' %}">
+            <h5>Agustín Harasiwka</h5>
+          </div>
+        </div>
+      </div>
+      <div class="row hide-on-small-only">
+        <div class="col l2 m2"></div>
+        <div class="col l4 m4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\alexis.jpg' %}">
+            <h5>Alexis Peloso</h5>
+          </div>
+        </div>
+        <div class="hide-on-small-only col l4 m4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\eduardo.jpg' %}">
+            <h5>Eduardo Ferreyra</h5>
+          </div>
+        </div>
+      </div>
+      <div class="hide-on-med-and-up carousel">
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\Brahim.jpg' %}">
+            <h5>Brahim Denysiuk</h5>
+          </div>
+        </div> 
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\agustin.jpg' %}">
+            <h5>Agustín Harasiwka</h5>
+          </div>  
+        </div>
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\alexis.jpg' %}">
+            <h5>Alexis Peloso</h5>
+          </div>  
+        </div>
+        <div class="carousel-item col s12 l4">
+          <div class="image-container">
+            <img class="circle" src="{% static 'images\eduardo.jpg' %}">
+            <h5>Eduardo Ferreyra</h5>
+          </div>  
+        </div>     
+      </div>   
     </div>
+    
+  </div><!-- Cierra row principal-->
 
-</div> 
-<div class="row">
-        <h4 class="titulos center-align"><strong>Collaborators</strong></h4>
-</div>    
-<div class="row center-align">
+</div><!-- Cierra contenedor -->
 
-            <div class="col s12 l3">
-                <div class="image-container">
-                <img class="circle" src="{% static 'images\Brahim.jpg' %}">
-                </div>
-                <h5>Brahim Denysiuk</h5>
-            </div>    
-            <div class="col s12 l3">
-              <div class="image-container">
-              <img class="circle" src="{% static 'images\agustin.jpg' %}">
-              <h5>Agustín Harasiwka</h5>
-              </div>
-          </div>
-          <div class="col s12 l3">
-              <div class="image-container">
-              <img class="circle" src="{% static 'images\alexis.jpg' %}">
-              <h5>Alexis Peloso</h5>
-              </div>
-          </div>
-           <div class="col s12 l3">
-              <div class="image-container">
-              <img class="circle" src="{% static 'images\eduardo.jpg' %}">
-              <h5>Eduardo Ferreyra</h5>
-              </div>
-          </div>    
-         
-        
-</div>
-</div>
-</div>
+{% endblock %}
 
+{% block extra_js %}
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.carousel').carousel({
+        padding: 15,
+        indicators: true,
+        duration: 100,
+      });
+      autoplay()   
+      function autoplay() {
+      $('.carousel').carousel('next');
+        setTimeout(autoplay, 4500);
+      }  
+    });
+  </script>
 {% endblock %}

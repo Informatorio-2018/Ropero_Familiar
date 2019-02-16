@@ -111,6 +111,9 @@ body{
 	background-color: #831212;
 }
 
+.boton-home:focus{
+	background-color: #831212;
+}
 
 #id_total{
 	font-size: 2em;
@@ -203,28 +206,71 @@ body{
 
 }
 
+#col-home > li > div.collapsible-header {
+	line-height: normal;
+}
+
 #col-home > li > div.collapsible-body {
 	padding: 5px 5px 0 5px;
+	border-bottom: 0;
 }
 
 #col-home > li > div.collapsible-body > a {
 	margin-bottom: 5px;
 }
 
+#col-peoples > li > div > a {
+	width: 85px;
+	height: 40px;
+}
+
+.align-v-icon{
+	vertical-align: -3px;
+}
+
+.image-container img{
+    width: 150px;
+    height: 150px;
+}
+
 /* TABLETA */
-@media screen and(max-width: 768px){
+@media only screen and (max-width: 600px){
 	.titulo-topbar{
 		font-size: 2.4rem!important;
 		color: red!important;
 	}
 
 	.logo-topbar{
-		max-width: 40px!important;
-		margin: 5px 0 0 5px;
+		margin: 1px 0 0 5px;
 	}
 
 	.img-login{
 		padding: 5% 2%!important;
+	}
+
+	#col-peoples > li > div > a {
+		width: 50px;
+	}
+
+	.image-container img{
+    	width: 200px;
+    	height: 200px;
+	}
+
+	.carousel .indicators .indicator-item{
+		background-color: #831212;
+	}
+
+	.carousel .indicators .indicator-item.active{
+		background-color: #f44336;
+	}
+
+	.carousel {
+		height: 350px;
+	}
+	
+	.carousel .carousel-item{
+		top: -50px;
 	}
 
 }
@@ -239,22 +285,10 @@ body{
 }
 
 
-
-
-
-
-
-
-
-
 @media screen and (min-width: 993px){
 	nav a.sidenav-trigger {
     	display: inline;
 	}
-}
-
-.image-container img{
-	max-width: 150px;
 }
 
 .graphs{

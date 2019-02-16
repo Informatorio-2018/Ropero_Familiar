@@ -10,7 +10,7 @@
         <div class="card #e53935 red darken-1">
           <i id="alert_close" class="material-icons right-align secondary-content white-text" aria-hidden="true">close</i>
           <div class="card-content white-text">
-            <span class="card-title"><p><i class="material-icons" aria-hidden="true">error</i>Atención</p></span>
+            <span class="card-title"><p><i class="material-icons align-v-icon" aria-hidden="true">error</i>Atención</p></span>
             <p>{{alert}}</p>
           </div>
         </div>
@@ -23,6 +23,7 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
+		<a class="btn right-align secondary-content " href="#"><i class="material-icons">clear</i></a>
 		<div class="row">
 			<h3 class="col s11">{{entry.family.lastname}}, {{entry.family.firstname}}</h3>
 			<h4 class="right-align">Subtotal: ${{sale.total}}</h4>
@@ -57,7 +58,7 @@
       					</strong>
       				</h6>
       			</div>
-		      	<form method="POST">
+		      	<form method="POST" id="form">
 		      		{% csrf_token %}
 			      	<div class="row">
 			      			<div class="col s8 m4 offset-m4 input-field">
