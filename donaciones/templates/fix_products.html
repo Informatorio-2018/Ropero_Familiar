@@ -26,6 +26,7 @@
   <h3 class="center-align">Para Acondicionar</h3>
 
   <div class="row">
+    {% if control %}
 
     <div class="col s12 m6">
       <div class="texto-ayuda">Donaciones sin clasificar"</div>
@@ -61,6 +62,15 @@
     </form>
   </div>
 </div>
+{% else %}
+    <div class="separador"></div>
+    <div class="center-align">
+      <img src="{% static 'images/nada.gif' %}" class="responsive-img">
+    </div>
+    <div class="separador"></div>
+    <h4 class="center-align">No hay productos para clasificar</h4>
+    <div class="separador"></div>
+  {% endif %}
 <div class="row">
   <a href="{% url 'list_sort' %}" class="col s12 m4 offset-m4 waves-effect btn-large waves-light btn">Volver</a>
 </div>
