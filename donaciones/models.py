@@ -98,7 +98,6 @@ class TypesProducts(models.Model):
 
 
 class ResponsableFix(models.Model):
-    date = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=30, verbose_name='Nombre')
     lastname = models.CharField(max_length=30, verbose_name='Apellido')
     phone = models.IntegerField(verbose_name='Telefono')
@@ -112,6 +111,7 @@ class ResponsableFix(models.Model):
 
 
 class Carry(models.Model):
+    date = models.DateTimeField(null=True,auto_now_add=True,verbose_name="Fecha de creacion")
     types = models.CharField(max_length=30, verbose_name='Tipo de Donación')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')

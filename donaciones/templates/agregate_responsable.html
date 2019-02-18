@@ -8,9 +8,13 @@
   <h3 class="center-align">Voluntarios</h3>
   <ul class="collection with-header lighten-3 z-depth-1">
  	  {% for r in resp %}
-      <a class="collection-item" href="{% url 'carry_out' r.id %}"><i class="material-icons right">pan_tool</i>{{r.name}}</a>
+      <a class="collection-item" href="{% url 'carry_out' r.id %}"><i class="material-icons right">pan_tool</i>{{r.name}} {{r.lastname}}</a>
     {% endfor %}
   </ul>
+  <div class="separador"></div>
+  <div class="row">
+    <a href="{% url 'list_fix' %}" class="col s12 m4 offset-m4 btn modal-trigger btn-large ">Volver</a>
+  </div>
   <div class="fixed-action-btn">
     <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
       <i class="large material-icons">add</i>

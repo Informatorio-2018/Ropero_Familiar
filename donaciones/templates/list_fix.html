@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %} Acondicionando {% endblock %}
 
@@ -6,18 +7,19 @@
 {% block content %}
 <div class="contenedor z-depth-3 white">
     <h3 class="center-align">Acondicionando</h3>
-    <div class="helper-text">Lista de voluntarios</div>
+    {% if carry %}
+    <div class="helper-text">Lista de voluntarios con productos en refaccion</div>
     <ul class="collapsible">
         {% for r in resp %}
             {% if r.state == 0 %}
                 <li>
                     <div class="collapsible-header">
-                        <p class="col s12">{{r.name}}  {{r.date}}</p>
+                        <p class="col s12">{{r.name}}  {{r.lastname}}</p>
                     </div>
                     {% for c in carry %}
                         {% if r.id == c.responsable_id %}
                             <div class="collapsible-body">
-                                <span>Llevo: {{c.types}}  {{c.quantity}}{{c.unit_measure}}</span>
+                                <span>Llevo: {{c.quantity}}{{c.unit_measure}} de {{c.types}} el {{c.date}}</span>
                                 <a href="{% url 'give_back' c.id %}" class="modal-trigger right">Devolver</a>
                             </div>
                         {% endif %}
@@ -26,9 +28,17 @@
             {% endif %}
         {% endfor %}
     </ul>
+    {% else %}
+        <h4 class="center-align">No hay productos en refacción</h4>
+        <div class="separador"></div>
+        <div class="center-align">
+            <img src="{% static 'images/nada.gif' %}" class="responsive-img">
+        </div>
+        <div class="separador"></div>
+    {% endif %}
     <div class="row">
-        <a href="{% url 'home' %}" class="col s12 m4 push-m2 btn modal-trigger btn-large ">Volver</a>
-        <a href="{% url 'agregate_responsable' %}" class="col s12 m4 push-m2 btn modal-trigger btn-large ">Nueva Refaccion</a>
+        <a href="{% url 'home' %}" class="col s12 m4 offset-m1 btn modal-trigger btn-large ">Volver</a>
+        <a href="{% url 'agregate_responsable' %}" class="col s12 m4 offset-m2 btn modal-trigger btn-large ">Nueva Refaccion</a>
     </div>
     
 </div>
