@@ -221,9 +221,10 @@
 			{% for u in users %}
 				<div id="modal{{u.id}}" class="modal">
 					<div class="modal-content">
-					  <h4>Información de usuario:</h4>
+					  <h4 class="hide-on-small-only center-align">Información de usuario</h4>
+					  <h5 class="hide-on-med-and-up center-align">Información de usuario</h5>
 						<div class="col s12 m7">
-							<div class="card horizontal">
+							<div class="card horizontal hide-on-small-only">
 							  <div class="card-image">
 							        {% if u.profile.image %}
 	          							<img class="circle" src="{{ u.profile.image.url }}">
@@ -236,7 +237,6 @@
 							    	<p>Nombre: {{u.first_name}}</p><br>
 							    	<p>Apellido: {{u.last_name}}</p><br>
 							    	<p>N° de teléfono: {{u.profile.phone_number}}</p><br>
-							    	<p>Email: {{u.email}}</p><br>
 							    	<p>Último ingreso:  {% if u.last_login is not Null %}
 						        							{{u.last_login|date:"d/m/Y"}}
 						        						{% else %}
@@ -246,6 +246,26 @@
 							    </div>
 							  </div>
 							</div>
+							<div class="card hide-on-med-and-up">
+						        <div class="card-image">
+						          	{% if u.profile.image %}
+	          							<img class="circle" src="{{ u.profile.image.url }}">
+	        						{% else %}
+	          							<img class="circle" src="{% static 'images/avatar.png' %}">
+	        						{% endif %}
+						        </div>
+						        <div class="card-content">
+						          <p>Nombre: {{u.first_name}}</p><br>
+							    	<p>Apellido: {{u.last_name}}</p><br>
+							    	<p>N° de teléfono: {{u.profile.phone_number}}</p><br>
+							    	<p>Último ingreso:  {% if u.last_login is not Null %}
+						        							{{u.last_login|date:"d/m/Y"}}
+						        						{% else %}
+						        							No ingresó
+						        						{% endif %}
+						        	</p>
+						        </div>
+						    </div>
 						</div>
 					</div>
 					<div class="modal-footer">

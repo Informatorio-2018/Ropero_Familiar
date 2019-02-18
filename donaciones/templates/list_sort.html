@@ -6,11 +6,8 @@
 {% block content %}
 <div class="contenedor z-depth-3 white">
 
-{% if list_donations %}
 	<h3 class="center-align">Clasificar Donaciones</h3>
-{% else %}
-	<h3 class="center-align">No Hay Nada Para Clasificar</h3>
-{% endif %}
+
 <div class="row">
 	{% if list_donations %}
 
@@ -68,6 +65,7 @@
 	<div class="center-align">
 		<img src="{% static 'images/nada.gif' %}" class="responsive-img">
 	</div>
+	<h5 class="center-align">No hay nada por aquí</h5>
 	{% endif %}
 </div>
 	<div class="row">	
