@@ -8,12 +8,14 @@
 	<h2 class="center-align">Referente</h2>
 	<form action="/busqueda_referente/" method="POST">
 		<div class="row">
-			<div class="input-field">
+			<div class="input-field col s12">
 				{% csrf_token %}
-				{{form}}
-				<span class="helper-text" data-error="wrong" data-success="right">Ingrese nombre, apellido o DNI del referente que desea buscar</span>
+				<i class="material-icons prefix">search</i> 
+				{{form.query}}
+				{{form.query.label_tag}}
+				<span class="helper-text" data-error="wrong" data-success="right">Ingrese nombre, apellido o DNI del referente.</span>
 			</div>
-			<div class="col s12 m6 push-m3">	
+			<div class="col s12 m4 push-m4">	
 				<input type="submit" value="Buscar" class="btn-large boton-perfil">
 			</div>
 			<div class="fixed-action-btn">
