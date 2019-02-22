@@ -8,7 +8,7 @@
 			<h3>Resultados para: "{{query}}"</h3>
 			<div class="row collection">
 				{% for r in ref %}
-					<a href="/referente/{{r.referring.id}}/" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
+					<a href="{% url 'referring_profile' r.referring.id %}" class="collection-item">{{r.lastname}}, {{r.firstname}}</a>
 				{% endfor %}
 			</div>
 		  {% else %}
@@ -16,11 +16,11 @@
 		  {% endif %}
 		  <div class="row">
 			  <div class="col s12 m4 push-m4">	
-				  <a href="/busqueda_referente/" class="btn-large boton-perfil">Volver</a>
+				  <a href="{% url 'referring_search' %}" class="btn-large boton-perfil">Volver</a>
 			  </div>
 		  </div>
 	    <div class="fixed-action-btn">
-		    <a href="/registrar_referente/" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
+		    <a href="{% url 'register_referring' %}" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
 	    </div>
   </div>
 
