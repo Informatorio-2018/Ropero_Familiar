@@ -7,7 +7,7 @@
 		<h2 class="center-align">Barrios</h2>
 		<div class="row collection">
 			{% for n in neigh %}
-				<a href="/adm/barrios/{{n.id}}" class="collection-item">{{n.name}}</a>		
+				<a href="{% url 'edit_neigh' n.id %}" class="collection-item">{{n.name}}</a>		
 			{% endfor %}
 		</div>
 		<h3 class="center-align">Agregar un Barrio</h3>

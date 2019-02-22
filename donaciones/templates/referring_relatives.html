@@ -8,19 +8,19 @@
 		<div class="row collection">
 			{% for f in fam %}
 				{% if f.role == 'f' %}
-					<a href="/referente/familiares/perfil_familiar/{{f.id}}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
+					<a href="{% url 'relative_profile' f.id %}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
 				{% endif %}
 			{% endfor %}
 		</div>
 		<div class="row">
 			<div class="col s12 m4"></div>
 			<div class="col s12 m4">
-				<a href="/referente/{{ref.id}}/" class="btn-large boton-perfil">Volver</a>
+				<a href="{% url 'referring_profile' ref.id %}" class="btn-large boton-perfil">Volver</a>
 			</div>
 		</div>
 
 		<div class="fixed-action-btn">
-			<a href="/referente/{{ref.id}}/familiares/registrar_familiar/" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
+			<a href="{% url 'register_family' ref.id %}" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
 		</div>
     </div>
 {% endblock %}
