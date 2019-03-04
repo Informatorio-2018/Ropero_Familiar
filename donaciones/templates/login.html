@@ -27,14 +27,12 @@
         				<i class="material-icons prefix">lock</i>
 								{{form.password}}
 								{{form.password.label_tag}}
-        			</div>
-        			<div class="input-field col s12">
         				{% if form.non_field_errors %}
 					        {% for error in form.non_field_errors %}
 					          <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{error}}</span>
 					        {% endfor %}
-								{% endif %}
-        			</div>
+						{% endif %}
+                    </div>
         			<div class="center-align">
         				<button type="submit" class="waves-effect waves-light btn-large boton-rojo"><i class="material-icons align-v-icon">fingerprint</i>Entrar</button>
         			</div>

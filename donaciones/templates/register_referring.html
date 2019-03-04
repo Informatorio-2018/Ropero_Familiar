@@ -5,21 +5,40 @@
 {% block content %}
 <div class="contenedor z-depth-3 white">
   <h3 class="center-align">Registro de Referente</h3>
-	<form method="POST">
+	<form method="POST" class="row">
 		{% csrf_token %}
-
-		<!-- {{form_family.firstname.label_tag}}
-		{{form_family.firstname}}
-		{{form_family.lastname.label_tag}}
-		{{form_family.lastname}}
-		{{form_family.dni.label_tag}}
-		{{form_family.dni}} -->
-		{{form_family}}
-		<label>Fecha de Nacimiento</label>
-		<input type="text" class="datepicker" name='birth'>
-		{{form_refering.as_p}}
+		    <div class="input-field col s12">
+          {{form_family.firstname}}
+          {{form_family.firstname.label_tag}}
+        </div>
+        <div class="input-field col s12">
+          {{form_family.lastname}}
+          {{form_family.lastname.label_tag}}
+        </div>
+        <div class="input-field col s12">
+          {{form_family.dni}}
+          {{form_family.dni.label_tag}}
+          {% if form_family.dni.errors %}
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_family.dni.errors|striptags}}</span>
+          {% endif %}
+        </div>
+        <div class="input-field col s12">
+           <input id="id_birth" type="text" class="datepicker" name='birth'>
+			     <label for="id_birth">Fecha de Nacimiento</label>
+        </div>
+        <div class="input-field col s12">
+          {{form_refering.phone}}
+          {{form_refering.phone.label_tag}}
+          {% if form_refering.phone.errors %}
+            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form_refering.phone.errors|striptags}}</span>
+          {% endif %}
+        </div>
+        <div class="input-field col s12">
+          {{form_refering.adress}}
+          {{form_refering.adress.label_tag}}
+        </div>
 		<div class="input-field col s12">
-    		<select name="neigh_id">
+    		<select name="neigh_id" required>
 		      <option value="" disabled selected>Elegir Barrio</option>
 		      {% for n in neigh %}
 		      	<option value={{n.id}}>{{n.name}}</option>
@@ -28,7 +47,7 @@
     		<label>Barrio</label>
   		</div>
   		<div class="row">
-  			<div class="col s12 m6 push-m3">
+  			<div class="col s12 m4 push-m4">
 				<button type="submit" class="btn-large boton-perfil">Guardar</button>
   			</div>
   		</div>

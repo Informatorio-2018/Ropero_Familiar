@@ -109,16 +109,7 @@ def edit_donation(request, id):
 #         detail.delete()
 #         delete_ok = True
 #         return redirect('resume_donation', id=id_donator)
-    # detail = get_object_or_404(DetailsDonation, pk=id)
-    # id_donator = detail.donation_id
-    # types = TypesDonation.objects.all()
-    # type_res = TypesDonation.objects.get(name=detail.donation_type)
-    # if detail.donation_type == type_res.name:
-    #     type_res.quantity_total -= detail.quantity
-    #     type_res.save()
-    # detail.delete()
-    # delete_ok = True
-    # return redirect('resume_donation', id=id_donator)
+
 @login_required
 def delete_donation(request):
     # import ipdb; ipdb.set_trace()
@@ -132,6 +123,21 @@ def delete_donation(request):
     response = {'type': detail.donation_type}
     detail.delete()
     return JsonResponse(response)
+
+@login_required
+def cancel_donation(self, id):
+    # import ipdb; ipdb.set_trace()
+    details = DetailsDonation.objects.filter(donation_id=id)
+    donation = Donation.objects.get(pk=id)
+    if details:
+        for detail in details:
+            type_res = TypesDonation.objects.get(name=detail.donation_type)
+            if detail.donation_type == type_res.name:
+                type_res.quantity_total -= detail.quantity
+                type_res.save()
+                detail.delete()
+    donation.delete()
+    return redirect('receive_donation') 
 
 @login_required
 def finish_donation(request, id):
@@ -529,11 +535,13 @@ def agregate_responsable(request):
 
 @login_required
 def register_referring(request):
+
     form_refering = ReferringForm(request.POST or None)
     form_family = FamilyForm_r(request.POST or None)
 
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
         if form_refering.is_valid() and form_family.is_valid() :
             fam = form_family.save(commit=False)
             fam.role = 'r'
@@ -605,6 +613,7 @@ def referring_profile(request, id):
 
 @login_required
 def referring_relatives(request, id):
+    # import ipdb; ipdb.set_trace()
     ref = Referring.objects.get(pk=id)
     fam = Family.objects.filter(ref=ref.family.id)
     return render(request, 'referring_relatives.html', {'ref': ref,
@@ -740,7 +749,7 @@ def closet(request):
             if query.isdigit():
                 fam = Family.objects.filter(q3)
             else:
-                fam = Family.objects.filter(q1 or q2)
+                fam = Family.objects.filter(q1 | q2)
             return render(request, 'closet_search_out.html', {'fam': fam,
                                                               'query': query})
     else:
@@ -957,9 +966,30 @@ def delete_sale(request):
     if detail.product_type == type_sum.name:
         type_sum.quantity_total += detail.quantity
         type_sum.save()
-    response = {'type_id': detail.id}
+    response = {'type_id': detail.id, 'total':sale.total}
     detail.delete()
     return JsonResponse(response)
+
+@login_required
+def cancel_sale(request, id):
+    sale = Sale.objects.get(entry_id=id)
+    details = SalesDetails.objects.filter(sale_id=sale.id)
+    entry = FamilyEntry.objects.get(pk=id)
+
+    # Si hay detalles, recorro details y elimino el detalle de venta
+    # devolviendo a typesproducts la cantidad vendida
+    if details:
+        for detail in details:
+            type_sum = TypesProducts.objects.get(name=detail.product_type)
+            if detail.product_type == type_sum.name:
+                type_sum.quantity_total += detail.quantity
+                type_sum.save()
+                detail.delete()
+    sale.delete()
+    entry.delete()
+    return redirect('peoples_closet')
+
+
 
 @login_required
 # @staff_member_required(login_url='home')

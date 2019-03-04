@@ -14,7 +14,7 @@ class FamilyForm_r(forms.ModelForm):
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
         if len(str(dni)) != 8:
-            raise forms.ValidationError('DNI no valido')
+            raise forms.ValidationError('DNI no válido')
         return dni
 
 
@@ -39,7 +39,7 @@ class ReferringForm(forms.ModelForm):
         phone = self.cleaned_data.get('phone')
         # username = username.upper()
         if len(str(phone)) != 10:
-            raise forms.ValidationError('Número de telefono no valido')
+            raise forms.ValidationError('Número de telefono no válido')
         return phone
 
 
