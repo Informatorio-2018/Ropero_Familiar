@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Bienvenido{% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
 		<div class="col s12">
 			<div class="card z-depth-5">
 				<div class="card-image img-login">
-          <img src="../static/images/flia_conin.jpg">
+          <img src="{% static 'images/flia_conin.jpg' %}">
         </div>
         <div class="card-content">
         	<div class="ayuda-iniciosesion grey-text text-darken-3">
