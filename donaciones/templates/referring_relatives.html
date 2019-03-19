@@ -4,13 +4,20 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
-		<h2 class="center-align">Familiares de {{ref.family.lastname}}, {{ref.family.firstname}}</h2>
+		<h3 class="center-align hide-on-small-only">Familiares de {{ref.family.lastname}}, {{ref.family.firstname}}</h3>
+		<h4 class="center-align hide-on-med-and-up">Familiares de {{ref.family.lastname}}, {{ref.family.firstname}}</h4>
 		<div class="row collection">
-			{% for f in fam %}
-				{% if f.role == 'f' %}
-					<a href="{% url 'relative_profile' f.id %}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
-				{% endif %}
-			{% endfor %}
+			{% if fam.count == 1 %}
+				<div class="collection-item">
+					Sin familiares registrados
+				</div>
+			{% else %}
+				{% for f in fam %}
+					{% if f.role == 'f' %}
+						<a href="{% url 'relative_profile' f.id %}" class="collection-item">{{f.lastname}}, {{f.firstname}}</a>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
 		</div>
 		<div class="row">
 			<div class="col s12 m4"></div>

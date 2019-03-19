@@ -4,10 +4,11 @@
 	
 {% block content %}
 	<div class="contenedor z-depth-3 white">
-		<h2 class="center-align">Editar Perfil de Referente</h2>
+		<h3 class="center-align hide-on-small-only">Editar Perfil de Referente</h3>
+		<h4 class="center-align hide-on-med-and-up">Editar Perfil de Referente</h4>
 		<div class="row">
 			<form method="POST">
-				<div class="col s12 m8 push-m2">
+				<div class="col s12">
 					{% csrf_token %}
 					{{form1.firstname.label_tag}}
 					{{form1.firstname}}
@@ -15,12 +16,12 @@
 					{{form1.lastname}}
 					{{form1.dni.label_tag}}
 					{{form1.dni}}
-					{{form1.birth.label_tag}}
-					<input type="text" class="datepicker" name='birth'>
+					<label>Fecha de Nacimiento:</label>
+					<input type="text" class="datepicker" name='birth' value="{{form1.instance.birth|date:"Y-m-d"}}">
 					{{form2.as_p}}
-					<div class="input-field col s12">
+					<div class="input-field">
 			    		<select name="neigh_id">
-					      <option value="{{ref.neighborhood}}" disabled>{{ref.neighborhood.name}}</option>
+					      <option value="{{ref.neighborhood.id}}">{{ref.neighborhood.name}}</option>
 					      {% for n in neigh %}
 					      	<option value={{n.id}}>{{n.name}}</option>
 					      {% endfor %}
@@ -28,15 +29,18 @@
 			    		<label>Barrio</label>
 			  		</div>
 				</div>
-				<div class="col s12 m6 push-m3">	
+				<div class="col s12 m4 push-m2 hide-on-small-only">	
+					<a href="{% url 'referring_profile' ref.id %}" class="btn-large boton-perfil">Volver</a>
+				</div>
+				<div class="col s12 m4 push-m2 hide-on-small-only">	
 					<button type="submit" class="btn-large boton-perfil">Guardar</button>
 				</div>
+				<div class="col s12 hide-on-med-and-up">
+					<button type="submit" class="btn-large boton-perfil">Guardar</button>
+					<div class="row"></div>
+					<a href="{% url 'referring_profile' ref.id %}" class="btn-large boton-perfil">Volver</a>
+				</div>
 			</form>
-		</div>
-		<div class="row">
-			<div class="col s12 m6 push-m3">	
-				<a href="{% url 'referring_profile' ref.id %}" class="btn-large boton-perfil">Volver</a>
-			</div>
 		</div>
 	</div>
 

@@ -16,7 +16,7 @@
 					{% if details %}
 						<div id="col_{{t.id}}" class="collapsible-header center-align">
 							<h6><strong>{{t.name}}</strong></h6>  {% for d in details %}	{% if d.donation_type == t.name %}
-							<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity|floatformat }} {{d.unit_measure}}</strong> </span>
+							<span class="badge" data-badge-caption="Agregados"><strong>{{ d.quantity|floatformat }} ({{d.unit_measure}})</strong> </span>
 								<!-- Script que desactiva tipo ya cargado -->
 								<script type="text/javascript">
 		 							$(document).ready(function() {
