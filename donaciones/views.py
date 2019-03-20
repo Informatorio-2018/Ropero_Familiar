@@ -450,6 +450,15 @@ def resume_fix(request, id):
     q1=Q(responsable__pk=id)
     q2=Q(quantity__gt=0)
     resumes = Carry.objects.filter(q1&q2)
+    
+    if resumes.count()==0:
+        responsable.state=1
+        responsable.save()
+    # else:
+    #     resumes = Carry.objects.filter(q1&q2).last()
+
+
+
     if request.method == "POST":
         fix_form = CarryForm(request.POST, instance=responsable)
         if fix_form.is_valid():
@@ -470,6 +479,14 @@ def delete_fix(request, id):
         type_res.save()
     carry.delete()
     return redirect('resume_fix', id=id_responsable)
+
+def delete_responsable(request):
+    res_id = request.POST.get('responsable_id')
+    responsable = ResponsableFix.objects.get(id=res_id)
+    responsable.delete()
+    response = {}
+    return JsonResponse(response)
+
     
 @login_required
 def list_sort(request):

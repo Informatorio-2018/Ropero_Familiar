@@ -6,7 +6,11 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-    <h3 class="center-align">Acondicionando</h3>
+    <div class="row">
+        <div class="col s12 ">
+            <h4 class="center-align">Acondicionando</h4>
+        </div>
+    </div>
     {% if carry %}
     <div class="helper-text">Lista de voluntarios con productos en refaccion</div>
     <ul class="collapsible">
@@ -14,13 +18,13 @@
             {% if r.state == 0 %}
                 <li>
                     <div class="collapsible-header">
-                        <p class="col s12">{{r.name}}  {{r.lastname}}</p>
+                        <p class="col s12"><b>{{r.name}}  {{r.lastname}}</b><i class="material-icons left">face</i></a></p>
                     </div>
                     {% for c in carry %}
                         {% if r.id == c.responsable_id %}
                             <div class="collapsible-body">
                                 <span>Llevo: {{c.quantity}}{{c.unit_measure}} de {{c.types}} el {{c.date}}</span>
-                                <a href="{% url 'give_back' c.id %}" class="modal-trigger right">Devolver</a>
+                                <a href="{% url 'give_back' c.id %}" class="modal-trigger right">Devolvió</a>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -37,8 +41,8 @@
         <div class="separador"></div>
     {% endif %}
     <div class="row">
-        <a href="{% url 'home' %}" class="col s12 m4 offset-m1 btn modal-trigger btn-large ">Volver</a>
-        <a href="{% url 'agregate_responsable' %}" class="col s12 m4 offset-m2 btn modal-trigger btn-large ">Nueva Refaccion</a>
+        <a href="{% url 'home' %}" class="col s12 m4 offset-m1 btn modal-trigger btn-large">Volver</a>
+        <a href="{% url 'agregate_responsable' %}" class="col s12 m4 offset-m2 btn modal-trigger btn-large">Nueva Refacción</a>
     </div>
     
 </div>
