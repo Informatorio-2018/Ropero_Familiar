@@ -1,26 +1,86 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %} Voluntarios {% endblock %}
 
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
-  <h3 class="center-align">Voluntarios</h3>
-  <ul class="collection with-header lighten-3 z-depth-1">
- 	  {% for r in resp %}
-      <a class="collection-item" href="{% url 'carry_out' r.id %}"><i class="material-icons right">pan_tool</i>{{r.name}} {{r.lastname}}</a>
-    {% endfor %}
-  </ul>
-  <div class="separador"></div>
   <div class="row">
-    <a href="{% url 'list_fix' %}" class="col s12 m4 offset-m4 btn modal-trigger btn-large ">Volver</a>
-  </div>
-  <div class="fixed-action-btn">
-    <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
-      <i class="large material-icons">add</i>
-    </a>
+    <div class="col s12">
+      {% if resp %}
+      <h3 class="center-align">Voluntarios</h3>
+      <ul class="collection with-header lighten-3 z-depth-1">
+     	  {% for r in resp %}
+        <li class="collection-item">
+          <span>{{r.name}} {{r.lastname}}
+            <a class="black-text" href="{% url 'carry_out' r.id %}"><i class="material-icons right">pan_tool</i></a>
+            <a class="black-text modal-trigger" href="#modal{{r.id}}"><i class="material-icons right">delete</i></a>  
+          </span> 
+        </li>
+        {% if r.state == 1 %}
+        <div id="modal{{r.id}}" class="modal">
+          <div class="modal-content">
+            <h4>Eliminar Voluntario</h4>
+            <p>Desea eliminar a {{r.name}} de la lista?</p>
+          </div>
+          <div class="modal-footer">
+            <a onclick="eliminarResponsable('{{ r.id }}')" href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+          </div>
+        </div>
+        {% else %}
+        <div id="modal{{r.id}}" class="modal">
+          <div class="modal-content">
+            <h4>Eliminar Voluntario</h4>
+            <p>{{r.name}} todavia tiene articulos en refacción</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Aceptar</a>
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="separador"></div>
+      {% else %}
+      <h4 class="center-align">No hay voluntarios</h4>
+      <div class="separador"></div>
+      <div class="center-align">
+        <img src="{% static 'images/nada.gif' %}" class="responsive-img">
+      </div>
+      <div class="separador"></div>
+      {% endif %}
+      <div class="row">
+        <a href="{% url 'list_fix' %}" class="col s12 m4 offset-m4 btn modal-trigger btn-large ">Volver</a>
+      </div>
+      <div class="fixed-action-btn">
+        <a class="btn-floating btn-large red" href="{% url 'responsable' %}">
+          <i class="large material-icons">add</i>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
+
+<script type="text/javascript">
+  function eliminarResponsable(responsableId) {
+        var request = $.ajax({
+            type: "POST",
+            url: "{% url 'delete_responsable' %}",
+            data: {
+                "csrfmiddlewaretoken": "{{ csrf_token }}",
+                "responsable_id": responsableId                    
+            },
+        });
+        request.done(function(response) {
+            location.reload(true);
+            // Cierra el modal, oculta el identificador eliminado, etc.
+        });
+    }
+  
+</script>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -32,6 +92,11 @@
 <script type="text/javascript">
 	  $(document).ready(function(){
     $('.fixed-action-btn').floatingActionButton();
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.modal').modal();
   });
 </script>
 

@@ -34,6 +34,7 @@ urlpatterns = [
     path('lista_acondicionar/', views.list_fix, name="list_fix"),
     path('lista_responsable/', views.agregate_responsable, name="agregate_responsable"),
     path('responsable/', views.responsable, name="responsable"),
+    path('responsable_delete/', views.delete_responsable, name="delete_responsable"),
     path('devolver/<int:id>', views.give_back, name="give_back"),
     path('para_acondicionar/<int:id>/resumen', views.resume_fix, name="resume_fix"),
     path('para_acondicionar/<int:id>', views.carry_out, name="carry_out"),

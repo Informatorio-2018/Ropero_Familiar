@@ -4,14 +4,15 @@
 
 {% block content %}
 <div class="contenedor z-depth-3 white">
+  
 	<h4 class="center-align">Resumen Voluntario</h4>
 	  <ul class="collection with-header grey lighten-3 z-depth-1">
       <li class="collection-header"><h4>{{ responsable.name }}</h4>
       </li>
 			{% for res in resumes %}
-      	<li class="collection-item">{{res.types}} {{res.quantity}} 
-      		{{ res.get_unit_measure_display }}
-      		<a href="#modal_delete{{res.id}}" class="modal-trigger right"><i class="material-icons">delete</i></a>
+      	<li class="collection-item">Lleva: {{res.quantity}} {{ res.get_unit_measure_display }} de {{res.types}}  
+      		
+      		<a href="#modal_delete{{res.id}}" class="modal-trigger right black-text"><i class="material-icons">delete</i></a>
 
           <!-- Modal Structure delete donation -->
           <div id="modal_delete{{res.id}}" class="modal">
