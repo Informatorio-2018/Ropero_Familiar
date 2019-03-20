@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3tmexvx(*ojpb9f26s+g7#e%--ak@9)f*u)=ifkfhuovzovu^u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1', 'roperofamiliar.com', '192.168.2.154', '*']
 
@@ -125,3 +125,9 @@ STATIC_URL = '/Ropero_Familiar/static/'
 # CONFIG MEDIA ROOTS
 MEDIA_ROOT = 'C:/Users/ANACONDA/Bitnami Django Stack projects/Ropero_Familiar/media'
 MEDIA_URL = '/Ropero_Familiar/media/'
+
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
