@@ -35,7 +35,13 @@
 		    	{% if sale_details %}
 						<div id="col_{{type.id}}" class="collapsible-header center-align">
 							<h6><strong>{{ type.name }}</strong></h6> {% for sale in sale_details %}{% if sale.product_type == type.name %} <span class="badge" data-badge-caption="">
-								<strong>{{ sale.quantity|floatformat }} {{sale.unit_measure}} - ${{sale.total}}</strong></span>
+								<strong>
+									{% if sale.product_type != 'Ropa Invierno' and  sale.product_type != 'Ropa Verano'%}
+										{{ sale.quantity|floatformat }} {{sale.unit_measure}} - ${{sale.total}}
+									{% else %}
+										{{ sale.quantity|floatformat:3 }} {{sale.unit_measure}} - ${{sale.total|floatformat:2}}
+									{% endif %}
+								</strong></span>
 
 							<!-- Script que desactiva tipo ya cargado -->
 							<script type="text/javascript">
@@ -68,7 +74,14 @@
 		     						<!-- input's hiden para enviar por POST-->
 		     						<input class="hide" type="text" name="product_type" value="{{ type.name }}">
 		     						<input class="hide" type="text" name="unit_measure" value="{{ type.unit_measure }}">
-		     						<input type="number" class="hide"  name="price" value="{{ type.price }}">
+		     						{% if type.name == 'Calzados' %}
+		     							<br>
+		     							<input type="number" name="price" value="{{ type.price }}" step="0.01">
+		     							<span class="helper-text" data-error="wrong" data-success="right">Ingrese el precio total de los calzados</span>
+		     						{% else %}
+		     							<input class="hide" type="number" name="price" value="{{ type.price }}">
+		     						{% endif %}
+		     						
 			      			</div>
 			      			<div class="col s4 left">
 			      				<label id="label_{{type.name}}" class="validate"  for="id_unit_measure">{{ type.get_unit_measure_display }}</label>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Reporte de Ventas{% endblock %}
+{% block title %}Reporte de Donaciones{% endblock %} 
 
 {% block content %}
   <div id="contenedor" class="contenedor z-depth-3 white">
@@ -9,7 +9,7 @@
       <div id="graphic_sale" class="col s12 m6"></div>
       <div class="col s12 m6">
         <form method="POST" id="form-report" action="{% url 'donations_report' %}">
-         <div class="input-field">
+         <div class="input-field" id="input-select">
           {% csrf_token %}
             <select multiple name="dona_id">
               <option value="" disabled selected>Elija tipo de donaciones</option>
@@ -26,7 +26,7 @@
             <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
           </div>
           <div class="row"></div>
-           <div class="input-field">
+           <div class="input-field" id="input-finish">
             <input type="text" class="datepicker" name='finish' id='id_finish' required>
             <label for="id_finish" class="">Hasta:</label>
             <span class="helper-text" data-error="wrong" data-success="right">Ingrese fecha de inicio del reporte</span>
@@ -34,11 +34,12 @@
 
           <div class="row">
             <div class="col s12 m8 push-m2">
-              <input type="submit" value="Generar Reporte" class="btn-large boton-perfil" id="btn_buscar">
+              <input type="submit" value="Generar Reporte" class="btn-large boton-perfil" id="btn_report">
             </div>
           </div>
         </form>
       </div>
+
 
       <!--Script form-report submit sin recargar -->
       <script type="text/javascript">
@@ -49,24 +50,38 @@
               type: $(this).attr('method'),
               url: $(this).attr('action'),
               success: function(report){
+                $('#report-ajax').show();
                 if (report.length > 0) {
                   $('#null').remove()
                   //Aca recupero los datos y muestro en template
-                  var title = $('<h4 class="center-align">Reporte generado</h4>')
+                  $('#report-ajax').removeClass("hide");
+                  var title = $('<h3 class="center-align">Reporte generado</h3>')
                   $('#id_title').html(title);
-                  $('#table-report').removeClass("hide")
+                  $('#table-report').removeClass("hide");
                   $('#id_title').removeClass("hide");
+                  $('#title-table').removeClass("hide");
+                  $('#product-total').removeClass("hide");
                   var content = $;
+                  var content2 = '<div class="collapsible-header grey lighten-3"><i class="material-icons">touch_app</i>Total recibido por tipo de donación</div>';
                   for (var i = 0; i < report.length; i++) {
-                    content += ('<tr>'+'<td>'+report[i].donation__name+'</td>'+'<td>'+report[i].donation_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'</tr>')
+                    if(report[i].donation_type!==undefined){
+                      content += ('<tr>'+'<td>'+report[i].donation__name+'</td>'+'<td>'+report[i].donation_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'</tr>')
+                    }else{
+                      content2 += ('<div class="collapsible-body grey lighten-4"><span>'+report[i].donation_type_total+": "+report[i].donation_total+"("+report[i].unit_measure+")"+'</span></div>');
+                    }
                   }
+                  // console.log(content2);
                   $('#table-report tbody').html(content);
+                  $('#coll-content').html(content2);
                   ScrollBottomSubmit();
                 } else {
-                  var title_null = $('<h4 class="center-align" id="null">No se realizaron donaciones durante el periodo de tiempo seleccionado</h4>')
+                  $('#report-ajax').removeClass("hide");
+                  var title_null = $('<h4 class="center-align" id="null">No se realizaron ventas durante el periodo de tiempo seleccionado</h4>')
                   $('#title_null').html(title_null);
                   $('#table-report').addClass("hide");
                   $('#id_title').addClass("hide");
+                  $('#title-table').addClass("hide");
+                  $('#product-total').addClass("hide");
                   ScrollBottomSubmit();
                 }
               }
@@ -78,21 +93,33 @@
       <!-- Acá termina script form-report -->
 
       <div class="row"></div>
-      <div class="col s12 card" id="report-ajax">
+      <div class="col s12 card highlight z-depth-2 hide" id="report-ajax">
+        <a class="right-align secondary-content" href="#" id="alert_close"><i class="material-icons">clear</i></a>
         <div id="id_title"></div>
         <div id="title_null"></div>
-        <table class="hide centered" id="table-report">
-          <thead>
+        <table class="hide centered card" id="table-report">
+          <thead class="grey lighten-3">
             <tr>
-                <th>Nombre</th>
-                <th>Donación</th>
-                <th>Cantidad</th>
+              <th><h5 id="title-table">Detalles De Donaciones</h5></th>
+            </tr>
+          </thead>
+          <thead class="grey lighten-3">
+            <tr>
+                <th>Nombre</th> 
+                <th>Producto</th>
+                <th>Precio</th>
             </tr>
           </thead>
 
-          <tbody>
+          <tbody class="grey lighten-4">
           </tbody>
         </table>
+        <div id="product-total" class="hide">
+          <ul class="collapsible">
+            <li id="coll-content">
+            </li>
+          </ul>
+        </div>
       </div>
 
     </div>
@@ -164,6 +191,42 @@
       var height = $(document).height();
       $("html, body").animate({scrollTop:height+"px"});
     };
+  </script>
+
+  <!-- Cierra reporte-->
+  <script type="text/javascript">
+    $('#alert_close').click(function(){
+      $( "#report-ajax" ).fadeOut( "slow", function() {
+      });
+    });
+  </script>
+
+   <!--Comprobaciones -->
+  <script type="text/javascript">
+    $(document).ready(function() {document  
+      $("#btn_report").on("click", function(e){
+        var dona = $("select[name='dona_id']").val();
+        var begin = new Date($("input[name='begin']").val().replace(/-/g,'/'));
+        var finish = new Date($("input[name='finish']").val().replace(/-/g,'/'));
+
+        //Select sin donacion
+        if (dona === null || dona == '') {
+          e.preventDefault();
+          $('#input-select').children('span').text("Elija al menos un articulo").addClass("red-text");
+        }else {
+          $('#input-select').children('span').text("Seleccione el tipo de articulo del que desea un reporte").removeClass("red-text");
+        }
+
+        //Fecha de inicio mayor a la final
+        if (begin > finish) {
+          e.preventDefault();
+          $('#input-finish').children('span').text("Esta fecha no puede ser anterior a la fecha de inicio").addClass("red-text");
+        } else {
+          $('#input-finish').children('span').text("Ingrese fecha final del reporte").removeClass("red-text");
+        }
+
+      }); 
+    });
   </script>
 
 {% endblock %}

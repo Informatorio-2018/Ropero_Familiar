@@ -162,6 +162,19 @@ body{
 		background-color: #831212!important;
 }
 
+
+#table-referring > tbody{
+	display:block;
+  	height:400px;
+  	overflow:auto;
+}
+
+#table-referring > thead, #table-referring > thead > tr, #table-referring > tbody > tr {
+	display:table;
+	width:100%;
+	table-layout:fixed;
+}
+
 /*Tabla reporte de ventas con tbody scroll*/
 #table-report > tbody {
 	display:block;

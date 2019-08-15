@@ -13,7 +13,7 @@
 				<div class="col s12 m6">
 					<div class="card z-depth-4">
 						<div class="center-align black white-text">	
-							<span class="card-title"><span><i class="material-icons align-v-icon">card_giftcard</i></span>Donaciones recibidas éste mes</span>
+							<span class="card-title"><span><i class="material-icons align-v-icon">card_giftcard</i></span>Productos en ropero</span>
 						</div>
 						{% if data_d %}
 							<div class="grey lighten-2" id='donations_graph'>
@@ -29,7 +29,7 @@
 								     text: ''
 								  },
 								  xAxis: {
-								     categories: ['Tipos de donaciones'],
+								     categories: ['Tipos de productos'],
 								     crosshair: true
 								  },
 								  yAxis: {
@@ -41,7 +41,7 @@
 								  series:[ 
 								  {% for d in data_d %}
 								    {
-								      name: '{{d.donation_type}}',
+								      name: '{{d.name}}',
 								      data: [{{d.total|safe}}]
 								    },
 								  {% endfor %} 
@@ -50,7 +50,7 @@
 							</script>
 						{% else %}
 							<div class="graphs">
-								<h4 style="margin:0; padding-top: 150px" class="center-align">No hubo donaciones éste mes</h4>
+								<h4 style="margin:0; padding-top: 150px" class="center-align">No hay productos en el ropero</h4>
 							</div>
 						{% endif %}
 					</div>
@@ -172,7 +172,7 @@
 				    </div>
 				    <div class="divisor"></div>
 						<div class="card-action right-align">
-							<a href="/tipos_productos/" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="MODIFICAR PRECIOS"><i class="material-icons">monetization_on</i></a>
+							<a href="{% url 'load_types_products' %}" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="MODIFICAR PRECIOS"><i class="material-icons">monetization_on</i></a>
 						</div>
 						
 					</div>
@@ -206,7 +206,7 @@
 				    </div>
 				    <div class="divisor"></div>
 						<div class="card-action right-align">
-							<a href="/cargar_tipos_donacion/" class="btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO TIPO DE DONACIÓN"><i class="material-icons">add</i></a>
+							<a href="{% url 'load_types_donation' %}" class="disabled btn-floating btn-large waves-effect waves-light red z-depth-3 tooltipped" data-position="top" data-tooltip="AGREGAR NUEVO TIPO DE DONACIÓN"><i class="material-icons">add</i></a>
 						</div>
 					</div>
 				</div>

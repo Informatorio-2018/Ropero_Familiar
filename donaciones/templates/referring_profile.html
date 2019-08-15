@@ -1,10 +1,38 @@
 {% extends "base.html" %}
 
-{% block title %}Pefil de {{ref.family.firstname}}{% endblock %}
+{% block title %}Perfil de {{ref.family.firstname}}{% endblock %}
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
 		<div class="row">
+			<a class="right btn modal-trigger" href="#modal1"><i class="material-icons">delete</i></a>
+			<a class="right btn" href="{% url 'edit_referring' ref.id %}" style="margin-right: 5px;"><i class="material-icons">edit</i></a>
+		</div>
+		<h3 class="center-align" style="margin-top: 0px;">Perfil de Referente</h3>
+		<div class="divider"></div>
+		<div class="row">
+			<p class="flow-text"><strong>Nombre: </strong>{{ref.family.firstname}}</p>
+			<div class="divider"></div>
+			<p class="flow-text"><strong>Apellido: </strong>{{ref.family.lastname}}</p>
+			<div class="divider"></div>
+			<p class="flow-text"><strong>DNI: </strong>{{ref.family.dni}}</p>
+			<div class="divider"></div>
+			<p class="flow-text"><strong>Fecha de Nacimiento: </strong>{{ref.family.birth}}</p>
+			<div class="divider"></div>
+			<p class="flow-text"><strong>Dirección: </strong>{{ref.adress}}</p>
+			<div class="divider"></div>
+			<p class="flow-text"><strong>Barrio: </strong>{{ref.neighborhood}}</p>
+			<div class="divider"></div>
+			{% if ref.phone %}
+				<p class="flow-text"><strong>Número de telefono: </strong>
+					{% for p in ref.phone|make_list %}{% if forloop.counter == 5 %}-{% endif %}{{p}}{% endfor %}
+				</p>
+			{% else %}
+					<p class="flow-text"><strong>Número de telefono: </strong><em>[Editar para agregar]</em></p>
+			{% endif %}
+		</div>
+
+		<!--<div class="row">
 			<div class="col s12 m6 push-m3">
 				<div class="card">				
 					<div class="card-content">
@@ -15,26 +43,61 @@
 						<p>Fecha de Nacimiento: {{ref.family.birth}}</p><br>
 						<p>Dirección: {{ref.adress}}</p><br>
 						<p>Barrio: {{ref.neighborhood}}</p><br>
-						<p>Número de Teléfono: {{ref.phone}}</p>
+						{% if ref.phone %}
+						<p class=""><strong>Número de telefono: </strong>
+							{% for p in ref.phone|make_list %}{% if forloop.counter == 5 %}-{% endif %}{{p}}{% endfor %}
+						</p>
+						{% else %}
+							<p class="flow-text"><strong>Número de telefono: </strong><em>[Editar para agregar]</em></p>
+						{% endif %}
 					</div>
 				</div>
 			</div>
+		</div>-->
+
+		<div class="row">
+			<div class="col s12 m4 push-m2 hide-on-small-only">
+	          <a href="{% url 'referring_search' %}" class="btn-large boton-perfil">Volver</a>
+	        </div>
+	        <div class="col s12 m4 push-m2 hide-on-small-only">
+	          <a href="{% url 'referring_relatives' ref.id %}" class="btn-large boton-perfil">Familiares</a>
+	        </div>
 		</div>
-		<div class="row">
-			<div class="col s12 m4 push-m4">
-				<a href="{% url 'referring_relatives' ref.id %}" class="btn-large boton-perfil">Familiares</a>
+
+		<!--Buttons small-->
+		<div class="hide-on-med-and-up">
+			<div class="row">
+				<div class="col s12 m4 push-m4">
+					<a href="{% url 'referring_relatives' ref.id %}" class="btn-large boton-perfil">Familiares</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12 m4 push-m4">
+					<a href="{% url 'referring_search' %}" class="btn-large boton-perfil">Volver</a>
+				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col s12 m4 push-m4">
-				<a href="{% url 'edit_referring' ref.id %}" class="btn-large boton-perfil">Editar</a>
-			</div>
-		</div>	
-		<div class="row">
-			<div class="col s12 m4 push-m4">
-				<a href="{% url 'referring_search' %}" class="btn-large boton-perfil">Volver</a>
-			</div>
+		
+	</div>
+	<div id="modal1" class="modal">
+		<div class="modal-content">
+			<h4>Eliminar Referente</h4>
+			<p>¿Desea Eliminar a {{ref.family.firstname}} {{ref.family.lastname}}?</p>
+			<p>Se eliminaran todos los familiares asociados</p>
+		</div>
+		<div class="modal-footer">
+			<a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+			<a href="{% url 'delete_referring' ref.family_id %}" class="waves-effect waves-green btn-flat">Aceptar</a>
 		</div>
 	</div>
 	
+{% endblock %}
+
+{% block extra_js %}
+
+<script type="text/javascript">
+	 $(document).ready(function(){
+    $('.modal').modal();
+  });
+</script>
 {% endblock %}

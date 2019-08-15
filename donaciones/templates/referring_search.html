@@ -5,8 +5,8 @@
 {% block content %}
 
 <div class="contenedor z-depth-3 white">
-	<h2 class="center-align">Referente</h2>
-	<form action="/busqueda_referente/" method="POST">
+	<h4 class="center-align">Buscar Referente</h4>
+	<form method="POST">
 		<div class="row">
 			<div class="input-field col s12">
 				{% csrf_token %}
@@ -21,7 +21,41 @@
 			<div class="fixed-action-btn">
 				<a href="{% url 'register_referring' %}" class="btn-floating btn-large waves-effect waves-light right pulse"><i class="material-icons">group_add</i></a>
 			</div>
+		</div>
 	</form>
 </div>
+{% if ref %}
+<div class="contenedor z-depth-3 white">
+	<div class="row">
+		<div class="card">
+			<h4 class="center-align">Lista de Referentes</h4>
+			<table  id="table-referring">
+		        <thead>
+		          <tr>
+		              <th>Ver Perfil</th>
+		              <th>Apellido</th>
+		              <th>Nombre</th>
+		              <th>DNI</th>
+		          </tr>
+		        </thead>
+
+		        <tbody>
+		        	{% for r in ref %}
+			          <tr>
+			            <td><a href="{% url 'referring_profile' r.referring.id %}" class="btn"><i class="material-icons">account_circle</i></a></td>
+			            <td>{{r.lastname}}</td>
+			            <td>{{r.firstname}}</td>
+			            <td>{{r.dni}} </td>
+			          </tr>
+		        	{% endfor %}
+		        </tbody>
+		    </table>
+		</div>
+		
+	</div>
+</div>
+{% else %}
+<div class=""></div>
+{% endif %}
  
 {% endblock %}
