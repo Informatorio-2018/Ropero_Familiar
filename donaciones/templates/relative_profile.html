@@ -5,6 +5,10 @@
 {% block content %}
 	<div class="contenedor z-depth-3 white">
 		<div class="row">
+			<a class="right btn modal-trigger" href="#modal1"><i class="material-icons">delete</i></a>
+			<a class="right btn" href="{% url 'edit_family' fam.id %}" style="margin-right: 5px;"><i class="material-icons">edit</i></a>
+		</div>
+		<div class="row">
 			<div class="col s12 m6 push-m3">
 				<div class="card">
 					<div class="card-content">
@@ -20,14 +24,27 @@
 		<div class="row">
 			<div class="col s12 m4"></div>
 			<div class="col s12 m4">
-				<a href="{% url 'edit_family' fam.id %}" class="btn-large boton-perfil">Editar</a>
-			</div>		
-		</div>	
-		<div class="row">
-			<div class="col s12 m4"></div>
-			<div class="col s12 m4">
 				<a href="{% url 'referring_relatives' ref.id %}" class="btn-large boton-perfil">Volver</a>
 			</div>		
 		</div>
 	</div>
+	<div id="modal1" class="modal">
+		<div class="modal-content">
+			<h4>Eliminar Familiar</h4>
+			<p>¿Desea Eliminar a {{fam.firstname}} {{fam.lastname}} de la familia de {{fam_ref.firstname}} {{fam_ref.lastname}}?</p>
+		</div>
+		<div class="modal-footer">
+			<a class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+			<a href="{% url 'delete_family' fam.id %}" class="waves-effect waves-green btn-flat">Aceptar</a>
+		</div>
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script type="text/javascript">
+	 $(document).ready(function(){
+    $('.modal').modal();
+  });
+</script>
 {% endblock %}

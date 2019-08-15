@@ -52,6 +52,7 @@
                 $('#report-ajax').show();
                 if (report.length > 0) {
                   $('#null').remove()
+                  // console.log(report);
                   //Aca recupero los datos y muestro en template
                   $('#report-ajax').removeClass("hide");
                   var title = $('<h3 class="center-align">Reporte generado</h3>')
@@ -67,10 +68,10 @@
                       content += ('<tr>'+'<td>'+report[i].sale__entry__family__firstname+", "+report[i].sale__entry__family__lastname+'</td>'+'<td>'+report[i].product_type+'</td>'+'<td>'+report[i].quantity+" "+report[i].unit_measure+'</td>'+'<td>'+'$ '+report[i].total+'</td>'+'</tr>')
                       
                     }else{
-                      content2 += ('<div class="collapsible-body grey lighten-4"><span>'+report[i].product_type_total+": "+report[i].product_total+report[i].unit_measure+'</span></div>');
+                      content2 += ('<div class="collapsible-body grey lighten-4"><span>'+report[i].product_type_total+": "+report[i].product_total+" - Unidad: "+report[i].unit_measure+'</span></div>');
                     }
                   }
-                  console.log(content2);
+                  // console.log(content2);
                   $('#table-report tbody').html(content);
                   $('#coll-content').html(content2);
                   ScrollBottomSubmit();

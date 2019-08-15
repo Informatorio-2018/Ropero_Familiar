@@ -4,9 +4,9 @@
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
-		<h2 class="center-align">Resultados para: "{{query}}"</h2>
-		<h4>Seleccione la persona que ingresará al ropero</h4>
-		<div class="row collection">	
+		<h2 class="hide-on-small-only center-align">Resultados para: "{{query}}"</h2>
+    	<h3 class="hide-on-med-and-up center-align">Resultados para: "{{query}}"</h3>
+		<div class="row collection" style="margin-bottom: 0px;">	
 			{% for r in fam %}
 					<a href="#modal1{{r.id}}" class="collection-item modal-trigger">{{r.lastname}}, {{r.firstname}}
 					{% if r.role == 'r' %}
@@ -30,6 +30,9 @@
 				</div>
 			</div>
 		{% endfor %}
+		<div class="input-field">
+			<span class="helper-text">Seleccione la persona que ingresará al ropero</span>
+		</div>
 		<div class="row">
 			<div class="col s12 m6 push-m3">		
 				<a href="{% url 'closet' %}" class="btn-large boton-perfil">Volver</a>

@@ -21,7 +21,13 @@
 		    	{% for det in details %}
 			      <tr class="collection" id="tr_{{ det.id }}">
 			        <td>{{det.product_type}}</td>
-			        <td>{{ det.quantity|floatformat }} ({{det.unit_measure}})</td>
+			        <td>
+			        	{% if det.product_type != 'Ropa Invierno' and  det.product_type != 'Ropa Verano' %}
+			        		{{ det.quantity|floatformat }} ({{det.unit_measure}})
+			        	{% else %}
+			        		{{ det.quantity|floatformat:3 }} ({{det.unit_measure}})
+			        	{% endif %}
+			      	</td>
 			        <td><span style="vertical-align:-8px;">$ {{det.total}}</span>  <a href="#modal{{det.id}}" class="modal-trigger right-align secondary-content btn"><i class="material-icons">delete</i></a></td>
 			      </tr>
 

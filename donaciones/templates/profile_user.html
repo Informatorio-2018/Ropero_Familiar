@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
-{% block title %}Pefil de {{user.username|lower}}{% endblock %}
+{% block title %}Perfil de {{user.username|lower}}{% endblock %}
 
 {% block content %}
 	<div class="contenedor z-depth-3 white">
@@ -14,12 +14,12 @@
 			<div class="col s12 m5 l5 center-align">
 				{% if user.profile.image %}
 					<div>
-    				<img class="circle responsive-img z-depth-3" src="{{ user.profile.image.url}}">
+    				<img class="circle responsive-img z-depth-4" style="border: 2px solid white;" src="{{ user.profile.image.url}}">
 					</div>
     		{% else %}
-    			<img class="circle responsive-img" src="{% static 'images/avatar.png' %}">
+    			<img class="circle responsive-img z-depth-4" style="border: 2px solid white;" src="{% static 'images/avatar.png' %}">
 				{% endif %}
-				<span class="name col s12"><strong>{{ user.username }}</strong></span>
+				<span class="name col s12"><h5><strong>{{ user.username }}</strong></h5></span>
 				<div class="divider hide-on-med-and-up"></div>
 			</div>
 			<div class="col s12 m7 l7">
@@ -38,7 +38,9 @@
       	<div class="divider"></div>
       	<div class="separador"></div>
       	{% if user.profile.phone_number %}
-					<p class="flow-text"><strong>Número de telefono: </strong>{{user.profile.phone_number}}</p>
+				<p class="flow-text"><strong>Número de telefono: </strong>
+					{% for p in user.profile.phone_number|make_list %}{% if forloop.counter == 5 %}-{% endif %}{{p}}{% endfor %}
+				</p>
 				{% else %}
 					<p class="flow-text"><strong>Número de telefono: </strong><em>[Editar para agregar]</em></p>
 				{% endif %}

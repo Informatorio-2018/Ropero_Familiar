@@ -7,40 +7,56 @@
 		<h3 class="center-align hide-on-small-only">Editar Perfil de Referente</h3>
 		<h4 class="center-align hide-on-med-and-up">Editar Perfil de Referente</h4>
 		<div class="row">
-			<form method="POST">
-				<div class="col s12">
+				<form method="POST" class="row">
 					{% csrf_token %}
-					{{form1.firstname.label_tag}}
-					{{form1.firstname}}
-					{{form1.lastname.label_tag}}
-					{{form1.lastname}}
-					{{form1.dni.label_tag}}
-					{{form1.dni}}
-					<label>Fecha de Nacimiento:</label>
-					<input type="text" class="datepicker" name='birth' value="{{form1.instance.birth|date:"Y-m-d"}}">
-					{{form2.as_p}}
-					<div class="input-field">
-			    		<select name="neigh_id">
-					      <option value="{{ref.neighborhood.id}}">{{ref.neighborhood.name}}</option>
-					      {% for n in neigh %}
-					      	<option value={{n.id}}>{{n.name}}</option>
-					      {% endfor %}
-			    		</select>
-			    		<label>Barrio</label>
+					    <div class="input-field col s12">
+			          {{form1.firstname}}
+			          {{form1.firstname.label_tag}}
+			        </div>
+			        <div class="input-field col s12">
+			          {{form1.lastname}}
+			          {{form1.lastname.label_tag}}
+			        </div>
+			        <div class="input-field col s12">
+			          {{form1.dni}}
+			          {{form1.dni.label_tag}}
+			          {% if form1.dni.errors %}
+			            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form1.dni.errors|striptags}}</span>
+			          {% endif %}
+			        </div>
+			        <div class="input-field col s12">
+			          {{ form1.birth }}
+			          {{ form1.birth.label_tag }}
+			           <!--<input id="id_birth" type="text" class="datepicker" name='birth'>
+						     <label for="id_birth">Fecha de Nacimiento</label>-->
+			        </div>
+			        <div class="input-field col s12">
+			          {{form2.phone}}
+			          {{form2.phone.label_tag}}
+			          {% if form2.phone.errors %}
+			            <span class="helper-text red-text text-accent-4" data-error="wrong" data-success="right">{{form2.phone.errors|striptags}}</span>
+			          {% endif %}
+			        </div>
+			        <div class="input-field col s12">
+			          {{form2.adress}}
+			          {{form2.adress.label_tag}}
+			        </div>
+					    <div class="input-field col s12" id="neigh_select">
+			      		<select name="neigh_id" required>
+			  		      <option value="{{ ref.neighborhood_id }}"  selected>{{ref.neighborhood.name}}</option>
+			  		      {% for n in neigh %}
+			  		      	<option value={{n.id}}>{{n.name}}</option>
+			  		      {% endfor %}
+			      		</select>
+			    		  <label>Barrio</label>
+			          <span class="helper-text" data-error="wrong" data-success="right"></span>
+			  		  </div>
+			  		<div class="row">
+			  			<div class="col s12 m4 push-m4">
+							<button type="submit" class="btn-large boton-perfil" id="btn_register">Guardar</button>
+			  			</div>
 			  		</div>
-				</div>
-				<div class="col s12 m4 push-m2 hide-on-small-only">	
-					<a href="{% url 'referring_profile' ref.id %}" class="btn-large boton-perfil">Volver</a>
-				</div>
-				<div class="col s12 m4 push-m2 hide-on-small-only">	
-					<button type="submit" class="btn-large boton-perfil">Guardar</button>
-				</div>
-				<div class="col s12 hide-on-med-and-up">
-					<button type="submit" class="btn-large boton-perfil">Guardar</button>
-					<div class="row"></div>
-					<a href="{% url 'referring_profile' ref.id %}" class="btn-large boton-perfil">Volver</a>
-				</div>
-			</form>
+			  </form>
 		</div>
 	</div>
 
@@ -56,19 +72,62 @@
 		$(document).ready(function(){
     		$('.datepicker').datepicker(
     			{ 
-            firstDay: true, 
-            format: 'yyyy-mm-dd',
-            yearRange: 100,
-            i18n: {
-                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
-                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
-                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
-                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
-                cancel: ['Cancelar'],
-                done: ['Aceptar'],
-            }
-        });
-  		});
+		            firstDay: true, 
+		            format: 'yyyy-mm-dd',
+		            yearRange: 100,
+		            i18n: {
+		                months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+		                monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+		                weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+		                weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+		                weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
+		                cancel: 'Cancelar'
+                }
+        	});
+
+    		$('select').formSelect();	
+
+  		});	
+	</script>
+
+	<!--Comprobaciones -->
+	<script type="text/javascript">
+	$(document).ready(function() {document  
+	  $("#btn_register").on("click", function(e){
+	    var neigh = $("select[name='neigh_id']").val();
+
+	    //Select sin barrio
+	    if (neigh === null || neigh == '') {
+	      console.log("entro en if")
+	      e.preventDefault();
+	      $('#neigh_select').children('span').text("Elija un barrio para finalizar").addClass("red-text");
+	    }else {
+	      $('#neigh_select').children('span').text("").removeClass("red-text");
+	    }
+
+	  }); 
+	});
+	</script>
+
+	<script type="text/javascript">
+	    $(document).ready(function() {
+	      $("[name=phone]").attr({pattern:'[0-9]+([-\,][0-9]+)?', type:'tel', maxlength:'11'});
+	    });
+  	</script>
+
+	<!-- AGREGA '-' AL NUMERO DE TEL-->
+	<script type="text/javascript">
+		$(document).ready(function() {
+		  $('#id_phone').keyup(function() {
+		    var val = this.value.replace(/\D/g, '');
+		    var newVal = '';
+		    if (val.length > 4) {
+		      newVal += val.substr(0, 4) + '-';
+		      val = val.substr(4);
+		    }
+		    newVal += val;
+		    this.value = newVal;
+		  });
+		});
 	</script>
 {% endblock %}

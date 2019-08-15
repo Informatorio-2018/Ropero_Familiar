@@ -13,7 +13,7 @@ UNITS_MEASURE = (('kg', 'Kg'), ('par', 'Par'), ('un', 'Unidad'), ('lt', 'Litro')
 
 
 class Donation(models.Model):
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField()
     name = models.CharField(max_length=80, verbose_name='Nombre o Razón Social')
     ticket_number = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(99999999)], null=True, verbose_name='Numero de Recibo')
 
@@ -24,7 +24,7 @@ class Donation(models.Model):
 class DetailsDonation(models.Model):
     donation_type = models.CharField(max_length=30, verbose_name='Tipo de Donación')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
-    quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
+    quantity = models.DecimalField(max_digits=6, decimal_places=3, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
     donation = models.ForeignKey(Donation, on_delete=models.CASCADE, related_name='detailsdonation')
 
     def __str__(self):
@@ -77,7 +77,7 @@ class FamilyEntry(models.Model):
 
 class Referring(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, related_name='referentes', null=True, verbose_name='Barrio')
-    phone = models.PositiveIntegerField(verbose_name='Número de Teléfono')  # Limitar numero de telefono
+    phone = models.PositiveIntegerField(verbose_name='Número de Teléfono', null=True, blank=True)  # Limitar numero de telefono
     adress = models.CharField(max_length=80, verbose_name='Dirección')
     family = models.OneToOneField(Family, on_delete=models.CASCADE, null=True)
     last_buy = models.DateField(null=True)
@@ -90,7 +90,7 @@ class Referring(models.Model):
 class TypesProducts(models.Model):
     name = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
-    price = models.IntegerField(default=0,verbose_name='Precio')
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0.01)], verbose_name='Precio')
     quantity_total = models.DecimalField(max_digits=8, decimal_places=2, default=0, validators=[MaxValueValidator(99999999.00), MinValueValidator(0.00)], verbose_name='Cantidad Total')
 
     def __str__(self):
@@ -111,7 +111,7 @@ class ResponsableFix(models.Model):
 
 
 class Carry(models.Model):
-    date = models.DateTimeField(null=True,auto_now_add=True,verbose_name="Fecha de creacion")
+    date = models.DateTimeField(null=True, auto_now_add=True, verbose_name="Fecha de creacion")
     types = models.CharField(max_length=30, verbose_name='Tipo de Donación')
     unit_measure = models.CharField(max_length=10, choices=UNITS_MEASURE, verbose_name='Unidad de Medida')
     quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
@@ -152,16 +152,16 @@ class FamilyEntry(models.Model):
 
 
 class Sale(models.Model):
-    total = models.IntegerField()
+    total = models.DecimalField(max_digits=9, decimal_places=2)
     entry = models.OneToOneField(FamilyEntry, on_delete=models.CASCADE)
 
 
 class SalesDetails(models.Model):
     product_type = models.CharField(max_length=30)
     unit_measure = models.CharField(max_length=10)
-    quantity = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
-    price = models.IntegerField()
-    total = models.IntegerField()
+    quantity = models.DecimalField(max_digits=6, decimal_places=3, validators=[MinValueValidator(0.01)], verbose_name='Cantidad')
+    price = models.DecimalField(max_digits=9, decimal_places=2)
+    total = models.DecimalField(max_digits=9, decimal_places=2)
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name='sales')
 
 
@@ -174,7 +174,7 @@ def custom_upload_to(instance, filename):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.PositiveIntegerField(verbose_name='Numero de telefono', null=True)
+    phone_number = models.PositiveIntegerField(verbose_name='Numero de telefono', null=True, blank=True)
     image = models.ImageField(verbose_name='Imagen', upload_to=custom_upload_to, null=True, blank=True)
 
     def __str__(self):

@@ -119,11 +119,11 @@ LOGIN_URL = "login"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_ROOT = 'C:/Users/ANACONDA/Bitnami Django Stack projects/Ropero_Familiar/static'
+STATIC_ROOT = 'C:/Users/Servidor/Bitnami Django Stack projects/Ropero_Familiar/static'
 STATIC_URL = '/Ropero_Familiar/static/'
 
 # CONFIG MEDIA ROOTS
-MEDIA_ROOT = 'C:/Users/ANACONDA/Bitnami Django Stack projects/Ropero_Familiar/media'
+MEDIA_ROOT = 'C:/Users/Servidor/Bitnami Django Stack projects/Ropero_Familiar/media'
 MEDIA_URL = '/Ropero_Familiar/media/'
 
 

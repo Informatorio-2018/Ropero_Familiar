@@ -16,6 +16,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 @login_required
 def receive_donation(request):
+    today = datetime_django.today()
     form = DonationForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -191,12 +192,13 @@ def update_price_article(request,id):
     else:
         form = LoadTypeProductForm(instance=article)
 
-    context={'form':form}
+    context={'form':form, 'article': article}
     return render(request,'upload_price_article.html',context)
 
 
 @login_required
 def sort_products(request):
+    last_load = SortProducts.objects.all().last()
     alert = False
     types_product=TypesProducts.objects.all()
     types = TypesDonation.objects.all()
@@ -220,7 +222,7 @@ def sort_products(request):
                     alert='El valor ingresado es mayor a la cantidad disponible'
                     ctotal=TypesProducts.objects.all()
                     control = TypesDonation.objects.filter(quantity_total__gt=0)
-                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    context = {'load':last_load,'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
                     return render(request, 'sort_products.html', context)
                 else:
                     cargo=1
@@ -232,7 +234,7 @@ def sort_products(request):
                     alert='El valor ingresado es mayor a la cantidad disponible'
                     ctotal=TypesProducts.objects.all()
                     control = TypesDonation.objects.filter(quantity_total__gt=0)
-                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    context = {'load':last_load,'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
                     return render(request, 'sort_products.html', context)
                 else:
                     cargo=1
@@ -247,7 +249,7 @@ def sort_products(request):
                     context={'alert':alert}
                     ctotal=TypesProducts.objects.all()
                     control = TypesDonation.objects.filter(quantity_total__gt=0)
-                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    context = {'load':last_load,'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
                     return render(request, 'sort_products.html', context)
                 else:
                     cargo=1
@@ -279,7 +281,7 @@ def sort_products(request):
             else:
                 pass
 
-        
+            
             return redirect('sort_products')
 
     else:
@@ -327,11 +329,14 @@ def sort_products(request):
 
     ctotal=TypesProducts.objects.all()
 
-    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+
+    context = {'load':last_load,'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
     return render(request, 'sort_products.html', context)
 
 @login_required
 def fix_products(request):
+
+    last_load = FixProducts.objects.all().last()
     alert = False
     types_product=TypesFix.objects.all()
     types = TypesDonation.objects.all()
@@ -354,7 +359,7 @@ def fix_products(request):
                     context={'alert':alert}
                     ctotal=TypesFix.objects.all()
                     control = TypesDonation.objects.filter(quantity_total__gt=0)
-                    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+                    context = {'load':last_load,'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
                     return render(request, 'fix_products.html', context)
                 else:
                     cargo=1
@@ -395,7 +400,7 @@ def fix_products(request):
 
     ctotal=TypesFix.objects.all()
 
-    context = {'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
+    context = {'load':last_load,'ctotal':ctotal,'control': control, 'form': form,'types_product':types_product,'alert':alert}
     return render(request, 'fix_products.html', context)
     
 
@@ -445,6 +450,7 @@ def responsable(request):
     context = {'form': form}
     return render(request, 'responsable.html', context)
 
+@login_required
 def resume_fix(request, id):
     responsable = ResponsableFix.objects.get(pk=id)
     q1=Q(responsable__pk=id)
@@ -495,6 +501,7 @@ def list_sort(request):
     context={'list_donations':list_donations}
     return render(request,'list_sort.html',context)
 
+@login_required
 def list_fix(request):
     resp=ResponsableFix.objects.all()
     carry=Carry.objects.filter(quantity__gt=0)
@@ -542,6 +549,7 @@ def give_back(request,id):
         
     return redirect('list_fix')
 
+@login_required
 def agregate_responsable(request):
     resp=ResponsableFix.objects.all()
     carry=Carry.objects.filter(quantity__gt=0)
@@ -559,6 +567,21 @@ def register_referring(request):
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
         # import ipdb; ipdb.set_trace()
+        # Delete '-' from phone_number
+        phone = request.POST["phone"]
+        request.POST._mutable = True # Change request.POST to mutable
+        if phone == '':
+            request.POST["phone"] = None
+        else:
+            phone = list(str(phone))
+            for p in phone:
+                if p == '-':
+                    phone.remove(p)
+            phone = ''.join(phone)
+            phone = int(phone)
+            request.POST["phone"] = phone
+        request.POST._mutable = False
+
         if form_refering.is_valid() and form_family.is_valid() :
             fam = form_family.save(commit=False)
             fam.role = 'r'
@@ -574,7 +597,7 @@ def register_referring(request):
             ref.family = family
             ref.neighborhood_id = request.POST['neigh_id']
             ref.save()
-            return redirect('/referente/'+str(ref.id)+'/')
+            return redirect('referring_profile',ref.id)
 
     form = {'form_refering':form_refering,'form_family':form_family,'neigh':neigh}
     template = 'register_referring.html'
@@ -593,13 +616,15 @@ def register_family(request, id):
             fam.birth = request.POST['birth']
             fam.save()
             fam_id=fam.id
-            return redirect('/referente/familiares/perfil_familiar/'+str(fam_id)+'/')
+            return redirect('relative_profile',fam_id)
     return render(request, 'register_family.html', {'form': form})
 
 
 @login_required
 def referring_search(request):
-    ref = Family.objects.filter(role__exact='r')
+    # import ipdb; ipdb.set_trace()
+    ref = Family.objects.filter(role__exact='r').order_by('lastname')
+    print(Family.objects.filter(role__exact='r').count())
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
@@ -625,7 +650,39 @@ def referring_search(request):
 @login_required
 def referring_profile(request, id):
     ref = Referring.objects.get(pk=id)
+
+
+
     return render(request, 'referring_profile.html', {'ref': ref})
+
+@login_required
+def delete_referring(request,id):
+    # import ipdb; ipdb.set_trace()
+    
+    family = Family.objects.filter(ref = id)
+
+
+    for fam in family:
+        f = Family.objects.get(id=fam.id)
+        f.delete()
+
+        
+
+    return redirect('referring_search')
+
+@login_required
+def delete_family(request,id):
+
+    
+    # import ipdb; ipdb.set_trace()
+    family = Family.objects.get(id = id)
+
+    ref = Referring.objects.get(family_id=family.ref)
+
+    family.delete()
+
+    return redirect('referring_relatives',ref.id)
+
 
 
 @login_required
@@ -633,6 +690,7 @@ def referring_relatives(request, id):
     # import ipdb; ipdb.set_trace()
     ref = Referring.objects.get(pk=id)
     fam = Family.objects.filter(ref=ref.family.id)
+
     return render(request, 'referring_relatives.html', {'ref': ref,
                                                         'fam': fam})
 
@@ -641,8 +699,10 @@ def relative_profile(request,id):
     # import ipdb; ipdb.set_trace()
     fam = Family.objects.get(pk=id)
     ref = Referring.objects.get(family_id=fam.ref)
-    return render(request, 'relative_profile.html', {'fam': fam,
-                                                    'ref': ref})
+    fam_ref = Family.objects.get(id=fam.ref)
+
+    context = {'fam':fam,'ref':ref,'fam_ref':fam_ref}
+    return render(request, 'relative_profile.html',context)
 
 @login_required
 def edit_referring(request,id):
@@ -650,6 +710,21 @@ def edit_referring(request,id):
     family = Family.objects.get(id=ref.family_id)
     neigh = Neighborhood.objects.all()
     if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
+        # Delete '-' from phone_number
+        phone = request.POST["phone"]
+        request.POST._mutable = True # Change request.POST to mutable
+        if phone == '':
+            request.POST["phone"] = None
+        else:
+            phone = list(str(phone))
+            for p in phone:
+                if p == '-':
+                    phone.remove(p)
+            phone = ''.join(phone)
+            phone = int(phone)
+            request.POST["phone"] = phone
+        request.POST._mutable = False
         form1 = FamilyForm_r(request.POST, instance=family)
         if form1.is_valid():
             fam1 = form1.save(commit=False)
@@ -817,7 +892,24 @@ def entry_ok(request,id):
 @staff_member_required(login_url='home')
 def register_user(request):
     if request.method == 'POST':
+        # import ipdb; ipdb.set_trace()
         form_user = UserRegisterForm(request.POST)
+        # Delete '-' from phone_number
+        phone = request.POST["phone_number"]
+        request.POST._mutable = True # Change request.POST to mutable
+        if phone == '':
+            request.POST["phone_number"] = None
+        else:
+            phone = list(str(phone))
+            for p in phone:
+                if p == '-':
+                    phone.remove(p)
+            phone = ''.join(phone)
+            phone = int(phone)
+            request.POST["phone_number"] = phone
+
+        request.POST._mutable = False
+
         form_profile = ProfileForm(request.POST)
         if form_user.is_valid() and form_profile.is_valid():
             form_user.save()
@@ -893,17 +985,23 @@ def sale_detail(request,id):
     if request.method == 'POST':
         form = SalesDetailsForm(request.POST)
         if form.is_valid():
-            # import ipdb; ipdb.set_trace()
+            import ipdb; ipdb.set_trace()
             detail = form.save(commit=False)
             detail.product_type = request.POST['product_type']
             detail.unit_measure = request.POST['unit_measure']
             detail.price = request.POST['price']
             # Para cantidad en kg con num despues de la coma
-            if (Decimal(detail.quantity) % 1 == 0):
-                detail.total = int(detail.price) * int(detail.quantity)
+            # if (Decimal(detail.quantity) % 1 == 0):
+            #     if detail.product_type == 'Calzados':
+            #         detail.total = int(detail.price)
+            #     else:
+            #         detail.total = int(detail.price) * int(detail.quantity)
+            # else:
+            #      detail.total = float(detail.price) * float(detail.quantity)
+            if detail.product_type == 'Calzados':
+                detail.total = float(detail.price)
             else:
-                 detail.total = float(detail.price) * float(detail.quantity)
-            
+                detail.total = float(detail.price) * float(detail.quantity)
             detail.sale_id = sale.id
             detail.save()
 
@@ -911,23 +1009,25 @@ def sale_detail(request,id):
             type_res = TypesProducts.objects.get(name=detail.product_type)
             if detail.product_type == type_res.name:
                 # Control producto ropa 1.5kg por cada venta
-                if detail.product_type == 'Ropa Invierno' or detail.product_type == 'Ropa Verano':
-                    if detail.quantity > 1.5:
-                        alert = 'Solo se permite 1.5Kg por cada venta'
-                        detail.delete()
-                        form = SalesDetailsForm()
-                        context = {'entry': entry, 'types': types, 'form': form, 
-                                    'sale': sale, 'sale_details': sale_details, 'alert': alert}
-                        return render(request, 'sales.html', context)
-                # Control producto calzado 2 pares por cada venta
-                if detail.product_type == 'Calzados':
-                    if detail.quantity > 2:
-                        alert = 'Solo se permite 2 pares por cada venta'
-                        detail.delete()
-                        form = SalesDetailsForm()
-                        context = {'entry': entry, 'types': types, 'form': form, 
-                                    'sale': sale, 'sale_details': sale_details, 'alert': alert}
-                        return render(request, 'sales.html', context)   
+                # if detail.product_type == 'Ropa Invierno' or detail.product_type == 'Ropa Verano':
+                #     if detail.quantity > 1.5:
+                #         alert = 'Solo se permite 1.5Kg por cada venta'
+                #         detail.delete()
+                #         form = SalesDetailsForm()
+                #         context = {'entry': entry, 'types': types, 'form': form, 
+                #                     'sale': sale, 'sale_details': sale_details, 'alert': alert}
+                #         return render(request, 'sales.html', context)
+
+                # # Control producto calzado 2 pares por cada venta
+                # if detail.product_type == 'Calzados':
+                #     if detail.quantity > 2:
+                #         alert = 'Solo se permite 2 pares por cada venta'
+                #         detail.delete()
+                #         form = SalesDetailsForm()
+                #         context = {'entry': entry, 'types': types, 'form': form, 
+                #                     'sale': sale, 'sale_details': sale_details, 'alert': alert}
+                #         return render(request, 'sales.html', context)
+                           
                 if type_res.quantity_total < detail.quantity:
                     alert = 'La cantidad ingresada es mayor a la disponible en el ropero'
                     detail.delete()
@@ -938,7 +1038,7 @@ def sale_detail(request,id):
                 else:
                     type_res.quantity_total -= detail.quantity
                     type_res.save()
-                    sale.total += detail.total
+                    sale.total += Decimal(detail.total)
                     sale.save()
                     return redirect('sale_detail', id)
     else:
@@ -1015,7 +1115,7 @@ def home(request):
     #Datos ventas
     data_s = SalesDetails.objects.filter(sale__entry__last_entry__month=today.month).values('product_type').annotate(total=Sum('quantity'))
     #Datos donaciones
-    data_d = DetailsDonation.objects.filter(donation__date__month=today.month).values('donation_type').annotate(total=Sum('quantity'))
+    data_d = TypesProducts.objects.values('name').annotate(total=Sum('quantity_total'))
     # Precios
     # prices = SalesDetails.objects.filter(sale__entry__last_entry__year=today.year,sale__entry__last_entry__month=today.month,sale__entry__last_entry__day=today.day).values('product_type').annotate(total=Sum('price'))
     #Usuarios
@@ -1050,6 +1150,21 @@ def profile_user_edit(request, id):
     user = User.objects.get(pk=id)
     profile = Profile.objects.get(user_id=id)
     if request.method == 'POST':
+        # Delete '-' from phone_number
+        phone = request.POST["phone_number"]
+        request.POST._mutable = True # Change request.POST to mutable
+        if phone == '':
+            request.POST["phone_number"] = None
+        else:
+            phone = list(str(phone))
+            for p in phone:
+                if p == '-':
+                    phone.remove(p)
+            phone = ''.join(phone)
+            phone = int(phone)
+            request.POST["phone_number"] = phone
+        request.POST._mutable = False
+
         form = UserUpdateForm(request.POST, instance=user)
         form_profile = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
         if form.is_valid() and form_profile.is_valid():
@@ -1124,46 +1239,6 @@ def sales_report(request):
     return render(request, 'sales_report.html', {'data':data, 'types': types})
 
 
-# @login_required
-# @staff_member_required(login_url='home')
-# def donations_report(request):
-#     dona = TypesDonation.objects.all()
-#     today = datetime.date.today()
-#     if request.method == 'POST':
-
-#         begin = request.POST['begin']
-#         finish = request.POST['finish']
-#         donation = request.POST['dona_id']
-
-#         if begin == '':
-#             begin = today
-#         else:
-#             begin = datetime.datetime.strptime(begin,"%Y-%m-%d").date()
-#         if finish == '':
-#             finish = today
-#         else:
-#             finish = datetime.datetime.strptime(finish,"%Y-%m-%d").date()
-
-
-#         import ipdb; ipdb.set_trace()
-
-#         q1 = Q(donation__date__gte=begin)
-#         q2 = Q(donation__date__lte=finish)
-#         q3 = Q(donation_type__exact=donation)
-#         report = DetailsDonation.objects.filter(q3 & q1 & q2).values('donation_type').annotate(total=Sum('quantity'))
-#         all_reports = DetailsDonation.objects.filter(q3 & q1 & q2)
-
-#         return render(request,'donations_report_result.html',{'report':report,
-#                                                               'don':donation,
-#                                                               'begin': begin,
-#                                                               'finish':finish,
-#                                                               'all':all_reports})
-
-#     else:
-#         form = DonationsReportForm()
-#     return render(request,'donations_report.html',{'form':form,
-#                                                    'dona':dona})
-
 @login_required
 @staff_member_required(login_url='home')
 def donations_report(request):
@@ -1185,23 +1260,24 @@ def donations_report(request):
         q2 = Q(donation__date__lte=finish)
         q3 = Q(donation_type__in=donation)
 
-        # Reporte de ventas con tipo de prod, fecha inicio y fecha final
+        # Reporte de donaciones
         report = list(DetailsDonation.objects.filter(q3 & q1 & q2).values('donation_type',
                                                                         'unit_measure',
                                                                         'quantity',
                                                                         'donation__date',
                                                                         'donation__name',))
         
-        # Reporte 2 con total por producto
-        # report2 = list(SalesDetails.objects.filter(q3 & q1 & q2).values(product_type_total=F('product_type')).annotate(product_total=Sum('quantity')))
+        # Reporte 2 con total por prodtipo de donacion
+        report2 = list(DetailsDonation.objects.filter(q3 & q1 & q2).values('unit_measure', donation_type_total=F('donation_type')).annotate(donation_total=Sum('quantity')))
 
         # Cambio en report cantidad en decimal por float
         for i in range(0,len(report)):
             report[i]['quantity'] = float(report[i]['quantity'])
 
-        # for i in range(0,len(report2)):
-        #     report2[i]['product_total'] = float(report2[i]['product_total'])
+        for i in range(0,len(report2)):
+            report2[i]['donation_total'] = float(report2[i]['donation_total'])
 
+        report = report + report2
         return JsonResponse(report, safe=False)
 
     return render(request, 'donations_report.html', {'data':data, 'types': types})

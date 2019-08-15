@@ -8,11 +8,18 @@
 		<form method="POST">
 			{% csrf_token %}
 			<div class="row">
-				<div class="input-field col s12">
+				<div class="input-field col m8 s12">
+          <i class="material-icons prefix">perm_identity</i>
 					{{ form.name }}
 					{{ form.name.label_tag }}
 					<span class="helper-text" data-error="wrong" data-success="right">Ingrese el nombre o razón social del donador</span>
 		    </div>
+        <div class="input-field col m4 s12">
+          <i class="material-icons prefix">date_range</i>
+          {{ form.date }}
+          {{ form.date.label_tag }}
+          <span class="helper-text" data-error="wrong" data-success="right">Confirmar o modificar fecha</span>
+        </div>
         <div class="col s12 m4 push-m2 hide-on-small-only">
           <a href="{% url 'home' %}" class="waves-effect waves-light btn-large boton-home" >Volver</a>
         </div>
@@ -32,4 +39,28 @@
 			</div>
 		</form>
 	</div>	
+{% endblock %}
+
+{% block extra_js %}
+  <!-- DatePicker -->
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.datepicker').datepicker(
+        { 
+          firstDay: true, 
+          format: 'yyyy-mm-dd',
+          yearRange: 100,
+          i18n: {
+              months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+              monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+              weekdays: ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+              weekdaysShort: ["Dom","Lun", "Mar", "Mie", "Jue", "Vie", "Sab"],
+              weekdaysAbbrev: ["D","L", "M", "M", "J", "V", "S"],
+              cancel: ['Cancelar'],
+              done: ['Aceptar'],
+          }
+      });
+    });
+  </script>
+   
 {% endblock %}

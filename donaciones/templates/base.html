@@ -5,12 +5,12 @@
 <head>
 		<!--Import Google Icon Font-->
 		<link href=" {% static 'css/material-icons.css' %}" rel="stylesheet">
-
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}"/>
 		<link rel="stylesheet" href= " {% static 'css/materialize.css' %}">         
 
     <script type="text/javascript" src=" {% static 'js/jquery-2.1.1.min.js' %}"></script>
 
-    <script type="text/javascript" src="{% static 'js/highcharts.src.js' %}" >  </script>
+    <script type="text/javascript" src="{% static 'js/highcharts.src.js' %}" ></script>
      
     <script src="{% static 'js/materialize.min.js' %}"></script>
 
@@ -40,7 +40,7 @@
       </ul>
     </div>
 
-  	 
+  	{% if user.is_authenticated %}
     <ul id="slide-out" class="sidenav grey lighten-3">
       <li>
         <div class="user-view">
@@ -102,12 +102,12 @@
             <i class="material-icons">person</i>Home
           </a>
         </li>
-        <li class="divider"></li>
+        <!-- <li class="divider"></li>
         <li  class="grey lighten-3">
           <a href="{% url 'load_types_donation' %}">
             <i class="material-icons">apps</i>Tipos de Donaciones
           </a>
-        </li>
+        </li> -->
         <li class="divider"></li>
         <li  class="grey lighten-3">
           <a href="{% url 'load_types_products' %}">
@@ -151,6 +151,7 @@
       </li>
 
     </ul>
+    {% endif %}
   
   </nav>
         

@@ -6,7 +6,7 @@
 <div class="contenedor z-depth-3 white">
 	<form method="POST">
   	{% csrf_token %}
-    <h5 class="center-align">Actualizar Precios</h5>
+    <h5 class="center-align">{{ article.name }}</h5>
   	<div>
     {{form.as_p}}	
   	</div>
@@ -17,3 +17,12 @@
   </form>
 </div>
 {% endblock %}
+
+{% block extra_js %}
+  <!--Attr step -->
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("[name=price]").attr({step:'0.001'});
+    });
+  </script>
+{% endblock  %}

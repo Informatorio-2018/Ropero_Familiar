@@ -12,7 +12,12 @@
         {% if resumes %}
           {% for res in resumes %}
             <li class="collection-item row grey lighten-4" id="{{res.donation_type}}">
-              {{res.donation_type}}  ({{ res.get_unit_measure_display }}): {{ res.quantity|floatformat }}
+              {{res.donation_type}}  ({{ res.get_unit_measure_display }}): 
+              {% if res.donation_type != 'Ropa' %}
+                {{ res.quantity|floatformat }}
+              {% else %}
+                {{ res.quantity|floatformat:3 }}
+              {% endif %}
               <a href="#modal_delete{{res.id}}" class="modal-trigger right-align secondary-content btn"><i class="material-icons">delete</i></a>
               
               <!-- Modal Structure delete donation -->

@@ -6,7 +6,7 @@
 	<div class="contenedor z-depth-3 white">
 		<h3 class="hide-on-small-only center-align">Donación recibida de {{donator.name}}</h3>
 		<h5 class="hide-on-med-and-up center-align">Donación recibida de {{ donator.name }}</h5>
-		<form class="row" method="POST">
+		<form class="row" method="POST" id="form">
 			{% csrf_token %}
 			<div class="input-field col s12">
 				{{form.ticket_number}}
@@ -15,9 +15,26 @@
 			</div>
 			<div class="row">
 				<div class="col s12 m4 push-m4" style="padding:0;">
-		  		<button class="waves-effect waves-light btn-large boton-home" type="submit">Finalizar</button>
+		  		<button class="waves-effect waves-light btn-large boton-home" type="submit" id="save">Finalizar</button>
 				</div>
 			</div>
 		</form>
 	</div>
+{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+			$('form').submit(function () {
+			    $(window).unbind('beforeunload');
+			});
+			$(window).bind('beforeunload', function(){
+		  	return 'Are you sure you want to leave?';
+			});  
+
+		});
+	</script>
+
+
 {% endblock %}

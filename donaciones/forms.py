@@ -4,12 +4,15 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 import datetime
 from django.contrib.auth import authenticate, login
+from django.utils.timezone import datetime as datetime_django
 
 
 class FamilyForm_r(forms.ModelForm):
+    birth = forms.DateField(input_formats=['%Y-%m-%d'], widget=forms.DateInput(attrs={'class': 'datepicker'}, format='%Y-%m-%d'), label='Fecha de Nacimiento')
+
     class Meta:
         model = Family
-        fields = ('firstname', 'lastname', 'dni')
+        fields = ('firstname', 'lastname', 'dni', 'birth')
 
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
@@ -23,11 +26,20 @@ class FamilyForm(forms.ModelForm):
         model = Family
         fields = ('firstname', 'lastname', 'dni')
 
+    def clean_dni(self):
+        dni = self.cleaned_data.get('dni')
+        if len(str(dni)) != 8:
+            raise forms.ValidationError('DNI no válido')
+        return dni
+
 
 class DonationForm(forms.ModelForm):
+    today = datetime.date.today()
+    date = forms.DateField(widget=forms.DateInput(attrs={'class': 'datepicker', 'value': today}), label='Fecha')
+
     class Meta:
         model = Donation
-        fields = ('name',)
+        fields = ('name', 'date')
 
 
 class ReferringForm(forms.ModelForm):
@@ -37,9 +49,11 @@ class ReferringForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        # username = username.upper()
-        if len(str(phone)) != 10:
-            raise forms.ValidationError('Número de telefono no válido')
+
+        if phone != None:
+            # username = username.upper()
+            if len(str(phone)) != 10:
+                raise forms.ValidationError('Número de telefono no válido')
         return phone
 
 
@@ -181,8 +195,10 @@ class ProfileForm(forms.ModelForm):
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
         # username = username.upper()
-        if len(str(phone_number)) != 10:
-            raise forms.ValidationError('Número de telefono no valido')
+        if phone_number != None:
+            # username = username.upper()
+            if len(str(phone_number)) != 10:
+                raise forms.ValidationError('Número de telefono no válido')
         return phone_number
 
 
@@ -197,3 +213,12 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['phone_number', 'image']
+
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        # username = username.upper()
+        if phone_number != None:
+            # username = username.upper()
+            if len(str(phone_number)) != 10:
+                raise forms.ValidationError('Número de telefono no válido')
+        return phone_number
