@@ -851,6 +851,7 @@ def closet(request):
 
 @login_required
 def entry_ok(request,id):
+    #import ipdb; ipdb.set_trace()
     fam = Family.objects.get(pk=id)
     ref = Referring.objects.get(family_id = fam.ref)
     today_month = datetime.date.today().month
@@ -858,13 +859,13 @@ def entry_ok(request,id):
     all_entry = FamilyEntry.objects.all()
     while True:
         try:
-            entry = FamilyEntry.objects.get(family_id=ref.id,last_entry__month=today.month)
+            entry = FamilyEntry.objects.get(family_id=id, last_entry__year=today.year,last_entry__month=today.month, last_entry__day=today.day)
             break
         except FamilyEntry.DoesNotExist:
             entry = None
             break
 
-    # import ipdb; ipdb.set_trace()
+
     if fam.role == 'r':
         last_buy = fam.referring.last_buy
     else:
@@ -873,20 +874,24 @@ def entry_ok(request,id):
     if entry == None:
         if last_buy:
             last_buy_date = last_buy.month
-            if ((today_month)-(last_buy_date) > 0):
+            if (last_buy.month != today.month or last_buy.year != today.year):
                 fam_e = FamilyEntry()
                 fam_e.family = fam
                 fam_e.save()
                 return render(request,'entry_ok.html',{'fam':fam})
             else:
-                return render(request,'entry_fail.html',{'fam':fam})
+                return render(request,'entry_fail.html',{'fam':fam, 'last_buy':last_buy})
         else:
             fam_e = FamilyEntry()
             fam_e.family = fam
             fam_e.save()
             return render(request,'entry_ok.html',{'fam':fam})
     else:
-        return render(request,'entry_fail.html',{'fam':fam})
+        entry_last = datetime.date(entry.last_entry.year, entry.last_entry.month, entry.last_entry.day)
+        if (entry_last == last_buy):
+            return render(request,'entry_fail.html',{'fam':fam, 'last_buy': last_buy})
+        else:
+            return render(request,'entry_fail.html',{'fam':fam, 'last_buy':'Actualmente esta en el ropero'})
 
 @login_required
 @staff_member_required(login_url='home')
@@ -985,7 +990,7 @@ def sale_detail(request,id):
     if request.method == 'POST':
         form = SalesDetailsForm(request.POST)
         if form.is_valid():
-            import ipdb; ipdb.set_trace()
+            # import ipdb; ipdb.set_trace()
             detail = form.save(commit=False)
             detail.product_type = request.POST['product_type']
             detail.unit_measure = request.POST['unit_measure']
